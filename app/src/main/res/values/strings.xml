@@ -1,3 +1,18 @@
 <resources>
-    <string name="app_name">LayoutMake</string>
+    <string name="app_name">Layout Makeup</string>
+
+    <string name="title">Playlist maker</string>
+    <string name="search">Поиск</string>
+    <string name="media_library">Медиатека</string>
+    <string name="settings">Настройки</string>
+    <string name="arrow_back">back action</string>
+    <string name="black_theme_setting">Темная тема</string>
+    <string name="share_setting">Поделиться приложением</string>
+    <string name="support_setting">Написать в поддержку</string>
+    <string name="agreement_setting">Пользовательское соглашение</string>
+    <string name="share_description">share description</string>
+    <string name="search_button_clicked">Переход в меню поиска</string>
+    <string name="media_library_button_clicked">Переход в медиатеку</string>
+    <string name="settings_button_clicked">Переход в меню настроек</string>
+
 </resources>
