@@ -12,5 +12,7 @@
 
     <!--custom colors-->
     <color name="blue_background">#3772E7</color>
+    <color name="y_black">#1A1B22</color>
+    <color name="y_grey">#AEAFB4</color>
 
 </resources>

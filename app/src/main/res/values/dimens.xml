@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <dimen name="sides_margin">17dp</dimen>
+    <dimen name="sides_margin">16dp</dimen>
     <dimen name="main_buttons_corner_radius">16dp</dimen>
     <dimen name="main_menu_text_size">22sp</dimen>
     <dimen name="main_menu_icon_size">20dp</dimen>
+    <dimen name="settings_margin_between_fields">40dp</dimen>
+    <dimen name="settings_back_arrow_margin">20dp</dimen>
+    <dimen name="settings_back_arrow_sides">20dp</dimen>
 </resources>

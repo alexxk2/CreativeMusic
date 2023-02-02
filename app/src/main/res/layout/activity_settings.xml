@@ -9,10 +9,10 @@
 
     <ImageButton
         android:id="@+id/arrow_back_button"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_width="@dimen/settings_back_arrow_sides"
+        android:layout_height="@dimen/settings_back_arrow_sides"
+        android:layout_marginStart="@dimen/settings_back_arrow_margin"
+        android:layout_marginTop="@dimen/settings_back_arrow_margin"
         android:background="?android:selectableItemBackgroundBorderless"
         android:contentDescription="@string/arrow_back"
         android:src="@drawable/icon_arrow_back"
@@ -35,11 +35,9 @@
         style="@style/YSTextStyleBlack16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="60dp"
-        android:layout_marginBottom="40dp"
+        android:layout_marginStart="@dimen/sides_margin"
+        android:layout_marginTop="@dimen/settings_margin_between_fields"
         android:text="@string/black_theme_setting"
-        app:layout_constraintBottom_toTopOf="@+id/share_text_view"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/settings_title_text_view" />
 
@@ -48,10 +46,9 @@
         style="@style/YSTextStyleBlack16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="40dp"
+        android:layout_marginStart="@dimen/sides_margin"
+        android:layout_marginTop="@dimen/settings_margin_between_fields"
         android:text="@string/share_setting"
-        app:layout_constraintBottom_toTopOf="@+id/support_text_view"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/black_theme_text_view" />
 
@@ -60,10 +57,9 @@
         style="@style/YSTextStyleBlack16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="40dp"
+        android:layout_marginStart="@dimen/sides_margin"
+        android:layout_marginTop="@dimen/settings_margin_between_fields"
         android:text="@string/support_setting"
-        app:layout_constraintBottom_toTopOf="@+id/agreement_text_view"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/share_text_view" />
 
@@ -72,10 +68,9 @@
         style="@style/YSTextStyleBlack16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="500dp"
+        android:layout_marginStart="@dimen/sides_margin"
+        android:layout_marginTop="@dimen/settings_margin_between_fields"
         android:text="@string/agreement_setting"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/support_text_view" />
 
@@ -83,17 +78,17 @@
         android:id="@+id/switch_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/black_theme_text_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/black_theme_text_view"
-        tools:ignore="UseSwitchCompatOrMaterialXml" />
+        tools:ignore="UseSwitchCompatOrMaterialXml"/>
 
     <ImageButton
         android:id="@+id/share_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="@dimen/sides_margin"
         android:src="@drawable/icon_share"
         android:background="?android:selectableItemBackgroundBorderless"
         app:layout_constraintBottom_toBottomOf="@+id/share_text_view"
@@ -105,7 +100,7 @@
         android:id="@+id/support_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="@dimen/sides_margin"
         android:src="@drawable/icon_support"
         android:background="?android:selectableItemBackgroundBorderless"
         app:layout_constraintBottom_toBottomOf="@+id/support_text_view"
@@ -117,13 +112,14 @@
         android:id="@+id/agreement_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="@dimen/sides_margin"
         android:src="@drawable/icon_arrow_forward"
         android:background="?android:selectableItemBackgroundBorderless"
         app:layout_constraintBottom_toBottomOf="@+id/agreement_text_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/agreement_text_view"
         android:contentDescription="@string/share_description"/>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

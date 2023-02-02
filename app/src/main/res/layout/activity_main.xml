@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/main_title_text_view"
-        style="@style/YSTextStyleWhite"
+        style="@style/YSTextStyleWhite22"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/sides_margin"
