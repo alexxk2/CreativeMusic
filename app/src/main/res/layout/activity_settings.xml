@@ -4,10 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SettingsActivity">
+    tools:context=".SettingsActivity"
+    style="@style/SettingsActivity">
 
 
     <ImageButton
+        style="@style/SettingsBackButton"
         android:id="@+id/arrow_back_button"
         android:layout_width="@dimen/settings_back_arrow_sides"
         android:layout_height="@dimen/settings_back_arrow_sides"
@@ -21,7 +23,7 @@
 
     <TextView
         android:id="@+id/settings_title_text_view"
-        style="@style/YSTextStyleBlack22"
+        style="@style/SettingsActivityTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
@@ -59,6 +61,7 @@
         app:layout_constraintTop_toBottomOf="@+id/support_text_view" />
 
     <Switch
+        style="@style/SettingsSwitch"
         android:id="@+id/switch_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -92,6 +95,7 @@
         android:id="@+id/agreement_button"
         style="@style/SettingsImageButtons"
         android:src="@drawable/icon_arrow_forward"
+
         android:background="?android:selectableItemBackgroundBorderless"
         app:layout_constraintBottom_toBottomOf="@+id/agreement_text_view"
         app:layout_constraintEnd_toEndOf="parent"

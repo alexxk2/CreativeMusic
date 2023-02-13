@@ -4,21 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/blue_background"
+    style="@style/MainActivity"
     tools:context=".MainActivity">
 
     <TextView
         android:id="@+id/main_title_text_view"
-        style="@style/YSTextStyleWhite22"
+        style="@style/MainActivityTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/sides_margin"
         android:layout_marginTop="14dp"
         android:text="@string/title"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
-    <com.google.android.material.button.MaterialButton
+
+    <Button
         android:id="@+id/search_button"
         style="@style/MainButtonsStyle"
         android:layout_marginTop="40dp"
@@ -27,7 +29,8 @@
         app:icon="@drawable/icon_search"
         app:layout_constraintBottom_toTopOf="@+id/media_library_button"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_title_text_view" />
+        app:layout_constraintTop_toBottomOf="@+id/main_title_text_view"
+        />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/media_library_button"
