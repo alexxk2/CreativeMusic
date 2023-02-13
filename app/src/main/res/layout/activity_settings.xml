@@ -32,44 +32,28 @@
 
     <TextView
         android:id="@+id/black_theme_text_view"
-        style="@style/YSTextStyleBlack16"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/sides_margin"
-        android:layout_marginTop="@dimen/settings_margin_between_fields"
+        style="@style/SettingNames"
         android:text="@string/black_theme_setting"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/settings_title_text_view" />
 
     <TextView
         android:id="@+id/share_text_view"
-        style="@style/YSTextStyleBlack16"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/sides_margin"
-        android:layout_marginTop="@dimen/settings_margin_between_fields"
+        style="@style/SettingNames"
         android:text="@string/share_setting"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/black_theme_text_view" />
 
     <TextView
         android:id="@+id/support_text_view"
-        style="@style/YSTextStyleBlack16"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/sides_margin"
-        android:layout_marginTop="@dimen/settings_margin_between_fields"
+        style="@style/SettingNames"
         android:text="@string/support_setting"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/share_text_view" />
 
     <TextView
         android:id="@+id/agreement_text_view"
-        style="@style/YSTextStyleBlack16"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/sides_margin"
-        android:layout_marginTop="@dimen/settings_margin_between_fields"
+        style="@style/SettingNames"
         android:text="@string/agreement_setting"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/support_text_view" />
@@ -86,9 +70,7 @@
 
     <ImageButton
         android:id="@+id/share_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/sides_margin"
+        style="@style/SettingsImageButtons"
         android:src="@drawable/icon_share"
         android:background="?android:selectableItemBackgroundBorderless"
         app:layout_constraintBottom_toBottomOf="@+id/share_text_view"
@@ -98,9 +80,7 @@
 
     <ImageButton
         android:id="@+id/support_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/sides_margin"
+        style="@style/SettingsImageButtons"
         android:src="@drawable/icon_support"
         android:background="?android:selectableItemBackgroundBorderless"
         app:layout_constraintBottom_toBottomOf="@+id/support_text_view"
@@ -110,9 +90,7 @@
 
     <ImageButton
         android:id="@+id/agreement_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/sides_margin"
+        style="@style/SettingsImageButtons"
         android:src="@drawable/icon_arrow_forward"
         android:background="?android:selectableItemBackgroundBorderless"
         app:layout_constraintBottom_toBottomOf="@+id/agreement_text_view"
