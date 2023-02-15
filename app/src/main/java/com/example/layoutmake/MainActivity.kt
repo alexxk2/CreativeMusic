@@ -20,17 +20,18 @@ class MainActivity : AppCompatActivity() {
 
         val searchIntent = Intent(this, SearchActivity::class.java)
 
-
         val buttonClickListener: OnClickListener = object : OnClickListener {
             override fun onClick(p0: View?) {
                startActivity(searchIntent)
             }
         }
         searchButton.setOnClickListener(buttonClickListener)
+
         mediaLibraryButton.setOnClickListener {
             val mediaIntent  = Intent(this, MediaActivity::class.java)
             startActivity(mediaIntent)
         }
+
         settingsButton.setOnClickListener {
             val settingsIntent = Intent(this, SettingsActivity::class.java)
             startActivity(settingsIntent)

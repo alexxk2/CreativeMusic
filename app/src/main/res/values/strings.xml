@@ -14,5 +14,10 @@
     <string name="search_button_clicked">Переход в меню поиска</string>
     <string name="media_library_button_clicked">Переход в медиатеку</string>
     <string name="settings_button_clicked">Переход в меню настроек</string>
+    <string name="url_android_practicum">https://practicum.yandex.ru/android-developer/</string>
+    <string name="url_agreement">https://yandex.ru/legal/practicum_offer/</string>
+    <string name="text_for_chooser">Share with…</string>
+    <string name="message_title">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
+    <string name="message_body">Спасибо разработчикам и разработчицам за крутое приложение!</string>
 
 </resources>
