@@ -2,22 +2,18 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/SettingsActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SettingsActivity"
-    style="@style/SettingsActivity">
+    tools:context=".SettingsActivity">
 
 
     <ImageButton
-        style="@style/SettingsBackButton"
         android:id="@+id/arrow_back_button"
+        style="@style/BackArrowButton"
         android:layout_width="@dimen/settings_back_arrow_sides"
         android:layout_height="@dimen/settings_back_arrow_sides"
-        android:layout_marginStart="@dimen/settings_back_arrow_margin"
-        android:layout_marginTop="@dimen/settings_back_arrow_margin"
-        android:background="?android:selectableItemBackgroundBorderless"
         android:contentDescription="@string/arrow_back"
-        android:src="@drawable/icon_arrow_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -61,46 +57,45 @@
         app:layout_constraintTop_toBottomOf="@+id/support_text_view" />
 
     <Switch
-        style="@style/SettingsSwitch"
         android:id="@+id/switch_button"
+        style="@style/SettingsSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/black_theme_text_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/black_theme_text_view"
-        tools:ignore="UseSwitchCompatOrMaterialXml"/>
+        tools:ignore="UseSwitchCompatOrMaterialXml" />
 
     <ImageButton
         android:id="@+id/share_button"
         style="@style/SettingsImageButtons"
-        android:src="@drawable/icon_share"
         android:background="?android:selectableItemBackgroundBorderless"
+        android:contentDescription="@string/share_description"
+        android:src="@drawable/icon_share"
         app:layout_constraintBottom_toBottomOf="@+id/share_text_view"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/share_text_view"
-        android:contentDescription="@string/share_description"/>
+        app:layout_constraintTop_toTopOf="@+id/share_text_view" />
 
     <ImageButton
         android:id="@+id/support_button"
         style="@style/SettingsImageButtons"
-        android:src="@drawable/icon_support"
         android:background="?android:selectableItemBackgroundBorderless"
+        android:contentDescription="@string/share_description"
+        android:src="@drawable/icon_support"
         app:layout_constraintBottom_toBottomOf="@+id/support_text_view"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/support_text_view"
-        android:contentDescription="@string/share_description"/>
+        app:layout_constraintTop_toTopOf="@+id/support_text_view" />
 
     <ImageButton
         android:id="@+id/agreement_button"
         style="@style/SettingsImageButtons"
-        android:src="@drawable/icon_arrow_forward"
         android:background="?android:selectableItemBackgroundBorderless"
+        android:contentDescription="@string/share_description"
+        android:src="@drawable/icon_arrow_forward"
         app:layout_constraintBottom_toBottomOf="@+id/agreement_text_view"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/agreement_text_view"
-        android:contentDescription="@string/share_description"/>
-
+        app:layout_constraintTop_toTopOf="@+id/agreement_text_view" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

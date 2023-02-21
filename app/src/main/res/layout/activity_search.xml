@@ -2,20 +2,17 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/SettingsActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SearchActivity">
 
     <ImageButton
-        style="@style/SettingsBackButton"
         android:id="@+id/arrow_back_button"
+        style="@style/BackArrowButton"
         android:layout_width="@dimen/settings_back_arrow_sides"
         android:layout_height="@dimen/settings_back_arrow_sides"
-        android:layout_marginStart="@dimen/settings_back_arrow_margin"
-        android:layout_marginTop="@dimen/settings_back_arrow_margin"
-        android:background="?android:selectableItemBackgroundBorderless"
         android:contentDescription="@string/arrow_back"
-        android:src="@drawable/icon_arrow_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -30,38 +27,28 @@
         app:layout_constraintStart_toEndOf="@id/arrow_back_button"
         app:layout_constraintTop_toTopOf="@id/arrow_back_button" />
 
+    <!--autoFill in style-->
     <EditText
-        android:id="@+id/search_edit_text"
+        style="@style/SearchEditText"
         android:layout_width="0dp"
         android:layout_height="36dp"
+        android:id="@+id/search_edit_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/search_title_text_view"
-        android:layout_marginHorizontal="@dimen/sides_margin"
-        android:layout_marginTop="@dimen/search_from_title_margin"
-        android:hint="@string/search"
-        android:maxLines="1"
-        android:inputType="text"
-        android:background="@drawable/rectangle_shape_for_search"
-        android:fontFamily="@font/ys_display_regular"
-        android:textSize="16sp"
-        android:textColorHint="@color/y_grey"
-        android:drawableStart="@drawable/icon_search_small"
-        android:paddingHorizontal="@dimen/search_edit_sides_padding"
-        android:drawablePadding="@dimen/drawable_padding_search"
-        android:importantForAutofill="no"/>
+        android:importantForAutofill="no" />
 
     <ImageButton
+        style="@style/RemoveInputButton"
         android:id="@+id/remove_input_button"
         android:layout_width="@dimen/icon_close_sizes"
         android:layout_height="@dimen/icon_close_sizes"
-        android:background="?android:attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/icon_close"
         android:layout_marginEnd="@dimen/search_edit_sides_padding"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/empty_search_input"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/search_edit_text"
         app:layout_constraintEnd_toEndOf="@+id/search_edit_text"
-        app:layout_constraintTop_toTopOf="@+id/search_edit_text"
-        android:visibility="invisible"
-        android:contentDescription="@string/empty_search_input"/>
+        app:layout_constraintTop_toTopOf="@+id/search_edit_text" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
