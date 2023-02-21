@@ -12,4 +12,7 @@
     <dimen name="search_from_title_margin">24dp</dimen>
     <dimen name="search_edit_sides_padding">12dp</dimen>
     <dimen name="icon_close_sizes">18dp</dimen>
+    <dimen name="title_margin_start">28dp</dimen>
+    <dimen name="drawable_padding_search">8dp</dimen>
+
 </resources>

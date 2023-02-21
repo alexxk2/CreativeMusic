@@ -19,5 +19,7 @@
     <string name="text_for_chooser">Share with…</string>
     <string name="message_title">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
     <string name="message_body">Спасибо разработчикам и разработчицам за крутое приложение!</string>
+    <string name="edit_text_input">edit text input</string>
+    <string name="empty_search_input">empty_search_input</string>
 
 </resources>

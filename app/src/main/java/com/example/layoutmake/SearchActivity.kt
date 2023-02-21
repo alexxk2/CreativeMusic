@@ -7,6 +7,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import com.example.layoutmake.SearchActivity.Companion.SEARCH_INPUT
 import com.example.layoutmake.databinding.ActivitySearchBinding
 
 
@@ -16,6 +17,7 @@ class SearchActivity : AppCompatActivity() {
         const val SEARCH_INPUT = "SEARCH_INPUT"
     }
     lateinit var binding: ActivitySearchBinding
+    lateinit var searchInput: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
@@ -25,11 +27,11 @@ class SearchActivity : AppCompatActivity() {
         val textWatcher = object : TextWatcher {
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (!p0.isNullOrEmpty()) binding.removeInputButton.visibility = View.VISIBLE
+                searchInput = binding.searchEditText.text.toString()
             }
 
             override fun afterTextChanged(p0: Editable?) {
@@ -56,7 +58,7 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(SEARCH_INPUT,binding.searchEditText.text.toString())
+        outState.putString(SEARCH_INPUT,searchInput)
     }
 
 

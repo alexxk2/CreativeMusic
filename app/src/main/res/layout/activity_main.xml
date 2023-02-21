@@ -19,7 +19,6 @@
         app:layout_constraintTop_toTopOf="parent"
         />
 
-
     <Button
         android:id="@+id/search_button"
         style="@style/MainButtonsStyle"
