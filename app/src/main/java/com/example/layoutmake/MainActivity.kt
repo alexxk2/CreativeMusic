@@ -14,6 +14,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
+
         val searchButton = findViewById<Button>(R.id.search_button)
         val mediaLibraryButton = findViewById<Button>(R.id.media_library_button)
         val settingsButton = findViewById<Button>(R.id.settings_button)

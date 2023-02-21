@@ -12,6 +12,9 @@ import com.example.layoutmake.databinding.ActivitySearchBinding
 
 class SearchActivity : AppCompatActivity() {
 
+    companion object{
+        const val SEARCH_INPUT = "SEARCH_INPUT"
+    }
     lateinit var binding: ActivitySearchBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +48,17 @@ class SearchActivity : AppCompatActivity() {
             }
         }
     }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        binding.searchEditText.setText(savedInstanceState.getString(SEARCH_INPUT))
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(SEARCH_INPUT,binding.searchEditText.text.toString())
+    }
+
 
     private fun clearInput() {
         binding.searchEditText.setText("")
