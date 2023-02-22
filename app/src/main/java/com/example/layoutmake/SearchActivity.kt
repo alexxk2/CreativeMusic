@@ -7,15 +7,15 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import com.example.layoutmake.SearchActivity.Companion.SEARCH_INPUT
 import com.example.layoutmake.databinding.ActivitySearchBinding
 
 
 class SearchActivity : AppCompatActivity() {
 
-    companion object{
+    companion object {
         const val SEARCH_INPUT = "SEARCH_INPUT"
     }
+
     lateinit var binding: ActivitySearchBinding
     lateinit var searchInput: String
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,12 +30,11 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (!p0.isNullOrEmpty()) binding.removeInputButton.visibility = View.VISIBLE
+                changeClearButtonVisibility(p0)
                 searchInput = binding.searchEditText.text.toString()
             }
 
             override fun afterTextChanged(p0: Editable?) {
-                if (p0.isNullOrEmpty()) binding.removeInputButton.visibility = View.INVISIBLE
             }
         }
 
@@ -53,14 +52,21 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        binding.searchEditText.setText(savedInstanceState.getString(SEARCH_INPUT))
+        searchInput = savedInstanceState.getString(SEARCH_INPUT).toString()
+        binding.searchEditText.setText(searchInput)
+
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(SEARCH_INPUT,searchInput)
+        outState.putString(SEARCH_INPUT, searchInput)
     }
 
+
+    private fun changeClearButtonVisibility(p0: CharSequence?) {
+        if (p0.isNullOrEmpty()) binding.removeInputButton.visibility = View.INVISIBLE
+        else binding.removeInputButton.visibility = View.VISIBLE
+    }
 
     private fun clearInput() {
         binding.searchEditText.setText("")
