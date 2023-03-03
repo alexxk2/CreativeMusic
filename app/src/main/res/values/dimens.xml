@@ -14,5 +14,9 @@
     <dimen name="icon_close_sizes">18dp</dimen>
     <dimen name="title_margin_start">28dp</dimen>
     <dimen name="drawable_padding_search">8dp</dimen>
+    <dimen name="track_height">64dp</dimen>
+    <dimen name="album_image_sides">48dp</dimen>
+    <dimen name="margin_start_track_text">8dp</dimen>
+    <dimen name="arrow_forward_sides">14dp</dimen>
 
 </resources>
