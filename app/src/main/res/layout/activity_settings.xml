@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/SettingsActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SettingsActivity">
@@ -9,22 +10,19 @@
 
     <ImageButton
         android:id="@+id/arrow_back_button"
+        style="@style/BackArrowButton"
         android:layout_width="@dimen/settings_back_arrow_sides"
         android:layout_height="@dimen/settings_back_arrow_sides"
-        android:layout_marginStart="@dimen/settings_back_arrow_margin"
-        android:layout_marginTop="@dimen/settings_back_arrow_margin"
-        android:background="?android:selectableItemBackgroundBorderless"
         android:contentDescription="@string/arrow_back"
-        android:src="@drawable/icon_arrow_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/settings_title_text_view"
-        style="@style/YSTextStyleBlack22"
+        style="@style/SettingsActivityTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
+        android:layout_marginStart="@dimen/title_margin_start"
         android:text="@string/settings"
         app:layout_constraintBottom_toBottomOf="@+id/arrow_back_button"
         app:layout_constraintStart_toEndOf="@id/arrow_back_button"
@@ -32,94 +30,45 @@
 
     <TextView
         android:id="@+id/black_theme_text_view"
-        style="@style/YSTextStyleBlack16"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/sides_margin"
-        android:layout_marginTop="@dimen/settings_margin_between_fields"
+        style="@style/SettingNames"
         android:text="@string/black_theme_setting"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/settings_title_text_view" />
 
     <TextView
         android:id="@+id/share_text_view"
-        style="@style/YSTextStyleBlack16"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/sides_margin"
-        android:layout_marginTop="@dimen/settings_margin_between_fields"
+        style="@style/SettingNames"
         android:text="@string/share_setting"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/black_theme_text_view" />
+        app:layout_constraintTop_toBottomOf="@+id/black_theme_text_view"
+        app:drawableEndCompat="@drawable/icon_share"/>
 
     <TextView
         android:id="@+id/support_text_view"
-        style="@style/YSTextStyleBlack16"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/sides_margin"
-        android:layout_marginTop="@dimen/settings_margin_between_fields"
+        style="@style/SettingNames"
         android:text="@string/support_setting"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/share_text_view" />
+        app:layout_constraintTop_toBottomOf="@+id/share_text_view"
+        app:drawableEndCompat="@drawable/icon_support"/>
 
     <TextView
         android:id="@+id/agreement_text_view"
-        style="@style/YSTextStyleBlack16"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/sides_margin"
-        android:layout_marginTop="@dimen/settings_margin_between_fields"
+        style="@style/SettingNames"
         android:text="@string/agreement_setting"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/support_text_view" />
+        app:layout_constraintTop_toBottomOf="@+id/support_text_view"
+        app:drawableEndCompat="@drawable/icon_arrow_forward"/>
 
     <Switch
         android:id="@+id/switch_button"
+        style="@style/SettingsSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/black_theme_text_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/black_theme_text_view"
-        tools:ignore="UseSwitchCompatOrMaterialXml"/>
-
-    <ImageButton
-        android:id="@+id/share_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/sides_margin"
-        android:src="@drawable/icon_share"
-        android:background="?android:selectableItemBackgroundBorderless"
-        app:layout_constraintBottom_toBottomOf="@+id/share_text_view"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/share_text_view"
-        android:contentDescription="@string/share_description"/>
-
-    <ImageButton
-        android:id="@+id/support_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/sides_margin"
-        android:src="@drawable/icon_support"
-        android:background="?android:selectableItemBackgroundBorderless"
-        app:layout_constraintBottom_toBottomOf="@+id/support_text_view"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/support_text_view"
-        android:contentDescription="@string/share_description"/>
-
-    <ImageButton
-        android:id="@+id/agreement_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/sides_margin"
-        android:src="@drawable/icon_arrow_forward"
-        android:background="?android:selectableItemBackgroundBorderless"
-        app:layout_constraintBottom_toBottomOf="@+id/agreement_text_view"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/agreement_text_view"
-        android:contentDescription="@string/share_description"/>
-
+        tools:ignore="UseSwitchCompatOrMaterialXml" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
