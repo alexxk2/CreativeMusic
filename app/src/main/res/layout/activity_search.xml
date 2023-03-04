@@ -50,5 +50,14 @@
         app:layout_constraintBottom_toBottomOf="@+id/search_edit_text"
         app:layout_constraintEnd_toEndOf="@+id/search_edit_text"
         app:layout_constraintTop_toTopOf="@+id/search_edit_text" />
+    
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/search_edit_text"
+        android:layout_marginTop="@dimen/search_from_title_margin"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -50,8 +50,6 @@
         <item name="android:layout_marginTop">@dimen/settings_margin_between_fields</item>
     </style>
 
-
-
     <style name="MainActivity">
         <item name="android:background">@color/y_blue</item>
     </style>
@@ -90,6 +88,27 @@
     <style name="SettingsSwitch">
         <item name="android:thumbTint">@drawable/thumb</item>
         <item name="android:trackTint">@drawable/track</item>
+    </style>
+
+
+    <style name="SongNameText">
+        <item name="android:ellipsize">end</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:lines">1</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="SongAlbumAndTimeText">
+        <item name="android:ellipsize">end</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:lines">1</item>
+        <item name="android:textColor">@color/y_grey</item>
+        <item name="android:textSize">11sp</item>
+    </style>
+
+    <style name="ArrowForward">
+        <item name="android:src">@drawable/icon_arrow_forward</item>
     </style>
 
 </resources>

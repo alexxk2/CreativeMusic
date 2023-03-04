@@ -7,7 +7,11 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.layoutmake.adapters.TrackAdapter
 import com.example.layoutmake.databinding.ActivitySearchBinding
+import com.example.layoutmake.models.Track
+import com.example.layoutmake.models.makeTrackList
 
 
 class SearchActivity : AppCompatActivity() {
@@ -16,13 +20,17 @@ class SearchActivity : AppCompatActivity() {
         const val SEARCH_INPUT = "SEARCH_INPUT"
     }
 
-    lateinit var binding: ActivitySearchBinding
-    lateinit var searchInput: String
+    private lateinit var binding: ActivitySearchBinding
+    private lateinit var searchInput: String
+    private lateinit var dataSet: ArrayList<Track>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
         binding = ActivitySearchBinding.inflate(layoutInflater).also { setContentView(it.root) }
+
+        startRecyclerView()
 
         val textWatcher = object : TextWatcher {
 
@@ -76,6 +84,13 @@ class SearchActivity : AppCompatActivity() {
         val inputMethodManager =
             getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+
+    private fun startRecyclerView(){
+        dataSet = makeTrackList()
+        binding.recyclerView.layoutManager = LinearLayoutManager(this)
+        binding.recyclerView.adapter = TrackAdapter(dataSet)
+        binding.recyclerView.setHasFixedSize(true)
     }
 
 }
