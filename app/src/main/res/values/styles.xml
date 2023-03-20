@@ -79,6 +79,9 @@
         <item name="android:paddingHorizontal">@dimen/search_edit_sides_padding</item>
         <item name="android:textColorHint">@color/y_grey</item>
         <item name="android:textSize">16sp</item>
+        <item name="android:imeOptions">actionDone</item>
+        <item name="singleLine">true</item>
+
     </style>
 
     <style name="RemoveInputButton">
@@ -100,7 +103,7 @@
     </style>
 
     <style name="SongAlbumAndTimeText">
-        <item name="android:ellipsize">end</item>
+        <item name="android:ellipsize">middle</item>
         <item name="android:fontFamily">@font/ys_display_regular</item>
         <item name="android:lines">1</item>
         <item name="android:textColor">@color/y_grey</item>
@@ -109,6 +112,37 @@
 
     <style name="ArrowForward">
         <item name="android:src">@drawable/icon_arrow_forward</item>
+    </style>
+
+    <!--Search screen-->
+    <style name="ErrorImageNotFound">
+        <item name="android:layout_marginTop">@dimen/error_image_side_and_margin</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:visibility">invisible</item>
+        <item name="android:src">@drawable/nothing_is_found</item>
+    </style>
+
+    <style name="ErrorImageOther">
+        <item name="android:layout_marginTop">@dimen/error_image_side_and_margin</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:visibility">invisible</item>
+        <item name="android:src">@drawable/something_went_wrong</item>
+    </style>
+
+    <style name="ErrorTextMessage">
+        <item name="android:textColor">@color/y_black</item>
+    </style>
+
+    <style name="UpdateRequestButton" parent="Widget.Material3.Button">
+
+        <item name="android:backgroundTint">@color/y_black</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:layout_marginTop">24dp</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:padding">0dp</item>
+        <item name="android:text">@string/update</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:visibility">invisible</item>
     </style>
 
 </resources>
