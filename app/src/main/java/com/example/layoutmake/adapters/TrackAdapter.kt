@@ -10,6 +10,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.layoutmake.R
 import com.example.layoutmake.models.Track
+import java.text.SimpleDateFormat
+import java.util.*
 
 class TrackViewHolder(private val parentView: View) : RecyclerView.ViewHolder(parentView) {
 
@@ -27,16 +29,20 @@ class TrackViewHolder(private val parentView: View) : RecyclerView.ViewHolder(pa
             .into(albumImageView)
 
         songNameTextView.text = track.trackName
+
+        val convertedTime =
+            SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis.toLong())
         albumAndTimeTextView.text = parentView.context.getString(
             R.string.artist_and_time,
             track.artistName,
-            track.trackTime
+            convertedTime
         )
     }
 }
 
+
 class TrackAdapter(
-    private val dataSet: ArrayList<Track>
+    private val dataSet: MutableList<Track>
 ) : RecyclerView.Adapter<TrackViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
@@ -47,6 +53,8 @@ class TrackAdapter(
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(dataSet[position])
+
+
     }
 
     override fun getItemCount(): Int = dataSet.size

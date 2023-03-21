@@ -19,31 +19,34 @@
         />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_start_track_text"
         android:orientation="vertical"
+        android:layout_marginEnd="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageView"
         app:layout_constraintStart_toEndOf="@+id/album_image"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            style="@style/SongNameText"
             android:id="@+id/song_name"
-            android:layout_width="wrap_content"
+            style="@style/SongNameText"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:text="@string/default_text" />
 
         <TextView
-            style="@style/SongAlbumAndTimeText"
             android:id="@+id/artist_and_track_time"
-            android:layout_width="wrap_content"
+            style="@style/SongAlbumAndTimeText"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/artist_and_time"
             tools:text="@string/default_text" />
     </LinearLayout>
 
     <ImageView
+        android:id="@+id/imageView"
         style="@style/ArrowForward"
         android:layout_width="@dimen/arrow_forward_sides"
         android:layout_height="@dimen/arrow_forward_sides"

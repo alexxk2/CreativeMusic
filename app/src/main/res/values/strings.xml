@@ -26,4 +26,12 @@
     <string name="default_text">Just a simple default text to fill the view</string>
     <string name="album_image">album image</string>
     <string name="arrow_forward">arrow forward</string>
+
+    <!--search screen-->
+    <string name="description_error_image">error image</string>
+    <string name="update">Обновить</string>
+    <string name="error_message_not_found">Ничего не нашлось</string>
+    <string name="error_message_something_went_wrong">Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
+    <string name="error_message_not_200">Неизвестная ошибка. Код %1$d</string>
+
 </resources>

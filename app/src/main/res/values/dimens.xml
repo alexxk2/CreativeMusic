@@ -19,4 +19,8 @@
     <dimen name="margin_start_track_text">8dp</dimen>
     <dimen name="arrow_forward_sides">14dp</dimen>
 
+    <!--Search screen-->
+    <dimen name="error_image_side_and_margin">120dp</dimen>
+    <dimen name="error_text_message_size">19sp</dimen>
+
 </resources>
