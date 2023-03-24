@@ -80,7 +80,9 @@ class SearchActivity : AppCompatActivity() {
             searchEditText.addTextChangedListener {
                 changeClearButtonVisibility(it)
             }
+
         }
+
 
     }
 
