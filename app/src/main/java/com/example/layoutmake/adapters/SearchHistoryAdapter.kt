@@ -7,10 +7,10 @@ import com.example.layoutmake.R
 import com.example.layoutmake.adapters.utils.TrackViewHolder
 import com.example.layoutmake.models.Track
 
-class TrackAdapter(
-    private var dataSet: MutableList<Track>
-) : RecyclerView.Adapter<TrackViewHolder>() {
 
+
+class SearchHistoryAdapter( private var dataSet: MutableList<Track>
+) : RecyclerView.Adapter<TrackViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val parentView =

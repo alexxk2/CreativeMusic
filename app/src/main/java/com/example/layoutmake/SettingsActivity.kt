@@ -76,7 +76,7 @@ class SettingsActivity : AppCompatActivity() {
         startActivity(chooser)
     }
 
-    fun setSwitcher(){
+    private fun setSwitcher(){
 
         val sharedPrefs = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE)
         val isDarkMode = sharedPrefs.getBoolean(IS_DARK_THEME,false)

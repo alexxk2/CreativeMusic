@@ -5,7 +5,8 @@ import android.os.Bundle
 import android.view.View
 import android.view.View.OnClickListener
 import android.widget.Button
-
+import com.example.layoutmake.models.Track
+import com.google.gson.Gson
 
 
 class MainActivity : AppCompatActivity() {
@@ -13,7 +14,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
+        /*val sharedPref = getSharedPreferences(SHARED_PREFS,0)
+        sharedPref.edit()
+            .putString(HISTORY_LIST,null)
+            .apply()*/
 
         val searchButton = findViewById<Button>(R.id.search_button)
         val mediaLibraryButton = findViewById<Button>(R.id.media_library_button)

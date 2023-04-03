@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatDelegate
 
 const val SHARED_PREFS = "shared_prefs"
 const val IS_DARK_THEME = "is_dark_theme"
+const val HISTORY_LIST = "history_list"
 
 class App: Application() {
 
