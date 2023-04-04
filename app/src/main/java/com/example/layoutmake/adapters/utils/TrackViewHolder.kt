@@ -9,6 +9,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.layoutmake.HISTORY_LIST
 import com.example.layoutmake.R
 import com.example.layoutmake.SHARED_PREFS
+import com.example.layoutmake.models.SearchHistory
 import com.example.layoutmake.models.Track
 import com.google.gson.Gson
 import java.text.SimpleDateFormat
@@ -41,31 +42,9 @@ class TrackViewHolder(private val parentView: View) : RecyclerView.ViewHolder(pa
 
         parentView.setOnClickListener {
             val sharedPref = parentView.context.getSharedPreferences(SHARED_PREFS, 0)
-            val trackListJSon = sharedPref.getString(HISTORY_LIST, null)
 
-            if (trackListJSon != null) {
-                val trackList =
-                    Gson().fromJson(trackListJSon, Array<Track>::class.java).toMutableList()
-
-                if (trackList.contains(track)) {
-                    trackList.remove(track)
-                    trackList.add(0,track)
-                } else if (trackList.size == 10) {
-                    trackList.removeLast()
-                    trackList.add(0,track)
-                } else trackList.add(0,track)
-
-                sharedPref.edit()
-                    .putString(HISTORY_LIST,Gson().toJson(trackList))
-                    .apply()
-
-            } else {
-                val defValue = Gson().toJson(arrayOf(track))
-                sharedPref.edit()
-                    .putString(HISTORY_LIST,defValue)
-                    .apply()
-            }
-
+            val searchHistory = SearchHistory(sharedPref)
+            searchHistory.manageTrackHistory(track)
         }
     }
 }

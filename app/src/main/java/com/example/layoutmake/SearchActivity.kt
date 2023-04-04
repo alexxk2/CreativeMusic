@@ -9,6 +9,7 @@ import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.layoutmake.adapters.SearchHistoryAdapter
 import com.example.layoutmake.adapters.TrackAdapter
@@ -188,7 +189,10 @@ class SearchActivity : AppCompatActivity() {
         with(binding){
             val trackHistory = sharedPref.getString(HISTORY_LIST,null)
             val historyCondition = searchEditText.hasFocus() && s?.isEmpty() == true && trackHistory!=null
-            searchHistoryView.visibility = if (historyCondition) View.VISIBLE else View.GONE
+            searchHistoryView.visibility = if (historyCondition) {
+                clearErrors()
+                View.VISIBLE
+            } else View.GONE
             cleanHistoryButton.visibility = if (historyCondition) View.VISIBLE else View.GONE
         }
     }
