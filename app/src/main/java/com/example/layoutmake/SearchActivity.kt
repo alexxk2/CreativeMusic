@@ -1,16 +1,20 @@
 package com.example.layoutmake
 
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import androidx.core.widget.addTextChangedListener
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.layoutmake.adapters.SearchHistoryAdapter
 import com.example.layoutmake.adapters.TrackAdapter
 import com.example.layoutmake.databinding.ActivitySearchBinding
+import com.example.layoutmake.models.SearchHistory
 import com.example.layoutmake.models.Track
 import com.example.layoutmake.sources.ITunesSearchApi
 import com.example.layoutmake.sources.entities.ResponseEntity
@@ -29,6 +33,8 @@ class SearchActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySearchBinding
     private lateinit var searchInput: String
+    private lateinit var sharedPref: SharedPreferences
+
     private val baseUrl = "https://itunes.apple.com"
 
     private val retrofit = Retrofit.Builder()
@@ -39,15 +45,22 @@ class SearchActivity : AppCompatActivity() {
     private var tracks = mutableListOf<Track>()
     private val searchingService = retrofit.create(ITunesSearchApi::class.java)
     private val trackAdapter = TrackAdapter(tracks)
-
+    private val listener = SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
+        if (key == HISTORY_LIST){
+            startHistoryRecyclerView()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
         binding = ActivitySearchBinding.inflate(layoutInflater).also { setContentView(it.root) }
+        sharedPref = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE)
 
-        startRecyclerView()
+
+        startTrackRecyclerView()
+        startHistoryRecyclerView()
 
         with(binding) {
             searchEditText.setOnEditorActionListener { view, actionId, _ ->
@@ -77,11 +90,43 @@ class SearchActivity : AppCompatActivity() {
                 startSearch()
             }
 
-            searchEditText.addTextChangedListener {
-                changeClearButtonVisibility(it)
+            searchEditText.addTextChangedListener(object: TextWatcher{
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {}
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    manageHistoryVisibility(s)
+                    manageSearchVisibility(s)
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                    changeClearButtonVisibility(s)
+                }
+            })
+
+            searchEditText.setOnFocusChangeListener { _, _ ->
+                manageHistoryVisibility(searchEditText.text)
+            }
+
+            cleanHistoryButton.setOnClickListener {
+                sharedPref.edit()
+                    .putString(HISTORY_LIST,null)
+                    .apply()
+
+                with(binding){
+                    searchHistoryView.visibility = View.GONE
+                    cleanHistoryButton.visibility = View.GONE
+                }
+
             }
         }
 
+
+         sharedPref.registerOnSharedPreferenceChangeListener (listener)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -97,7 +142,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun changeClearButtonVisibility(input: Editable?) {
-        binding.removeInputButton.visibility = if (input.isNullOrEmpty()) View.INVISIBLE
+        binding.removeInputButton.visibility = if (input.isNullOrEmpty()) View.GONE
         else View.VISIBLE
     }
 
@@ -111,54 +156,87 @@ class SearchActivity : AppCompatActivity() {
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
-    private fun startRecyclerView() {
-        binding.recyclerView.layoutManager = LinearLayoutManager(this)
-        binding.recyclerView.adapter = trackAdapter
-        binding.recyclerView.setHasFixedSize(true)
+    private fun startTrackRecyclerView() {
+        with(binding){
+            recyclerView.layoutManager = LinearLayoutManager(this@SearchActivity)
+            recyclerView.adapter = trackAdapter
+            recyclerView.setHasFixedSize(true)
+        }
+    }
+
+    private fun startHistoryRecyclerView() {
+        val sharedPref = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE)
+        val searchHistory = SearchHistory(sharedPref)
+        with(binding) {
+            historyRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity)
+            historyRecyclerView.adapter = SearchHistoryAdapter(searchHistory.historyList())
+            historyRecyclerView.setHasFixedSize(true)
+        }
     }
 
     private fun clearErrors() {
 
         with(binding) {
-            errorTextMessage.visibility = View.INVISIBLE
-            errorNotFoundImage.visibility = View.INVISIBLE
-            errorSomethingWrongImage.visibility = View.INVISIBLE
-            updateButton.visibility = View.INVISIBLE
+            errorTextMessage.visibility = View.GONE
+            errorNotFoundImage.visibility = View.GONE
+            errorSomethingWrongImage.visibility = View.GONE
+            updateButton.visibility = View.GONE
+        }
+    }
+
+    private fun manageHistoryVisibility(s: CharSequence?){
+
+        with(binding){
+            val trackHistory = sharedPref.getString(HISTORY_LIST,null)
+            val historyCondition = searchEditText.hasFocus() && s?.isEmpty() == true && trackHistory!=null
+            searchHistoryView.visibility = if (historyCondition) {
+                clearErrors()
+                View.VISIBLE
+            } else View.GONE
+            cleanHistoryButton.visibility = if (historyCondition) View.VISIBLE else View.GONE
+        }
+    }
+
+    private fun manageSearchVisibility(s: CharSequence?){
+        with(binding){
+            val searchCondition = searchEditText.hasFocus() && s?.isEmpty() == true
+            if (searchCondition){
+                hideKeyboard(constraintLayout)
+                tracks.clear()
+                trackAdapter.notifyDataSetChanged()
+            }
         }
     }
 
     private fun startSearch() {
 
-        with(binding)
-        {
-            searchingService
-                .findSong(searchInput)
-                .enqueue(object : Callback<ResponseEntity> {
-                    override fun onResponse(
-                        call: Call<ResponseEntity>,
-                        response: Response<ResponseEntity>
-                    ) {
-                        if (response.code() == 200) {
-                            clearErrors()
-                            tracks.clear()
-                            if (response.body()?.results?.isNotEmpty() == true) {
-                                tracks.addAll(response.body()?.results!!)
-                                trackAdapter.notifyDataSetChanged()
-                            }
-                        } else {
-                            showServerError()
+        searchingService
+            .findSong(searchInput)
+            .enqueue(object : Callback<ResponseEntity> {
+                override fun onResponse(
+                    call: Call<ResponseEntity>,
+                    response: Response<ResponseEntity>
+                ) {
+                    if (response.code() == 200) {
+                        clearErrors()
+                        tracks.clear()
+                        if (response.body()?.results?.isNotEmpty() == true) {
+                            tracks.addAll(response.body()?.results!!)
+                            trackAdapter.notifyDataSetChanged()
                         }
-
-                        if (tracks.isEmpty()) {
-                            showNotFoundError()
-                        }
-                    }
-
-                    override fun onFailure(call: Call<ResponseEntity>, t: Throwable) {
+                    } else {
                         showServerError()
                     }
-                })
-        }
+
+                    if (tracks.isEmpty()) {
+                        showNotFoundError()
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponseEntity>, t: Throwable) {
+                    showServerError()
+                }
+            })
     }
 
     private fun showServerError() {

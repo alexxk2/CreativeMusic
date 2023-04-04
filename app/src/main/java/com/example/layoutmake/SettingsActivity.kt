@@ -2,12 +2,15 @@ package com.example.layoutmake
 
 import android.app.ActivityManager
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.core.content.ContextCompat.startActivity
 
 import com.example.layoutmake.databinding.ActivitySettingsBinding
+
 
 
 class SettingsActivity : AppCompatActivity() {
@@ -19,18 +22,27 @@ class SettingsActivity : AppCompatActivity() {
 
         binding = ActivitySettingsBinding.inflate(layoutInflater).also { setContentView(it.root) }
 
-        binding.arrowBackButton.setOnClickListener {
-            finish()
-        }
+        setSwitcher()
 
-        binding.shareTextView.setOnClickListener { createShareIntent() }
+        with(binding)
+        {
+            arrowBackButton.setOnClickListener {
+                finish()
+            }
 
-        binding.supportTextView.setOnClickListener {
-            createMessageIntent()
-        }
+            shareTextView.setOnClickListener { createShareIntent() }
 
-        binding.agreementTextView.setOnClickListener {
-            createBrowserIntent()
+            supportTextView.setOnClickListener {
+                createMessageIntent()
+            }
+
+            agreementTextView.setOnClickListener {
+                createBrowserIntent()
+            }
+
+            switchButton.setOnCheckedChangeListener { _, isChecked ->
+                (applicationContext as App).switchTheme(isChecked)
+            }
         }
 
     }
@@ -62,6 +74,14 @@ class SettingsActivity : AppCompatActivity() {
         intent.type = "text/plain"
         val chooser = Intent.createChooser(intent, getString(R.string.text_for_chooser))
         startActivity(chooser)
+    }
+
+    private fun setSwitcher(){
+
+        val sharedPrefs = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE)
+        val isDarkMode = sharedPrefs.getBoolean(IS_DARK_THEME,false)
+        binding.switchButton.isChecked = isDarkMode
+
     }
 
 

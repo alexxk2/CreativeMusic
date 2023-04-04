@@ -33,5 +33,7 @@
     <string name="error_message_not_found">Ничего не нашлось</string>
     <string name="error_message_something_went_wrong">Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
     <string name="error_message_not_200">Неизвестная ошибка. Код %1$d</string>
+    <string name="search_history_title">Вы искали</string>
+    <string name="clean_history">Очистить историю</string>
 
 </resources>
