@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+
     <style name="MainButtonsStyle" parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:textAllCaps">false</item>
@@ -153,7 +154,74 @@
         <item name="android:textSize">@dimen/error_text_message_size</item>
     </style>
 
+    <!--Player screen-->
 
+    <style name="TrackNameTextStyle">
+        <item name="android:layout_marginTop">@dimen/search_from_title_margin</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:lines">1</item>
+        <item name="android:textColor">@color/y_black</item>
+        <item name="android:textSize">@dimen/main_menu_text_size</item>
+    </style>
+
+    <style name="TrackArtistTextStyle">
+        <item name="android:layout_marginTop">@dimen/search_edit_sides_padding</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:lines">1</item>
+        <item name="android:textColor">@color/y_black</item>
+        <item name="android:textSize">@dimen/artist_name_text_size</item>
+    </style>
+
+    <style name="AddButtonStyle">
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:src">@drawable/add_button</item>
+        <item name="android:layout_marginTop">@dimen/buttons_and_text_margin_top</item>
+        <item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>
+    </style>
+
+    <style name="PlayButtonStyle">
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:src">@drawable/play_button</item>
+        <item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>
+    </style>
+
+    <style name="LikeButtonStyle">
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:src">@drawable/like_button</item>
+        <item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>
+    </style>
+
+    <style name="TimerTextStyle">
+        <item name="android:layout_marginTop">@dimen/search_edit_sides_padding</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:lines">1</item>
+        <item name="android:textColor">@color/y_black</item>
+        <item name="android:textSize">@dimen/artist_name_text_size</item>
+        <item name="android:text">@string/default_timer_text</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
+    <style name="InfoBlockNamesStyle">
+        <item name="android:layout_marginStart">@dimen/sides_margin</item>
+        <item name="android:layout_marginTop">@dimen/sides_margin</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textColor">@color/y_grey</item>
+        <item name="android:textSize">@dimen/info_block_text_size</item>
+    </style>
+
+    <style name="InfoBlockValuesStyle">
+        <item name="android:layout_marginStart">@dimen/sides_margin</item>
+        <item name="android:layout_marginEnd">@dimen/sides_margin</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:lines">1</item>
+        <item name="android:textAlignment">viewEnd</item>
+        <item name="android:textColor">@color/y_black</item>
+        <item name="android:textSize">@dimen/info_block_text_size</item>
+    </style>
 
 </resources>
 

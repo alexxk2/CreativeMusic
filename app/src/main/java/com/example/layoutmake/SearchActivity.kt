@@ -32,9 +32,9 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private lateinit var binding: ActivitySearchBinding
-    private lateinit var searchInput: String
     private lateinit var sharedPref: SharedPreferences
 
+    private var searchInput = ""
     private val baseUrl = "https://itunes.apple.com"
 
     private val retrofit = Retrofit.Builder()
