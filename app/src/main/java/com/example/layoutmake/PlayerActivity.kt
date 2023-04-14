@@ -40,11 +40,13 @@ class PlayerActivity : AppCompatActivity() {
                     Locale.getDefault()
                 ).format(track.trackTimeMillis.toLong())
 
+            val cornerRadiusInPx = resources.getDimensionPixelSize(R.dimen.cover_corner_radius)
+
             Glide.with(this@PlayerActivity)
                 .load(getCoverArtwork(track.artworkUrl100))
                 .placeholder(R.drawable.placeholder)
                 .centerCrop()
-                .transform(RoundedCorners(16))
+                .transform(RoundedCorners(cornerRadiusInPx))
                 .into(cover)
 
             songName.text = track.trackName
@@ -62,7 +64,6 @@ class PlayerActivity : AppCompatActivity() {
             trackGenreValue.text = track.primaryGenreName
             trackCountryValue.text = track.country
         }
-
     }
 
     private fun getCoverArtwork(oldUrl: String) = oldUrl.replaceAfterLast('/', "512x512bb.jpg")
