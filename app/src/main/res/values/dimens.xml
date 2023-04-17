@@ -27,4 +27,16 @@
     <dimen name="linear_marin_bottom">120dp</dimen>
     <dimen name="search_edit_height">36dp</dimen>
 
+    <!--player screen-->
+    <dimen name="cover_margin_top">48dp</dimen>
+    <dimen name="artist_name_text_size">14sp</dimen>
+    <dimen name="additional_buttons_size">50dp</dimen>
+    <dimen name="buttons_and_text_margin_top">54dp</dimen>
+    <dimen name="play_button_size">84dp</dimen>
+    <dimen name="info_block_margin_top">38dp</dimen>
+    <dimen name="info_block_text_size">12sp</dimen>
+    <dimen name="player_bottom_margin">20dp</dimen>
+    <dimen name="cover_corner_radius">8dp</dimen>
+
+
 </resources>
