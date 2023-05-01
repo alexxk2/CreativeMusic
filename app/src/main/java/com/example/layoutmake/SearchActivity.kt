@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -28,14 +30,15 @@ import retrofit2.converter.gson.GsonConverterFactory
 class SearchActivity : AppCompatActivity() {
 
     companion object {
-        const val SEARCH_INPUT = "SEARCH_INPUT"
+        private const val SEARCH_INPUT = "SEARCH_INPUT"
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 
     private lateinit var binding: ActivitySearchBinding
     private lateinit var sharedPref: SharedPreferences
 
     private var searchInput = ""
-    private val baseUrl = "https://itunes.apple.com"
+    private val baseUrl = "http://itunes.apple.com"
 
     private val retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
@@ -50,6 +53,8 @@ class SearchActivity : AppCompatActivity() {
             startHistoryRecyclerView()
         }
     }
+    private val handler = Handler(Looper.getMainLooper())
+    private val searchRunnable = Runnable { startSearch() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,17 +68,6 @@ class SearchActivity : AppCompatActivity() {
         startHistoryRecyclerView()
 
         with(binding) {
-            searchEditText.setOnEditorActionListener { view, actionId, _ ->
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    if (view.text.isNotEmpty()) {
-                        searchInput = view.text.toString()
-                        startSearch()
-                    }
-                    true
-                }
-                false
-
-            }
 
             removeInputButton.setOnClickListener {
                 clearInput()
@@ -101,6 +95,7 @@ class SearchActivity : AppCompatActivity() {
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     manageHistoryVisibility(s)
                     manageSearchVisibility(s)
+                    startSearchDebounce(s)
                 }
 
                 override fun afterTextChanged(s: Editable?) {
@@ -121,10 +116,8 @@ class SearchActivity : AppCompatActivity() {
                     searchHistoryView.visibility = View.GONE
                     cleanHistoryButton.visibility = View.GONE
                 }
-
             }
         }
-
 
          sharedPref.registerOnSharedPreferenceChangeListener (listener)
     }
@@ -178,7 +171,7 @@ class SearchActivity : AppCompatActivity() {
 
         with(binding) {
             errorTextMessage.visibility = View.GONE
-            errorNotFoundImage.visibility = View.GONE
+            errorNotFoundImage.visibility = View.INVISIBLE
             errorSomethingWrongImage.visibility = View.GONE
             updateButton.visibility = View.GONE
         }
@@ -221,11 +214,14 @@ class SearchActivity : AppCompatActivity() {
                         clearErrors()
                         tracks.clear()
                         if (response.body()?.results?.isNotEmpty() == true) {
+                            hideProgressBar()
                             tracks.addAll(response.body()?.results!!)
+                            binding.progressBar.visibility = View.INVISIBLE
                             trackAdapter.notifyDataSetChanged()
                         }
                     } else {
                         showServerError()
+
                     }
 
                     if (tracks.isEmpty()) {
@@ -234,10 +230,31 @@ class SearchActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<ResponseEntity>, t: Throwable) {
+
                     showServerError()
                 }
             })
     }
+
+    private fun startSearchDebounce(s:CharSequence?){
+        if (!s.isNullOrEmpty()) {
+            showProgressBar()
+            searchInput = s.toString()
+            handler.removeCallbacks(searchRunnable)
+            handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+        }
+    }
+
+    private fun showProgressBar(){
+        binding.recyclerView.visibility = View.INVISIBLE
+        binding.progressBar.visibility = View.VISIBLE
+    }
+
+    private fun hideProgressBar(){
+        binding.progressBar.visibility = View.INVISIBLE
+        binding.recyclerView.visibility = View.VISIBLE
+    }
+
 
     private fun showServerError() {
         with(binding) {

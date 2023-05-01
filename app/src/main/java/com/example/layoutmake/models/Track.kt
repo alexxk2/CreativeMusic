@@ -13,11 +13,12 @@ data class Track(
     val collectionName: String?,
     val releaseDate: String?,
     val primaryGenreName: String?,
-    val country: String?
+    val country: String?,
+    val previewUrl: String?
 ): Parcelable{
 
     companion object{
-        @JvmStatic val DEFAULT = Track(1,"default","default","default","default","default","default","default","default")
+        @JvmStatic val DEFAULT = Track(1,"default","default","default","default","default","default","default","default","default")
     }
 }
 
