@@ -1,6 +1,7 @@
 package com.example.layoutmake
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,11 +10,8 @@ import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.layoutmake.adapters.SearchHistoryAdapter
 import com.example.layoutmake.adapters.TrackAdapter
 import com.example.layoutmake.databinding.ActivitySearchBinding
 import com.example.layoutmake.models.SearchHistory
@@ -29,11 +27,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
 
-    companion object {
-        private const val SEARCH_INPUT = "SEARCH_INPUT"
-        private const val SEARCH_DEBOUNCE_DELAY = 2000L
-    }
-
     private lateinit var binding: ActivitySearchBinding
     private lateinit var sharedPref: SharedPreferences
 
@@ -47,7 +40,9 @@ class SearchActivity : AppCompatActivity() {
 
     private var tracks = mutableListOf<Track>()
     private val searchingService = retrofit.create(ITunesSearchApi::class.java)
-    private val trackAdapter = TrackAdapter(tracks)
+    private lateinit var  trackAdapter: TrackAdapter
+    private var isClickAllowed = true
+    private lateinit var  searchHistoryAdapter: TrackAdapter
     private val listener = SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
         if (key == HISTORY_LIST){
             startHistoryRecyclerView()
@@ -150,6 +145,11 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun startTrackRecyclerView() {
+        trackAdapter = TrackAdapter(this,tracks,object : TrackAdapter.TrackActionListener{
+            override fun onClickTrack(track: Track) {
+                manageClickAction(track)
+            }
+        })
         with(binding){
             recyclerView.layoutManager = LinearLayoutManager(this@SearchActivity)
             recyclerView.adapter = trackAdapter
@@ -158,11 +158,19 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun startHistoryRecyclerView() {
+
+
         val sharedPref = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE)
         val searchHistory = SearchHistory(sharedPref)
+        searchHistoryAdapter = TrackAdapter(this,searchHistory.historyList(),object : TrackAdapter.TrackActionListener{
+            override fun onClickTrack(track: Track) {
+                manageClickAction(track)
+            }
+        })
+
         with(binding) {
             historyRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity)
-            historyRecyclerView.adapter = SearchHistoryAdapter(searchHistory.historyList())
+            historyRecyclerView.adapter = searchHistoryAdapter
             historyRecyclerView.setHasFixedSize(true)
         }
     }
@@ -278,5 +286,34 @@ class SearchActivity : AppCompatActivity() {
             errorTextMessage.text =
                 getString(R.string.error_message_not_found)
         }
+    }
+
+    private fun clickDebounce (): Boolean{
+        val current = isClickAllowed
+        if (isClickAllowed){
+            isClickAllowed = false
+            handler.postDelayed({isClickAllowed=true}, CLICK_DEBOUNCE_DELAY)
+        }
+        return current
+    }
+
+    private fun manageClickAction(track: Track){
+        if (clickDebounce()){
+            val sharedPref = getSharedPreferences(SHARED_PREFS, 0)
+
+            val searchHistory = SearchHistory(sharedPref)
+            searchHistory.manageTrackHistory(track)
+
+            val playerIntent = Intent(this@SearchActivity, PlayerActivity::class.java)
+            playerIntent.putExtra(TRACK, track)
+            startActivity(playerIntent)
+        }
+    }
+
+    companion object {
+        private const val SEARCH_INPUT = "SEARCH_INPUT"
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        private const val TRACK = "track"
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }
