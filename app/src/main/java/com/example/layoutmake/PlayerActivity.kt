@@ -1,13 +1,11 @@
 package com.example.layoutmake
 
-import android.app.usage.NetworkStats.Bucket.STATE_DEFAULT
 import android.media.MediaPlayer
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.provider.MediaStore.Audio.AudioColumns.TRACK
 import android.view.View
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
@@ -25,7 +23,17 @@ class PlayerActivity : AppCompatActivity() {
     private var mediaPlayer = MediaPlayer()
     private val handler = Handler(Looper.getMainLooper())
     private var playerState = STATE_DEFAULT
-    private lateinit var timerText: Runnable
+
+    private val timerRunn = object : Runnable{
+        override fun run() {
+            binding.timer.text = SimpleDateFormat(
+                "mm:ss",
+                Locale.getDefault()
+            ).format(mediaPlayer.currentPosition)
+
+            handler.postDelayed(this, TIMER_UPDATE_INTERVAL_MS)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,26 +48,14 @@ class PlayerActivity : AppCompatActivity() {
         inflateViews()
         prepareMediaPlayer()
 
-        timerText = object : Runnable{
-            override fun run() {
-                binding.timer.text = SimpleDateFormat(
-                    "mm:ss",
-                    Locale.getDefault()
-                ).format(mediaPlayer.currentPosition)
-
-                handler.postDelayed(this, TIMER_UPDATE_INTERVAL)
-            }
-        }
-
         binding.arrowBackButton.setOnClickListener { finish() }
         binding.playButton.setOnClickListener {
             startPlayer()
 
             handler.postDelayed(
-                timerText,
-                TIMER_UPDATE_INTERVAL
+                timerRunn,
+                TIMER_UPDATE_INTERVAL_MS
             )
-
         }
 
         binding.pauseButton.setOnClickListener {
@@ -114,7 +110,7 @@ class PlayerActivity : AppCompatActivity() {
         mediaPlayer.setOnCompletionListener {
             playerState = STATE_PREPARED
             manageControlButtonsVisibility()
-            handler.removeCallbacks(timerText)
+            handler.removeCallbacks(timerRunn)
             binding.timer.text = getString(R.string.default_timer_text)
         }
     }
@@ -156,7 +152,7 @@ class PlayerActivity : AppCompatActivity() {
         mediaPlayer.pause()
         playerState = STATE_PAUSED
         manageControlButtonsVisibility()
-        handler.removeCallbacks(timerText)
+        handler.removeCallbacks(timerRunn)
     }
 
     override fun onStop() {
@@ -176,7 +172,7 @@ class PlayerActivity : AppCompatActivity() {
         private const val STATE_PREPARED = 1
         private const val STATE_PLAYING = 2
         private const val STATE_PAUSED = 3
-        private const val TIMER_UPDATE_INTERVAL = 300L
+        private const val TIMER_UPDATE_INTERVAL_MS = 300L
     }
 
 }
