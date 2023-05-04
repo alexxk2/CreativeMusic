@@ -1,8 +1,12 @@
 package com.example.layoutmake
 
+import android.media.MediaPlayer
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.view.View
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -16,6 +20,21 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPlayerBinding
     private lateinit var track: Track
 
+    private var mediaPlayer = MediaPlayer()
+    private val handler = Handler(Looper.getMainLooper())
+    private var playerState = STATE_DEFAULT
+
+    private val timerRunn = object : Runnable{
+        override fun run() {
+            binding.timer.text = SimpleDateFormat(
+                "mm:ss",
+                Locale.getDefault()
+            ).format(mediaPlayer.currentPosition)
+
+            handler.postDelayed(this, TIMER_UPDATE_INTERVAL_MS)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -27,8 +46,21 @@ class PlayerActivity : AppCompatActivity() {
         } else intent.getParcelableExtra(TRACK) ?: Track.DEFAULT
 
         inflateViews()
+        prepareMediaPlayer()
 
         binding.arrowBackButton.setOnClickListener { finish() }
+        binding.playButton.setOnClickListener {
+            startPlayer()
+
+            handler.postDelayed(
+                timerRunn,
+                TIMER_UPDATE_INTERVAL_MS
+            )
+        }
+
+        binding.pauseButton.setOnClickListener {
+            pausePlayer()
+        }
     }
 
     private fun inflateViews() {
@@ -68,9 +100,79 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun getCoverArtwork(oldUrl: String) = oldUrl.replaceAfterLast('/', "512x512bb.jpg")
 
-    companion object {
-        const val TRACK = "track"
+    private fun prepareMediaPlayer(){
+        mediaPlayer.setDataSource(track.previewUrl)
+        mediaPlayer.prepareAsync()
+        mediaPlayer.setOnPreparedListener {
+            binding.playButton.isClickable = true
+            playerState = STATE_PREPARED
+        }
+        mediaPlayer.setOnCompletionListener {
+            playerState = STATE_PREPARED
+            manageControlButtonsVisibility()
+            handler.removeCallbacks(timerRunn)
+            binding.timer.text = getString(R.string.default_timer_text)
+        }
     }
 
+    private fun manageControlButtonsVisibility(){
+        when(playerState){
+            STATE_PREPARED -> {
+                makePlayButtonVisible()
+            }
+            STATE_PAUSED-> {
+                makePlayButtonVisible()
+            }
+            STATE_PLAYING -> {
+                makePauseButtonVisible()
+            }
+            else -> {
+                makePlayButtonVisible()
+            }
+        }
+    }
+
+    private fun makePlayButtonVisible(){
+        binding.playButton.visibility = View.VISIBLE
+        binding.pauseButton.visibility = View.INVISIBLE
+    }
+
+    private fun makePauseButtonVisible(){
+        binding.playButton.visibility = View.INVISIBLE
+        binding.pauseButton.visibility = View.VISIBLE
+    }
+
+    private fun startPlayer(){
+        mediaPlayer.start()
+        playerState = STATE_PLAYING
+        manageControlButtonsVisibility()
+    }
+
+    private fun pausePlayer(){
+        mediaPlayer.pause()
+        playerState = STATE_PAUSED
+        manageControlButtonsVisibility()
+        handler.removeCallbacks(timerRunn)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        pausePlayer()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        pausePlayer()
+        mediaPlayer.release()
+    }
+
+    companion object {
+        private const val TRACK = "track"
+        private const val STATE_DEFAULT = 0
+        private const val STATE_PREPARED = 1
+        private const val STATE_PLAYING = 2
+        private const val STATE_PAUSED = 3
+        private const val TIMER_UPDATE_INTERVAL_MS = 300L
+    }
 
 }

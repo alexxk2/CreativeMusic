@@ -14,11 +14,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        /*val sharedPref = getSharedPreferences(SHARED_PREFS,0)
-        sharedPref.edit()
-            .putString(HISTORY_LIST,null)
-            .apply()*/
-
         val searchButton = findViewById<Button>(R.id.search_button)
         val mediaLibraryButton = findViewById<Button>(R.id.media_library_button)
         val settingsButton = findViewById<Button>(R.id.settings_button)
@@ -42,6 +37,5 @@ class MainActivity : AppCompatActivity() {
             startActivity(settingsIntent)
         }
     }
-
 
 }
