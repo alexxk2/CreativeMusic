@@ -1,4 +1,4 @@
-package com.example.layoutmake.adapters
+package com.example.layoutmake.presentation.presenters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.layoutmake.R
 import com.example.layoutmake.databinding.TrackItemBinding
-import com.example.layoutmake.models.Track
+import com.example.layoutmake.domain.models.Track
 import java.text.SimpleDateFormat
 import java.util.*
 

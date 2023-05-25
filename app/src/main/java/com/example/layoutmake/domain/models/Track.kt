@@ -1,4 +1,4 @@
-package com.example.layoutmake.models
+package com.example.layoutmake.domain.models
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

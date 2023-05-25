@@ -1,12 +1,11 @@
-package com.example.layoutmake
+package com.example.layoutmake.presentation.ui
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.View.OnClickListener
 import android.widget.Button
-import com.example.layoutmake.models.Track
-import com.google.gson.Gson
+import com.example.layoutmake.R
 
 
 class MainActivity : AppCompatActivity() {
