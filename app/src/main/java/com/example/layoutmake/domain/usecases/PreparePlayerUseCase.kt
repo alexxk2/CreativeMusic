@@ -1,5 +1,7 @@
 package com.example.layoutmake.domain.usecases
 
+import com.example.layoutmake.data.OnCompletePlaying
+import com.example.layoutmake.data.OnPreparePlayer
 import com.example.layoutmake.domain.api.PlayerRepository
 
 class PreparePlayerUseCase(
@@ -7,8 +9,10 @@ class PreparePlayerUseCase(
 ) {
 
     fun execute(
-        path: String
+        path: String,
+        onComplete: OnCompletePlaying,
+        onPreparePlayer: OnPreparePlayer
     ) {
-        playerRepository.preparePlayer(path = path)
+        playerRepository.preparePlayer(path = path, onComplete = onComplete, onPreparePlayer = onPreparePlayer)
     }
 }

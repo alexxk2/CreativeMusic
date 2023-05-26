@@ -1,10 +1,9 @@
 package com.example.layoutmake.presentation.presenters.player
 
-import androidx.lifecycle.LiveData
-import com.example.layoutmake.data.MediaPlayerImpl
-import com.example.layoutmake.data.player.PlayerRepositoryImpl
+import com.example.layoutmake.data.OnCompletePlaying
+import com.example.layoutmake.data.OnPreparePlayer
+import com.example.layoutmake.domain.api.PlayerRepository
 import com.example.layoutmake.domain.models.Track
-import com.example.layoutmake.domain.usecases.GetPlayerStateUseCase
 import com.example.layoutmake.domain.usecases.GetTrackCurrentPositionUseCase
 import com.example.layoutmake.domain.usecases.PauseSongUseCase
 import com.example.layoutmake.domain.usecases.PlaySongUseCase
@@ -14,7 +13,9 @@ import com.example.layoutmake.domain.usecases.ReleasePlayerUseCase
 class PlayerPresenter(
     private var view: PlayerView?,
     private val track: Track,
-    mediaPlayerImpl: MediaPlayerImpl
+    playerRepository: PlayerRepository,
+    private val onComplete: OnCompletePlaying,
+    private val onPreparePlayer: OnPreparePlayer
 ) {
 
     init {
@@ -22,15 +23,12 @@ class PlayerPresenter(
 
     }
 
-    private val playerRepositoryImpl = PlayerRepositoryImpl(mediaPlayerImpl)
-
-    private val playSongUseCase = PlaySongUseCase(playerRepositoryImpl)
-    private val pauseSongUseCase = PauseSongUseCase(playerRepositoryImpl)
-    private val preparePlayerUseCase = PreparePlayerUseCase(playerRepositoryImpl)
-    private val releasePlayerUseCase = ReleasePlayerUseCase(playerRepositoryImpl)
+    private val playSongUseCase = PlaySongUseCase(playerRepository)
+    private val pauseSongUseCase = PauseSongUseCase(playerRepository)
+    private val preparePlayerUseCase = PreparePlayerUseCase(playerRepository)
+    private val releasePlayerUseCase = ReleasePlayerUseCase(playerRepository)
     private val getTrackCurrentPositionUseCase =
-        GetTrackCurrentPositionUseCase(playerRepositoryImpl)
-    private val getPlayerStateUseCase = GetPlayerStateUseCase(playerRepositoryImpl)
+        GetTrackCurrentPositionUseCase(playerRepository)
 
     fun playSong() {
         playSongUseCase.execute()
@@ -42,7 +40,9 @@ class PlayerPresenter(
 
     fun preparePlayer() {
         preparePlayerUseCase.execute(
-            path = track.previewUrl!!
+            path = track.previewUrl!!,
+            onComplete = onComplete,
+            onPreparePlayer = onPreparePlayer
         )
     }
 
@@ -52,7 +52,6 @@ class PlayerPresenter(
 
     fun getTrackCurrentPosition(): Int = getTrackCurrentPositionUseCase.execute()
 
-    fun getPlayerState(): LiveData<Int> = getPlayerStateUseCase.execute()
 
     fun onViewDestroyed() {
         view = null
