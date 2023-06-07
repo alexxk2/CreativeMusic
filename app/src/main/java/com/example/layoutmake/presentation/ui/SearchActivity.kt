@@ -1,4 +1,4 @@
-package com.example.layoutmake
+package com.example.layoutmake.presentation.ui
 
 import android.content.Context
 import android.content.Intent
@@ -12,12 +12,15 @@ import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.layoutmake.adapters.TrackAdapter
+import com.example.layoutmake.HISTORY_LIST
+import com.example.layoutmake.R
+import com.example.layoutmake.SHARED_PREFS
+import com.example.layoutmake.presentation.presenters.TrackAdapter
 import com.example.layoutmake.databinding.ActivitySearchBinding
-import com.example.layoutmake.models.SearchHistory
-import com.example.layoutmake.models.Track
-import com.example.layoutmake.sources.ITunesSearchApi
-import com.example.layoutmake.sources.entities.ResponseEntity
+import com.example.layoutmake.data.local.SearchHistory
+import com.example.layoutmake.domain.models.Track
+import com.example.layoutmake.data.network.ITunesSearchApi
+import com.example.layoutmake.data.network.ResponseEntity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

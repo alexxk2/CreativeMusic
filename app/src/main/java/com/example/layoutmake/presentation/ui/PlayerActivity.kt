@@ -1,6 +1,5 @@
-package com.example.layoutmake
+package com.example.layoutmake.presentation.ui
 
-import android.media.MediaPlayer
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,17 +9,27 @@ import android.view.View
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.layoutmake.R
+import com.example.layoutmake.creator.Creator
+import com.example.layoutmake.data.MediaPlayerImpl
+import com.example.layoutmake.data.OnCompletePlaying
+import com.example.layoutmake.data.OnPreparePlayer
+import com.example.layoutmake.data.player.PlayerRepositoryImpl
 import com.example.layoutmake.databinding.ActivityPlayerBinding
-import com.example.layoutmake.models.Track
+import com.example.layoutmake.domain.models.Track
+import com.example.layoutmake.presentation.presenters.player.PlayerPresenter
+import com.example.layoutmake.presentation.presenters.player.PlayerView
 import java.text.SimpleDateFormat
 import java.util.*
 
-class PlayerActivity : AppCompatActivity() {
+class PlayerActivity : AppCompatActivity(), PlayerView, OnCompletePlaying, OnPreparePlayer {
 
     private lateinit var binding: ActivityPlayerBinding
     private lateinit var track: Track
 
-    private var mediaPlayer = MediaPlayer()
+    private lateinit var presenter: PlayerPresenter
+    private val mediaPlayerImpl = MediaPlayerImpl()
+    private val playerRepositoryImpl = PlayerRepositoryImpl(mediaPlayerImpl)
     private val handler = Handler(Looper.getMainLooper())
     private var playerState = STATE_DEFAULT
 
@@ -29,8 +38,7 @@ class PlayerActivity : AppCompatActivity() {
             binding.timer.text = SimpleDateFormat(
                 "mm:ss",
                 Locale.getDefault()
-            ).format(mediaPlayer.currentPosition)
-
+            ).format(presenter.getTrackCurrentPosition())
             handler.postDelayed(this, TIMER_UPDATE_INTERVAL_MS)
         }
     }
@@ -40,17 +48,18 @@ class PlayerActivity : AppCompatActivity() {
 
         binding = ActivityPlayerBinding.inflate(layoutInflater).also { setContentView(it.root) }
 
-
         track = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getParcelableExtra(TRACK, Track::class.java) ?: Track.DEFAULT
         } else intent.getParcelableExtra(TRACK) ?: Track.DEFAULT
 
-        inflateViews()
-        prepareMediaPlayer()
+        presenter = Creator.providePresenter(this,track,playerRepositoryImpl,this,this)
 
-        binding.arrowBackButton.setOnClickListener { finish() }
+        presenter.preparePlayer()
+
         binding.playButton.setOnClickListener {
-            startPlayer()
+            presenter.playSong()
+            playerState = STATE_PLAYING
+            manageControlButtonsVisibility()
 
             handler.postDelayed(
                 timerRunn,
@@ -59,11 +68,19 @@ class PlayerActivity : AppCompatActivity() {
         }
 
         binding.pauseButton.setOnClickListener {
-            pausePlayer()
+            presenter.pauseSong()
+            playerState = STATE_PAUSED
+            manageControlButtonsVisibility()
         }
+
+        binding.arrowBackButton.setOnClickListener { finish() }
     }
 
-    private fun inflateViews() {
+
+    private fun getCoverArtwork(oldUrl: String) = oldUrl.replaceAfterLast('/', "512x512bb.jpg")
+
+    override fun drawPlayer(track: Track) {
+
         with(binding) {
 
             val convertedTime =
@@ -98,31 +115,8 @@ class PlayerActivity : AppCompatActivity() {
         }
     }
 
-    private fun getCoverArtwork(oldUrl: String) = oldUrl.replaceAfterLast('/', "512x512bb.jpg")
-
-    private fun prepareMediaPlayer(){
-        mediaPlayer.setDataSource(track.previewUrl)
-        mediaPlayer.prepareAsync()
-        mediaPlayer.setOnPreparedListener {
-            binding.playButton.isClickable = true
-            playerState = STATE_PREPARED
-        }
-        mediaPlayer.setOnCompletionListener {
-            playerState = STATE_PREPARED
-            manageControlButtonsVisibility()
-            handler.removeCallbacks(timerRunn)
-            binding.timer.text = getString(R.string.default_timer_text)
-        }
-    }
-
     private fun manageControlButtonsVisibility(){
         when(playerState){
-            STATE_PREPARED -> {
-                makePlayButtonVisible()
-            }
-            STATE_PAUSED-> {
-                makePlayButtonVisible()
-            }
             STATE_PLAYING -> {
                 makePauseButtonVisible()
             }
@@ -142,37 +136,44 @@ class PlayerActivity : AppCompatActivity() {
         binding.pauseButton.visibility = View.VISIBLE
     }
 
-    private fun startPlayer(){
-        mediaPlayer.start()
-        playerState = STATE_PLAYING
-        manageControlButtonsVisibility()
-    }
-
-    private fun pausePlayer(){
-        mediaPlayer.pause()
-        playerState = STATE_PAUSED
-        manageControlButtonsVisibility()
-        handler.removeCallbacks(timerRunn)
-    }
-
     override fun onStop() {
         super.onStop()
-        pausePlayer()
+        handler.removeCallbacks(timerRunn)
+        presenter.pauseSong()
+        playerState = STATE_PAUSED
+        manageControlButtonsVisibility()
+    }
+
+    override fun doOnCompletePlaying() {
+        handler.removeCallbacks(timerRunn)
+        binding.timer.text = getString(R.string.default_timer_text)
+        makePlayButtonVisible()
+    }
+
+    override fun doOnPreparedPlayer() {
+        binding.playButton.isClickable = true
+    }
+
+    override fun onResume() {
+        super.onResume()
+        manageControlButtonsVisibility()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        pausePlayer()
-        mediaPlayer.release()
+        handler.removeCallbacks(timerRunn)
+        presenter.pauseSong()
+        presenter.releasePlayer()
+        presenter.onViewDestroyed()
     }
 
     companion object {
         private const val TRACK = "track"
         private const val STATE_DEFAULT = 0
-        private const val STATE_PREPARED = 1
-        private const val STATE_PLAYING = 2
-        private const val STATE_PAUSED = 3
+        private const val STATE_PLAYING = 1
+        private const val STATE_PAUSED = 2
         private const val TIMER_UPDATE_INTERVAL_MS = 300L
     }
+
 
 }

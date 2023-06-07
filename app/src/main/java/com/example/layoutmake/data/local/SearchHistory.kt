@@ -1,7 +1,8 @@
-package com.example.layoutmake.models
+package com.example.layoutmake.data.local
 
 import android.content.SharedPreferences
 import com.example.layoutmake.HISTORY_LIST
+import com.example.layoutmake.domain.models.Track
 import com.google.gson.Gson
 
 class SearchHistory(private val sharedPref: SharedPreferences) {

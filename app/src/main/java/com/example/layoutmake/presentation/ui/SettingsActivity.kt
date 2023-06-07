@@ -1,13 +1,13 @@
-package com.example.layoutmake
+package com.example.layoutmake.presentation.ui
 
-import android.app.ActivityManager
-import android.content.Context
-import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.core.content.ContextCompat.startActivity
+import com.example.layoutmake.App
+import com.example.layoutmake.IS_DARK_THEME
+import com.example.layoutmake.R
+import com.example.layoutmake.SHARED_PREFS
 
 import com.example.layoutmake.databinding.ActivitySettingsBinding
 
