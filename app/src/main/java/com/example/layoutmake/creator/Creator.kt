@@ -1,16 +1,37 @@
 package com.example.layoutmake.creator
 
-import com.example.layoutmake.data.OnCompletePlaying
-import com.example.layoutmake.data.OnPreparePlayer
-import com.example.layoutmake.domain.api.PlayerRepository
-import com.example.layoutmake.domain.models.Track
-import com.example.layoutmake.presentation.presenters.player.PlayerPresenter
-import com.example.layoutmake.presentation.presenters.player.PlayerView
+import android.content.Context
+import android.content.SharedPreferences
+import com.example.layoutmake.data.externals.player.impl.MediaPlayerImpl
+import com.example.layoutmake.data.externals.search.impl.HistoryManagerImpl
+import com.example.layoutmake.data.externals.search.impl.NetworkClientImpl
+import com.example.layoutmake.data.externals.settings.impl.ExternalNavigatorImpl
+import com.example.layoutmake.data.externals.settings.impl.LocalSettingsImpl
+import com.example.layoutmake.data.repositories.player.PlayerRepository
+import com.example.layoutmake.data.repositories.player.impl.PlayerRepositoryImpl
+import com.example.layoutmake.data.repositories.search.SearchRepository
+import com.example.layoutmake.data.repositories.search.impl.SearchRepositoryImpl
+import com.example.layoutmake.data.repositories.settings.SettingsRepository
+import com.example.layoutmake.data.repositories.settings.impl.SettingsRepositoryImpl
+
 
 object Creator {
 
-    fun providePresenter(view: PlayerView, track: Track, playerRepository: PlayerRepository, onComplete: OnCompletePlaying, onPreparePlayer: OnPreparePlayer): PlayerPresenter {
+    fun getPlayerRepository(): PlayerRepository {
+        return PlayerRepositoryImpl(MediaPlayerImpl())
+    }
 
-        return PlayerPresenter(view, track, playerRepository, onComplete, onPreparePlayer)
+    fun getSearchRepository(sharedPref: SharedPreferences): SearchRepository {
+        return SearchRepositoryImpl(
+            HistoryManagerImpl(sharedPref = sharedPref),
+            NetworkClientImpl()
+        )
+    }
+
+    fun getSettingsRepository(context: Context, sharedPref: SharedPreferences): SettingsRepository {
+        return SettingsRepositoryImpl(
+            ExternalNavigatorImpl(context = context),
+            LocalSettingsImpl(sharedPref = sharedPref)
+        )
     }
 }
