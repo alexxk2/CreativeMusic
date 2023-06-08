@@ -6,7 +6,7 @@
     style="@style/SettingsActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.ui.SearchActivity">
+    tools:context=".presentation.search.activity.SearchActivity">
 
     <ImageButton
         android:id="@+id/arrow_back_button"
