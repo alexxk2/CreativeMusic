@@ -33,7 +33,7 @@ class MediaPlayerImpl : Player {
     }
 
     override fun releaseMediaPlayer() {
-        mediaPlayer.release()
+        mediaPlayer.reset()
     }
 
     override fun getTrackCurrentPosition(): Int = mediaPlayer.currentPosition

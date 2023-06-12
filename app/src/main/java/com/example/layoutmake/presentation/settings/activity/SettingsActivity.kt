@@ -3,19 +3,17 @@ package com.example.layoutmake.presentation.settings.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.lifecycle.ViewModelProvider
-import com.example.layoutmake.App
+import com.example.layoutmake.app.App
 import com.example.layoutmake.R
-import com.example.layoutmake.SHARED_PREFS
-import com.example.layoutmake.creator.Creator
 import com.example.layoutmake.databinding.ActivitySettingsBinding
 import com.example.layoutmake.presentation.settings.view_model.SettingsViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class SettingsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySettingsBinding
-    private lateinit var viewModel: SettingsViewModel
+    private val viewModel: SettingsViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,7 +21,6 @@ class SettingsActivity : AppCompatActivity() {
 
         binding = ActivitySettingsBinding.inflate(layoutInflater).also { setContentView(it.root) }
 
-        createViewModel()
         setSwitcher()
 
         with(binding)
@@ -49,12 +46,6 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
 
-    }
-
-    private fun createViewModel(){
-        val  sharedPrefs = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE)
-        val settingsRepository = Creator.getSettingsRepository(this,sharedPrefs)
-        viewModel = ViewModelProvider(this,SettingsViewModel.getViewModelProvider(settingsRepository))[SettingsViewModel::class.java]
     }
 
     private fun setSwitcher(){

@@ -2,7 +2,6 @@ package com.example.layoutmake.presentation.search.activity
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -11,25 +10,21 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.layoutmake.R
-import com.example.layoutmake.SHARED_PREFS
-import com.example.layoutmake.creator.Creator
 import com.example.layoutmake.presentation.search.adapter.TrackAdapter
 import com.example.layoutmake.databinding.ActivitySearchBinding
 import com.example.layoutmake.domain.models.Track
 import com.example.layoutmake.presentation.player.activity.PlayerActivity
 import com.example.layoutmake.presentation.search.SearchingState
 import com.example.layoutmake.presentation.search.view_model.SearchViewModel
-
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class SearchActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySearchBinding
-    private lateinit var sharedPref: SharedPreferences
-    private lateinit var viewModel: SearchViewModel
+    private val viewModel: SearchViewModel by viewModel()
 
     private var searchInput = ""
     private var tracks = mutableListOf<Track>()
@@ -47,7 +42,7 @@ class SearchActivity : AppCompatActivity() {
 
         binding = ActivitySearchBinding.inflate(layoutInflater).also { setContentView(it.root) }
 
-        createViewModel()
+
 
         viewModel.trackList.observe(this){newTrackList ->
             tracks.clear()
@@ -122,12 +117,6 @@ class SearchActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-    private fun createViewModel(){
-        sharedPref = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE)
-        val searchRepository = Creator.getSearchRepository(sharedPref)
-        viewModel = ViewModelProvider(this, SearchViewModel.getViewModelFactory(searchRepository))[SearchViewModel::class.java]
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {

@@ -7,17 +7,15 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.layoutmake.R
-import com.example.layoutmake.creator.Creator
-import com.example.layoutmake.data.externals.player.impl.MediaPlayerImpl
-import com.example.layoutmake.data.repositories.player.impl.PlayerRepositoryImpl
 import com.example.layoutmake.databinding.ActivityPlayerBinding
 import com.example.layoutmake.domain.models.Track
 import com.example.layoutmake.presentation.player.model.PlayerState
 import com.example.layoutmake.presentation.player.view_model.PlayerViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -25,7 +23,7 @@ class PlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPlayerBinding
     private lateinit var track: Track
-    private lateinit var viewModel: PlayerViewModel
+    private val viewModel: PlayerViewModel by viewModel{ parametersOf(track) }
 
     private val handler = Handler(Looper.getMainLooper())
 
@@ -48,8 +46,6 @@ class PlayerActivity : AppCompatActivity() {
             intent.getParcelableExtra(TRACK, Track::class.java) ?: Track.DEFAULT
         } else intent.getParcelableExtra(TRACK) ?: Track.DEFAULT
 
-        val playerRepository = Creator.getPlayerRepository()
-        viewModel = ViewModelProvider(this, PlayerViewModel.getViewModelFactory(track,playerRepository))[PlayerViewModel::class.java]
 
         viewModel.playerState.observe(this) { state ->
 

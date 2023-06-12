@@ -1,7 +1,12 @@
-package com.example.layoutmake
+package com.example.layoutmake.app
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
+import com.example.layoutmake.di.dataModule
+import com.example.layoutmake.di.domainModule
+import com.example.layoutmake.di.presentationModule
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
 
 const val SHARED_PREFS = "shared_prefs"
 const val IS_DARK_THEME = "is_dark_theme"
@@ -14,6 +19,15 @@ class App: Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        startKoin {
+            androidContext(this@App)
+            modules(listOf(
+                dataModule,
+                domainModule,
+                presentationModule
+            ))
+        }
 
         val sharedPrefs = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE)
 

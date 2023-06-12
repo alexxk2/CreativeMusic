@@ -1,17 +1,20 @@
 package com.example.layoutmake.data.externals.search.impl
 
+import android.content.Context
 import android.content.SharedPreferences
-import com.example.layoutmake.HISTORY_LIST
+import com.example.layoutmake.app.HISTORY_LIST
+import com.example.layoutmake.app.SHARED_PREFS
 import com.example.layoutmake.data.externals.search.HistoryManager
 import com.example.layoutmake.domain.models.Track
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class HistoryManagerImpl(private val sharedPref: SharedPreferences) : HistoryManager {
+class HistoryManagerImpl(context: Context) : HistoryManager {
 
     private var isHistoryChanged = MutableStateFlow(false)
     private var tempHistoryChangeStatus = false
+    private val sharedPref = context.getSharedPreferences(SHARED_PREFS,0)
 
     override fun getSearchHistory(): MutableList<Track> {
         val jSonList = sharedPref.getString(HISTORY_LIST, null)

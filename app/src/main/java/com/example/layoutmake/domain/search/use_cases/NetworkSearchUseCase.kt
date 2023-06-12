@@ -1,4 +1,4 @@
-package com.example.layoutmake.domain.search
+package com.example.layoutmake.domain.search.use_cases
 
 
 import com.example.layoutmake.data.repositories.search.SearchRepository
