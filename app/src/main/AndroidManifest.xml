@@ -19,7 +19,7 @@
             android:name=".presentation.player.activity.PlayerActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.media.MediaActivity"
+            android:name=".presentation.media.activity.MediaActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.search.activity.SearchActivity"

@@ -4,13 +4,45 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.media.MediaActivity">
+    tools:context=".presentation.media.activity.MediaActivity">
+
+
+    <ImageButton
+        android:id="@+id/arrow_back_button"
+        style="@style/BackArrowButton"
+        android:layout_width="@dimen/settings_back_arrow_sides"
+        android:layout_height="@dimen/settings_back_arrow_sides"
+        android:contentDescription="@string/arrow_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        style="@style/MainButtonsStyle"
+        android:id="@+id/media_title_text_view"
+        style="@style/SettingsActivityTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/title_margin_start"
+        android:text="@string/media_library"
+        app:layout_constraintBottom_toBottomOf="@+id/arrow_back_button"
+        app:layout_constraintStart_toEndOf="@id/arrow_back_button"
+        app:layout_constraintTop_toTopOf="@id/arrow_back_button" />
+
+    <com.google.android.material.tabs.TabLayout
+        style="@style/MediaScreenTab"
+        android:id="@+id/tab_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="@string/media_library" />
+        android:layout_height="@dimen/tab_height"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/media_title_text_view"
+        />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tab_layout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

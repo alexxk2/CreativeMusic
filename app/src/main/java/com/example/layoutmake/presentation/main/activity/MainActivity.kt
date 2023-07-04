@@ -6,7 +6,7 @@ import android.view.View
 import android.view.View.OnClickListener
 import android.widget.Button
 import com.example.layoutmake.R
-import com.example.layoutmake.presentation.media.MediaActivity
+import com.example.layoutmake.presentation.media.activity.MediaActivity
 import com.example.layoutmake.presentation.search.activity.SearchActivity
 import com.example.layoutmake.presentation.settings.activity.SettingsActivity
 

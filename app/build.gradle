@@ -64,4 +64,7 @@ dependencies {
     def koin_version = "3.4.2"
     implementation "io.insert-koin:koin-core:$koin_version"
     implementation "io.insert-koin:koin-android:$koin_version"
+
+    //viewPager2
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
 }
