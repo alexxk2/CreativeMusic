@@ -1,4 +1,4 @@
-package com.example.layoutmake.domain.settings
+package com.example.layoutmake.domain.settings.use_cases
 
 import com.example.layoutmake.data.repositories.settings.SettingsRepository
 

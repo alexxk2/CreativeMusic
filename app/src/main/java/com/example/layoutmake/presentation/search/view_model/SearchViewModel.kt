@@ -3,33 +3,28 @@ package com.example.layoutmake.presentation.search.view_model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.layoutmake.data.repositories.search.SearchRepository
 import com.example.layoutmake.domain.models.Track
-import com.example.layoutmake.domain.search.AddTrackToHistoryUseCase
-import com.example.layoutmake.domain.search.CheckHistoryExistenceUseCase
-import com.example.layoutmake.domain.search.ClearSearchHistoryUseCase
-import com.example.layoutmake.domain.search.GetSearchHistoryUseCase
-import com.example.layoutmake.domain.search.NetworkSearchUseCase
-import com.example.layoutmake.domain.search.SearchHistoryListenerUseCase
-import com.example.layoutmake.domain.search.StartHistoryListenerUseCase
+import com.example.layoutmake.domain.search.use_cases.AddTrackToHistoryUseCase
+import com.example.layoutmake.domain.search.use_cases.CheckHistoryExistenceUseCase
+import com.example.layoutmake.domain.search.use_cases.ClearSearchHistoryUseCase
+import com.example.layoutmake.domain.search.use_cases.GetSearchHistoryUseCase
+import com.example.layoutmake.domain.search.use_cases.NetworkSearchUseCase
+import com.example.layoutmake.domain.search.use_cases.SearchHistoryListenerUseCase
+import com.example.layoutmake.domain.search.use_cases.StartHistoryListenerUseCase
 import com.example.layoutmake.presentation.search.SearchingState
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
-class SearchViewModel(private val searchRepository: SearchRepository): ViewModel() {
-
-
-    private val addTrackToHistoryUseCase = AddTrackToHistoryUseCase(searchRepository)
-    private val getSearchHistoryUseCase = GetSearchHistoryUseCase(searchRepository)
-    private val checkHistoryExistenceUseCase = CheckHistoryExistenceUseCase(searchRepository)
-    private val networkSearchUseCase = NetworkSearchUseCase(searchRepository)
-    private val clearSearchHistoryUseCase = ClearSearchHistoryUseCase(searchRepository)
-    private val startHistoryListenerUseCase = StartHistoryListenerUseCase(searchRepository)
-    private val searchHistoryListenerUseCase = SearchHistoryListenerUseCase(searchRepository)
+class SearchViewModel(
+    private val addTrackToHistoryUseCase: AddTrackToHistoryUseCase,
+    private val getSearchHistoryUseCase: GetSearchHistoryUseCase,
+    private val checkHistoryExistenceUseCase: CheckHistoryExistenceUseCase,
+    private val networkSearchUseCase: NetworkSearchUseCase,
+    private val clearSearchHistoryUseCase: ClearSearchHistoryUseCase,
+    private val startHistoryListenerUseCase: StartHistoryListenerUseCase,
+    private val searchHistoryListenerUseCase: SearchHistoryListenerUseCase,
+) : ViewModel() {
 
     private val _trackList = MutableLiveData<List<Track>>()
     val trackList: LiveData<List<Track>> = _trackList
@@ -78,15 +73,4 @@ class SearchViewModel(private val searchRepository: SearchRepository): ViewModel
         }
     }
 
-
-    companion object {
-        fun getViewModelFactory(
-            searchRepository: SearchRepository
-        ): ViewModelProvider.Factory =
-            viewModelFactory {
-                initializer {
-                    SearchViewModel(searchRepository)
-                }
-            }
-    }
 }

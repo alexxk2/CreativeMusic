@@ -2,34 +2,23 @@ package com.example.layoutmake.presentation.settings.view_model
 
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.layoutmake.data.repositories.settings.SettingsRepository
-import com.example.layoutmake.domain.settings.CheckingDarkModeUseCase
-import com.example.layoutmake.domain.settings.CreateBrowserIntentUseCase
-import com.example.layoutmake.domain.settings.CreateMessageIntentUseCase
-import com.example.layoutmake.domain.settings.CreateShareIntentUseCase
+import com.example.layoutmake.domain.settings.use_cases.CheckingDarkModeUseCase
+import com.example.layoutmake.domain.settings.use_cases.CreateBrowserIntentUseCase
+import com.example.layoutmake.domain.settings.use_cases.CreateMessageIntentUseCase
+import com.example.layoutmake.domain.settings.use_cases.CreateShareIntentUseCase
 
-class SettingsViewModel(settingsRepository: SettingsRepository): ViewModel() {
-
-
-    private val checkingDarkModeUseCase = CheckingDarkModeUseCase(settingsRepository)
-    private val createBrowserIntentUseCase = CreateBrowserIntentUseCase(settingsRepository)
-    private val createMessageIntentUseCase = CreateMessageIntentUseCase(settingsRepository)
-    private val createShareIntentUseCase = CreateShareIntentUseCase(settingsRepository)
+class SettingsViewModel(
+    private val checkingDarkModeUseCase: CheckingDarkModeUseCase,
+    private val createBrowserIntentUseCase: CreateBrowserIntentUseCase,
+    private val createMessageIntentUseCase: CreateMessageIntentUseCase,
+    private val createShareIntentUseCase: CreateShareIntentUseCase
+) : ViewModel() {
 
 
-    fun isDarkMode()  = checkingDarkModeUseCase.execute()
+    fun isDarkMode() = checkingDarkModeUseCase.execute()
     fun createBrowserIntent() = createBrowserIntentUseCase.execute()
     fun createMessageIntent() = createMessageIntentUseCase.execute()
-    fun createShareIntent()  = createShareIntentUseCase.execute()
+    fun createShareIntent() = createShareIntentUseCase.execute()
 
-    companion object{
-        fun getViewModelProvider(settingsRepository: SettingsRepository): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                SettingsViewModel(settingsRepository = settingsRepository)
-            }
-        }
-    }
+
 }
