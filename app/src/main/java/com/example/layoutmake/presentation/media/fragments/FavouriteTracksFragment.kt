@@ -5,14 +5,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.layoutmake.R
 import com.example.layoutmake.databinding.FragmentFavouriteTracksBinding
+import com.example.layoutmake.presentation.media.view_model.FavouriteTrackViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class FavouriteTracksFragment : Fragment() {
 
     private var _binding: FragmentFavouriteTracksBinding? = null
     private val binding get() = _binding!!
+    private val viewModel: FavouriteTrackViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
