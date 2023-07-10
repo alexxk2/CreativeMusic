@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/search_title_text_view"
+        android:id="@+id/media_title_text_view"
         style="@style/SettingsActivityTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
         android:importantForAutofill="no"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/search_title_text_view" />
+        app:layout_constraintTop_toBottomOf="@id/media_title_text_view" />
 
     <ImageButton
         android:id="@+id/remove_input_button"

@@ -38,5 +38,12 @@
     <dimen name="player_bottom_margin">20dp</dimen>
     <dimen name="cover_corner_radius">8dp</dimen>
 
+    <!--media screen-->
+    <dimen name="tab_height">48dp</dimen>
+    <dimen name="no_content_image_top_margin">106dp</dimen>
+    <dimen name="no_content_message_margin">16dp</dimen>
+    <dimen name="no_content_message_text_size">19sp</dimen>
+    <dimen name="tab_top_margin">28dp</dimen>
+    <dimen name="tab_horizontal_margin">24dp</dimen>
 
 </resources>
