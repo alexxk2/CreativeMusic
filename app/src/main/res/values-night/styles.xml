@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <style name="Widget.MaterialComponents.BottomNavigationView.Colored" >
+
+        <item name="enforceTextAppearance">true</item>
+        <item name="enforceMaterialTheme">true</item>
+        <item name="android:background">@color/y_black</item>
+        <item name="itemIconTint">@color/bottom_nav_night</item>
+        <item name="itemRippleColor">@color/mtrl_navigation_bar_colored_ripple_color</item>
+        <item name="itemTextAppearanceInactive">?attr/textAppearanceCaption</item>
+        <item name="itemTextAppearanceActive">?attr/textAppearanceCaption</item>
+        <item name="itemTextColor">@color/bottom_nav_night</item>
+    </style>
+
+
     <style name="MainButtonsStyle" parent="Widget.Material3.Button">
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:textAllCaps">false</item>
@@ -61,10 +74,6 @@
 
     <style name="SettingsSwitch"  >
         <item name="android:thumbTint">@drawable/thumb_night</item>
-    </style>
-
-    <style name="MainActivity">
-        <item name="android:background">@color/y_black</item>
     </style>
 
     <style name="SettingsActivity">

@@ -2,54 +2,30 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/MainActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".presentation.main.activity.MainActivity">
 
-    <TextView
-        android:id="@+id/main_title_text_view"
-        style="@style/MainActivityTitle"
-        android:layout_width="wrap_content"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/nav_host_fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/nav_graph" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="0dp"
+
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/sides_margin"
-        android:layout_marginTop="14dp"
-        android:text="@string/title"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/search_button"
-        style="@style/MainButtonsStyle"
-        android:layout_marginTop="40dp"
-        android:layout_marginBottom="@dimen/sides_margin"
-        android:text="@string/search"
-        app:icon="@drawable/icon_search"
-        app:layout_constraintBottom_toTopOf="@+id/media_library_button"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_title_text_view" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/media_library_button"
-        style="@style/MainButtonsStyle"
-        android:layout_marginBottom="@dimen/sides_margin"
-        android:text="@string/media_library"
-        app:cornerRadius="@dimen/main_buttons_corner_radius"
-        app:icon="@drawable/icon_media"
-        app:layout_constraintBottom_toTopOf="@+id/settings_button"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_button" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/settings_button"
-        style="@style/MainButtonsStyle"
-        android:layout_marginBottom="28dp"
-        android:text="@string/settings"
-        app:cornerRadius="@dimen/main_buttons_corner_radius"
-        app:icon="@drawable/icon_settings"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/media_library_button" />
-
+        app:menu="@menu/bottom_navigation_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
