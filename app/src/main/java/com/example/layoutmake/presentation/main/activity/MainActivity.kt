@@ -1,43 +1,47 @@
 package com.example.layoutmake.presentation.main.activity
-import android.content.Intent
+
+
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.view.View.OnClickListener
-import android.widget.Button
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import com.example.layoutmake.R
-import com.example.layoutmake.presentation.media.activity.MediaActivity
-import com.example.layoutmake.presentation.search.activity.SearchActivity
-import com.example.layoutmake.presentation.settings.activity.SettingsActivity
+import com.example.layoutmake.databinding.ActivityMainBinding
+
 
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var navController: NavController
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        val searchButton = findViewById<Button>(R.id.search_button)
-        val mediaLibraryButton = findViewById<Button>(R.id.media_library_button)
-        val settingsButton = findViewById<Button>(R.id.settings_button)
+        binding = ActivityMainBinding.inflate(layoutInflater).also { setContentView(it.root) }
 
-        val searchIntent = Intent(this, SearchActivity::class.java)
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
 
-        val buttonClickListener: OnClickListener = object : OnClickListener {
-            override fun onClick(p0: View?) {
-               startActivity(searchIntent)
+        navController = navHostFragment.navController
+
+        binding.bottomNavigation.setupWithNavController(navController)
+
+        navController.addOnDestinationChangedListener{  _, destination, _ ->
+
+            when(destination.id){
+                R.id.playerFragment ->binding.bottomNavigation.visibility = View.GONE
+                else -> binding.bottomNavigation.visibility = View.VISIBLE
             }
         }
-        searchButton.setOnClickListener(buttonClickListener)
 
-        mediaLibraryButton.setOnClickListener {
-            val mediaIntent  = Intent(this, MediaActivity::class.java)
-            startActivity(mediaIntent)
-        }
+    }
 
-        settingsButton.setOnClickListener {
-            val settingsIntent = Intent(this, SettingsActivity::class.java)
-            startActivity(settingsIntent)
-        }
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp() || super.onSupportNavigateUp()
+
     }
 
 }
