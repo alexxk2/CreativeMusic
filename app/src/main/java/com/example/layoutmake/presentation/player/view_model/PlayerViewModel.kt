@@ -12,7 +12,11 @@ import com.example.layoutmake.domain.player.use_cases.PlaySongUseCase
 import com.example.layoutmake.domain.player.use_cases.PreparePlayerUseCase
 import com.example.layoutmake.domain.player.use_cases.ReleasePlayerUseCase
 import com.example.layoutmake.presentation.player.model.PlayerState
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 
 class PlayerViewModel(
     private val track: Track,
@@ -25,9 +29,13 @@ class PlayerViewModel(
 
 ) : ViewModel() {
 
+    private var timerJob: Job? = null
 
     private val _playerState = MutableLiveData<PlayerState>(PlayerState.Draw(track))
     val playerState: LiveData<PlayerState> = _playerState
+
+    private val _playerTime = MutableLiveData<String>("00:00")
+    val playerTime: LiveData<String> = _playerTime
 
     init {
         viewModelScope.launch {
@@ -45,10 +53,12 @@ class PlayerViewModel(
 
     fun playSong() {
         playSongUseCase.execute()
+        startTimer()
     }
 
     fun pauseSong() {
         pauseSongUseCase.execute()
+        timerJob?.cancel()
     }
 
     fun preparePlayer() {
@@ -62,13 +72,31 @@ class PlayerViewModel(
         releasePlayerUseCase.execute()
     }
 
-    companion object {
+    private fun startTimer(){
+        timerJob = viewModelScope.launch {
+            delay(DELAY_BEFORE_STATE_CHANGED)
+            while (_playerState.value == PlayerState.Playing){
+                delay(TIMER_UPDATE_INTERVAL_MS)
+                _playerTime.value = SimpleDateFormat(
+                    "mm:ss",
+                    Locale.getDefault()
+                ).format(getTrackCurrentPositionUseCase.execute())
+                if (_playerState.value == PlayerState.Completed){
+                    _playerTime.value = "00:00"
+                    timerJob?.cancel()
+                }
+            }
+        }
+    }
 
+    companion object {
         const val PLAYER_STATE_LOADING = 1
         const val PLAYER_STATE_PREPARED = 2
         const val PLAYER_STATE_PLAYING = 3
         const val PLAYER_STATE_COMPLETED = 4
         const val PLAYER_STATE_PAUSED = 5
+        private const val TIMER_UPDATE_INTERVAL_MS = 300L
+        private const val DELAY_BEFORE_STATE_CHANGED = 100L
     }
 }
 

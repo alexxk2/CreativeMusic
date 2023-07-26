@@ -7,6 +7,7 @@ import com.example.layoutmake.data.externals.search.dto.TrackResponseEntity
 import com.example.layoutmake.data.repositories.search.SearchRepository
 import com.example.layoutmake.domain.models.Track
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class SearchRepositoryImpl(
     private val historyManager: HistoryManager,
@@ -25,12 +26,12 @@ class SearchRepositoryImpl(
         return historyManager.doesHistoryExist()
     }
 
-    override suspend fun startSearch(searchInput: String): List<Track> {
+    override  fun startSearch(searchInput: String): Flow<List<Track>> = flow {
         val response = networkClient.startSearch(TrackRequestEntity(searchInput))
 
         if (response.resultCode == 200) {
 
-            return (response as TrackResponseEntity).results.map {
+            emit((response as TrackResponseEntity).results.map {
                 Track(
                     trackId = it.trackId,
                     trackName = it.trackName,
@@ -43,9 +44,9 @@ class SearchRepositoryImpl(
                     country = it.country,
                     previewUrl = it.previewUrl
                 )
-            }
+            })
         }
-        else return emptyList()
+        else emit(emptyList())
     }
 
     override fun clearSearchHistory() {

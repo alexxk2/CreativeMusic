@@ -7,7 +7,7 @@ interface SearchRepository {
     fun getSearchHistory(): MutableList<Track>
     fun addTrackToHistory(track: Track)
     fun doesHistoryExist(): Boolean
-    suspend fun startSearch(searchInput: String): List<Track>
+    fun startSearch(searchInput: String): Flow<List<Track>>
     fun clearSearchHistory()
     fun isHistoryChanged(): Flow<Boolean>
     fun startHistoryListener()

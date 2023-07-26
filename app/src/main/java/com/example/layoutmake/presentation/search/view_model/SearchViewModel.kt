@@ -57,14 +57,15 @@ class SearchViewModel(
 
         viewModelScope.launch {
             try {
-                val response = networkSearchUseCase.execute(searchInput)
-                if (response.isNotEmpty()){
-                    _searchingState.value = SearchingState.Done
-                    _trackList.value = response
-                }
-                else {
-                    _searchingState.value = SearchingState.NoResults
-                    _trackList.value = emptyList()
+                networkSearchUseCase.execute(searchInput).collect{
+                    if (it.isNotEmpty()){
+                        _searchingState.value = SearchingState.Done
+                        _trackList.value = it
+                    }
+                    else {
+                        _searchingState.value = SearchingState.NoResults
+                        _trackList.value = emptyList()
+                    }
                 }
             }
             catch (e: Exception){

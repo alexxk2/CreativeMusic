@@ -1,10 +1,7 @@
 package com.example.layoutmake.presentation.search.fragments
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -13,17 +10,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import androidx.core.content.ContextCompat.getSystemService
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.layoutmake.R
 import com.example.layoutmake.databinding.FragmentSearchBinding
-import com.example.layoutmake.databinding.FragmentSettingsBinding
 import com.example.layoutmake.domain.models.Track
-import com.example.layoutmake.presentation.player.activity.PlayerActivity
 import com.example.layoutmake.presentation.search.SearchingState
 import com.example.layoutmake.presentation.search.adapter.TrackAdapter
 import com.example.layoutmake.presentation.search.view_model.SearchViewModel
+import com.example.layoutmake.utils.debounce
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
@@ -39,8 +39,8 @@ class SearchFragment : Fragment() {
     private var isClickAllowed = true
     private lateinit var  searchHistoryAdapter: TrackAdapter
 
-    private val handler = Handler(Looper.getMainLooper())
-    private val searchRunnable = Runnable { viewModel.startSearch(searchInput)}
+    private var searchJob: Job? = null
+    private lateinit var onTrackClickDebounce: (Boolean) -> Unit
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +60,9 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        onTrackClickDebounce =  debounce<Boolean>(CLICK_DEBOUNCE_DELAY,viewModel.viewModelScope,false){boolean->
+            isClickAllowed = boolean
+        }
 
         viewModel.trackList.observe(viewLifecycleOwner){newTrackList ->
             tracks.clear()
@@ -212,8 +215,12 @@ class SearchFragment : Fragment() {
         if (!s.isNullOrEmpty()) {
             showProgressBar()
             searchInput = s.toString()
-            handler.removeCallbacks(searchRunnable)
-            handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+            searchJob?.cancel()
+
+            searchJob = viewLifecycleOwner.lifecycleScope.launch {
+                delay(SEARCH_DEBOUNCE_DELAY)
+                viewModel.startSearch(searchInput)
+            }
         }
     }
 
@@ -257,9 +264,11 @@ class SearchFragment : Fragment() {
 
     private fun clickDebounce (): Boolean{
         val current = isClickAllowed
+
         if (isClickAllowed){
             isClickAllowed = false
-            handler.postDelayed({isClickAllowed=true}, CLICK_DEBOUNCE_DELAY)
+
+            onTrackClickDebounce(true)
         }
         return current
     }
@@ -270,7 +279,6 @@ class SearchFragment : Fragment() {
 
             val action = SearchFragmentDirections.actionSearchFragmentToPlayerFragment(track)
             findNavController().navigate(action)
-
         }
     }
 
@@ -290,6 +298,7 @@ class SearchFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        //isClickAllowed = true
         Log.d("GGG","onResume")
     }
 
