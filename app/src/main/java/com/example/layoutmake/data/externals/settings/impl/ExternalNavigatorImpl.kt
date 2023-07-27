@@ -14,6 +14,7 @@ class ExternalNavigatorImpl(private val context: Context): ExternalNavigator {
         val urlAgreement = context.getString(R.string.url_agreement)
         val intent = Intent(Intent.ACTION_VIEW)
         intent.data = Uri.parse(urlAgreement)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(context,intent, null)
     }
 
@@ -25,6 +26,7 @@ class ExternalNavigatorImpl(private val context: Context): ExternalNavigator {
         intent.putExtra(Intent.EXTRA_TEXT, messageBody)
         intent.putExtra(Intent.EXTRA_SUBJECT, messageTitle)
         intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(context.getString(R.string.dev_email)))
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(context,intent,null)
     }
 
@@ -34,6 +36,7 @@ class ExternalNavigatorImpl(private val context: Context): ExternalNavigator {
         intent.putExtra(Intent.EXTRA_TEXT, url)
         intent.type = "text/plain"
         val chooser = Intent.createChooser(intent, context.getString(R.string.text_for_chooser))
+        chooser.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(context,chooser,null)
     }
 }

@@ -10,11 +10,11 @@ import com.example.layoutmake.data.externals.settings.ExternalNavigator
 import com.example.layoutmake.data.externals.settings.LocalSettings
 import com.example.layoutmake.data.externals.settings.impl.ExternalNavigatorImpl
 import com.example.layoutmake.data.externals.settings.impl.LocalSettingsImpl
-import com.example.layoutmake.data.repositories.player.PlayerRepository
+import com.example.layoutmake.domain.repositories.PlayerRepository
 import com.example.layoutmake.data.repositories.player.impl.PlayerRepositoryImpl
-import com.example.layoutmake.data.repositories.search.SearchRepository
+import com.example.layoutmake.domain.repositories.SearchRepository
 import com.example.layoutmake.data.repositories.search.impl.SearchRepositoryImpl
-import com.example.layoutmake.data.repositories.settings.SettingsRepository
+import com.example.layoutmake.domain.repositories.SettingsRepository
 import com.example.layoutmake.data.repositories.settings.impl.SettingsRepositoryImpl
 import org.koin.dsl.module
 

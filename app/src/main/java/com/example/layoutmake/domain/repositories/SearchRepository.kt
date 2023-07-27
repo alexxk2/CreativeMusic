@@ -1,4 +1,4 @@
-package com.example.layoutmake.data.repositories.search
+package com.example.layoutmake.domain.repositories
 
 import com.example.layoutmake.domain.models.Track
 import kotlinx.coroutines.flow.Flow

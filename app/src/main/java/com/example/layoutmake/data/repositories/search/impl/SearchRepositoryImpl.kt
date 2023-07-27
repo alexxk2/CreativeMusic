@@ -4,7 +4,7 @@ import com.example.layoutmake.data.externals.search.HistoryManager
 import com.example.layoutmake.data.externals.search.NetworkClient
 import com.example.layoutmake.data.externals.search.dto.TrackRequestEntity
 import com.example.layoutmake.data.externals.search.dto.TrackResponseEntity
-import com.example.layoutmake.data.repositories.search.SearchRepository
+import com.example.layoutmake.domain.repositories.SearchRepository
 import com.example.layoutmake.domain.models.Track
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

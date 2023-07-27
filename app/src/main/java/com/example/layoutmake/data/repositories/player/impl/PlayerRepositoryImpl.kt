@@ -1,7 +1,7 @@
 package com.example.layoutmake.data.repositories.player.impl
 
 import com.example.layoutmake.data.externals.player.Player
-import com.example.layoutmake.data.repositories.player.PlayerRepository
+import com.example.layoutmake.domain.repositories.PlayerRepository
 import kotlinx.coroutines.flow.Flow
 
 class PlayerRepositoryImpl(private val mediaPlayer: Player) : PlayerRepository {
