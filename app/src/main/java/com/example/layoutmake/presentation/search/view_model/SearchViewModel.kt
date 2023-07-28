@@ -1,5 +1,6 @@
 package com.example.layoutmake.presentation.search.view_model
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,6 +14,8 @@ import com.example.layoutmake.domain.search.use_cases.NetworkSearchUseCase
 import com.example.layoutmake.domain.search.use_cases.SearchHistoryListenerUseCase
 import com.example.layoutmake.domain.search.use_cases.StartHistoryListenerUseCase
 import com.example.layoutmake.presentation.search.SearchingState
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
@@ -34,6 +37,9 @@ class SearchViewModel(
 
     private val _isHistoryChanged = MutableLiveData<Boolean>()
     val isHistoryChanged: LiveData<Boolean> = _isHistoryChanged
+
+    private var isClickAllowed = true
+    private var clickJob: Job? = null
 
     init {
         startHistoryListenerUseCase.execute()
@@ -57,19 +63,42 @@ class SearchViewModel(
 
         viewModelScope.launch {
             try {
-                val response = networkSearchUseCase.execute(searchInput)
-                if (response.isNotEmpty()){
-                    _searchingState.value = SearchingState.Done
-                    _trackList.value = response
-                }
-                else {
-                    _searchingState.value = SearchingState.NoResults
-                    _trackList.value = emptyList()
+                networkSearchUseCase.execute(searchInput).collect{
+                    if (it.isNotEmpty()){
+                        _searchingState.value = SearchingState.Done
+                        _trackList.value = it
+                    }
+                    else {
+                        _searchingState.value = SearchingState.NoResults
+                        _trackList.value = emptyList()
+                    }
                 }
             }
             catch (e: Exception){
                 _searchingState.value = SearchingState.Error
             }
         }
+    }
+
+    fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+
+            clickJob = viewModelScope.launch {
+                delay(CLICK_DEBOUNCE_DELAY)
+                isClickAllowed = true
+            }
+        }
+        return current
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        Log.d("VVV","OnCleared")
+    }
+
+    companion object{
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }

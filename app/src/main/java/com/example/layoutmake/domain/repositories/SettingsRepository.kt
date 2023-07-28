@@ -1,4 +1,4 @@
-package com.example.layoutmake.data.repositories.settings
+package com.example.layoutmake.domain.repositories
 
 interface SettingsRepository {
     fun createBrowserIntent()

@@ -58,6 +58,7 @@
         style="@style/ErrorImageNotFound"
         android:layout_width="@dimen/error_image_side_and_margin"
         android:layout_height="@dimen/error_image_side_and_margin"
+        android:layout_marginTop="120dp"
         android:contentDescription="@string/description_error_image"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

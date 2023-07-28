@@ -2,8 +2,6 @@ package com.example.layoutmake.presentation.player.fragments
 
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +13,6 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.layoutmake.R
 import com.example.layoutmake.databinding.FragmentPlayerBinding
 import com.example.layoutmake.domain.models.Track
-import com.example.layoutmake.presentation.player.activity.PlayerActivity
 import com.example.layoutmake.presentation.player.model.PlayerState
 import com.example.layoutmake.presentation.player.view_model.PlayerViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -32,17 +29,6 @@ class PlayerFragment : Fragment() {
     private lateinit var track: Track
     private val viewModel: PlayerViewModel by viewModel{ parametersOf(track) }
 
-    private val handler = Handler(Looper.getMainLooper())
-
-    private val timerRunn = object : Runnable{
-        override fun run() {
-            binding.timer.text = SimpleDateFormat(
-                "mm:ss",
-                Locale.getDefault()
-            ).format(viewModel.getTrackCurrentPosition())
-            handler.postDelayed(this, TIMER_UPDATE_INTERVAL_MS)
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,15 +64,14 @@ class PlayerFragment : Fragment() {
             }
         }
 
+        viewModel.playerTime.observe(viewLifecycleOwner){
+            binding.timer.text = it
+        }
+
         viewModel.preparePlayer()
 
         binding.playButton.setOnClickListener {
             viewModel.playSong()
-
-            handler.postDelayed(
-                timerRunn,
-                TIMER_UPDATE_INTERVAL_MS
-            )
         }
 
         binding.pauseButton.setOnClickListener {
@@ -94,7 +79,6 @@ class PlayerFragment : Fragment() {
         }
 
         binding.arrowBackButton.setOnClickListener { findNavController().navigateUp() }
-
 
     }
 
@@ -163,7 +147,6 @@ class PlayerFragment : Fragment() {
     }
 
     private fun showCompleted(){
-        handler.removeCallbacks(timerRunn)
         binding.timer.text = getString(R.string.default_timer_text)
         makePlayButtonVisible()
     }
@@ -171,13 +154,11 @@ class PlayerFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
-        handler.removeCallbacks(timerRunn)
         viewModel.pauseSong()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        handler.removeCallbacks(timerRunn)
         viewModel.pauseSong()
         viewModel.releasePlayer()
     }
@@ -188,6 +169,5 @@ class PlayerFragment : Fragment() {
     }
     companion object {
         private const val TRACK = "track"
-        private const val TIMER_UPDATE_INTERVAL_MS = 300L
     }
 }

@@ -2,7 +2,7 @@ package com.example.layoutmake.data.repositories.settings.impl
 
 import com.example.layoutmake.data.externals.settings.ExternalNavigator
 import com.example.layoutmake.data.externals.settings.LocalSettings
-import com.example.layoutmake.data.repositories.settings.SettingsRepository
+import com.example.layoutmake.domain.repositories.SettingsRepository
 
 class SettingsRepositoryImpl(
     private val externalNavigator: ExternalNavigator,
