@@ -19,7 +19,9 @@ val presentationModule = module {
             playSongUseCase = get(),
             preparePlayerUseCase = get(),
             releasePlayerUseCase = get(),
-            getPlayerStateUseCase = get()
+            getPlayerStateUseCase = get(),
+            addTrackToFavouriteUseCase = get(),
+            removeTrackFromFavouriteUseCase = get()
         )
     }
 

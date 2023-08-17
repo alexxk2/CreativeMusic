@@ -1,5 +1,9 @@
 package com.example.layoutmake.di
 
+import com.example.layoutmake.domain.media.AddTrackToFavouriteUseCase
+import com.example.layoutmake.domain.media.GetAllFavouriteTracksUseCase
+import com.example.layoutmake.domain.media.GetFavouriteTracksIdsUseCase
+import com.example.layoutmake.domain.media.RemoveTrackFromFavouriteUseCase
 import com.example.layoutmake.domain.player.use_cases.GetPlayerStateUseCase
 import com.example.layoutmake.domain.player.use_cases.GetTrackCurrentPositionUseCase
 import com.example.layoutmake.domain.player.use_cases.PauseSongUseCase
@@ -29,7 +33,6 @@ val domainModule = module {
     factory<PreparePlayerUseCase> { PreparePlayerUseCase(playerRepository = get()) }
     factory<ReleasePlayerUseCase> { ReleasePlayerUseCase(playerRepository = get()) }
 
-
     factory<AddTrackToHistoryUseCase> { AddTrackToHistoryUseCase(searchRepository = get()) }
     factory<CheckHistoryExistenceUseCase> { CheckHistoryExistenceUseCase(searchRepository = get()) }
     factory<ClearSearchHistoryUseCase> { ClearSearchHistoryUseCase(searchRepository = get()) }
@@ -38,10 +41,13 @@ val domainModule = module {
     factory<SearchHistoryListenerUseCase> { SearchHistoryListenerUseCase(searchRepository = get()) }
     factory<StartHistoryListenerUseCase> { StartHistoryListenerUseCase(searchRepository = get()) }
 
-
     factory<CheckingDarkModeUseCase> { CheckingDarkModeUseCase(settingsRepository = get()) }
     factory<CreateBrowserIntentUseCase> { CreateBrowserIntentUseCase(settingsRepository = get()) }
     factory<CreateMessageIntentUseCase> { CreateMessageIntentUseCase(settingsRepository = get()) }
     factory<CreateShareIntentUseCase> { CreateShareIntentUseCase(settingsRepository = get()) }
 
+    factory<AddTrackToFavouriteUseCase> { AddTrackToFavouriteUseCase(mediaRepository = get()) }
+    factory<RemoveTrackFromFavouriteUseCase> { RemoveTrackFromFavouriteUseCase(mediaRepository = get()) }
+    factory<GetAllFavouriteTracksUseCase> { GetAllFavouriteTracksUseCase(mediaRepository = get()) }
+    factory<GetFavouriteTracksIdsUseCase> { GetFavouriteTracksIdsUseCase(mediaRepository = get()) }
 }
