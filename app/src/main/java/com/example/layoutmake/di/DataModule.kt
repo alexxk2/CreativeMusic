@@ -39,7 +39,7 @@ val dataModule = module {
 
     single<PlayerRepository> { PlayerRepositoryImpl(mediaPlayer = get()) }
 
-    single<SearchRepository> { SearchRepositoryImpl(historyManager = get(), networkClient = get()) }
+    single<SearchRepository> { SearchRepositoryImpl(historyManager = get(), networkClient = get(), roomStorage = get(), converter = get()) }
 
     single<SettingsRepository> {
         SettingsRepositoryImpl(

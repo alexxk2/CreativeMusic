@@ -6,8 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "favourite")
 data class TrackDto(
-    @PrimaryKey(autoGenerate = false) val id: Int = 0,
-    @ColumnInfo(name = "track_id") val trackId: Int,
+    @PrimaryKey(autoGenerate = false) @ColumnInfo(name = "track_id") val trackId: Int,
     @ColumnInfo(name = "track_name") val trackName: String,
     @ColumnInfo(name = "artist_name") val artistName: String,
     @ColumnInfo(name = "track_time_millis") val trackTimeMillis: String,
@@ -17,6 +16,7 @@ data class TrackDto(
     @ColumnInfo(name = "primary_genre_name") val primaryGenreName: String?,
     val country: String?,
     @ColumnInfo(name = "preview_url") val previewUrl: String?,
-    @ColumnInfo(name = "is_favourite") val isFavourite: Boolean = false
+    @ColumnInfo(name = "is_favourite") val isFavourite: Boolean = false,
+    val date: Long = 0L
 ) {
 }

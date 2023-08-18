@@ -47,7 +47,7 @@ val presentationModule = module {
     }
 
     viewModel<FavouriteTrackViewModel> {
-        FavouriteTrackViewModel()
+        FavouriteTrackViewModel(getAllFavouriteTracksUseCase = get())
     }
 
     viewModel<PlaylistsViewModel> {

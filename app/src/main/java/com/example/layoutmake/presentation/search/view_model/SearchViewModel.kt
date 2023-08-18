@@ -38,6 +38,8 @@ class SearchViewModel(
     private val _isHistoryChanged = MutableLiveData<Boolean>()
     val isHistoryChanged: LiveData<Boolean> = _isHistoryChanged
 
+
+
     private var isClickAllowed = true
     private var clickJob: Job? = null
 
@@ -46,11 +48,14 @@ class SearchViewModel(
         viewModelScope.launch {
             searchHistoryListenerUseCase.execute().collect{isHistoryChanged->
                 _isHistoryChanged.postValue(isHistoryChanged)
+                getSearchHistory()
             }
         }
     }
 
-    fun getSearchHistory(): MutableList<Track> = getSearchHistoryUseCase.execute()
+    fun getSearchHistory(): MutableList<Track> {
+        return  getSearchHistoryUseCase.execute()
+    }
 
     fun addTrackToHistory(track: Track) = addTrackToHistoryUseCase.execute(track)
 

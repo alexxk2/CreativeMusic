@@ -18,6 +18,7 @@ import com.example.layoutmake.presentation.player.view_model.PlayerViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.*
 
 
@@ -83,7 +84,9 @@ class PlayerFragment : Fragment() {
         }
 
         binding.addToFavouriteButton.setOnClickListener {
-            viewModel.addTrackToFavourite(track)
+
+            val date = Calendar.getInstance().timeInMillis
+            viewModel.addTrackToFavourite(track.copy(date = date))
         }
 
         binding.removeFromFavouriteButton.setOnClickListener {
@@ -167,11 +170,11 @@ class PlayerFragment : Fragment() {
 
         with(binding) {
             if (isFavourite) {
-                binding.addToFavouriteButton.visibility = View.VISIBLE
-                binding.removeFromFavouriteButton.visibility = View.GONE
+                addToFavouriteButton.visibility = View.INVISIBLE
+                removeFromFavouriteButton.visibility = View.VISIBLE
             } else {
-                binding.addToFavouriteButton.visibility = View.GONE
-                binding.removeFromFavouriteButton.visibility = View.VISIBLE
+                addToFavouriteButton.visibility = View.VISIBLE
+                removeFromFavouriteButton.visibility = View.INVISIBLE
             }
         }
     }

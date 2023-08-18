@@ -10,13 +10,13 @@ import com.example.layoutmake.data.externals.search.dto.TrackDto
 @Dao
 interface FavouriteDao {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addNewItem(trackDto: TrackDto)
 
     @Delete
     suspend fun deleteItem(trackDto: TrackDto)
 
-    @Query("SELECT * FROM favourite ORDER BY id DESC")
+    @Query("SELECT * FROM favourite ORDER BY date DESC")
     suspend fun gelAllItems(): List<TrackDto>
 
     @Query("SELECT track_id FROM favourite")
