@@ -18,6 +18,7 @@ import com.example.layoutmake.presentation.player.view_model.PlayerViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.*
 
 
@@ -27,15 +28,15 @@ class PlayerFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var track: Track
-    private val viewModel: PlayerViewModel by viewModel{ parametersOf(track) }
+    private val viewModel: PlayerViewModel by viewModel { parametersOf(track) }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             track = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                it.getParcelable(TRACK,Track::class.java)!!
-            } else{
+                it.getParcelable(TRACK, Track::class.java)!!
+            } else {
                 it.getParcelable(TRACK)!!
             }
         }
@@ -45,7 +46,7 @@ class PlayerFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentPlayerBinding.inflate(layoutInflater,container,false)
+        _binding = FragmentPlayerBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
@@ -64,7 +65,11 @@ class PlayerFragment : Fragment() {
             }
         }
 
-        viewModel.playerTime.observe(viewLifecycleOwner){
+        viewModel.isFavourite.observe(viewLifecycleOwner) { isFavourite ->
+            manageFavouriteButton(isFavourite)
+        }
+
+        viewModel.playerTime.observe(viewLifecycleOwner) {
             binding.timer.text = it
         }
 
@@ -76,6 +81,16 @@ class PlayerFragment : Fragment() {
 
         binding.pauseButton.setOnClickListener {
             viewModel.pauseSong()
+        }
+
+        binding.addToFavouriteButton.setOnClickListener {
+
+            val date = Calendar.getInstance().timeInMillis
+            viewModel.addTrackToFavourite(track.copy(date = date))
+        }
+
+        binding.removeFromFavouriteButton.setOnClickListener {
+            viewModel.removeTrackFromFavourite(track)
         }
 
         binding.arrowBackButton.setOnClickListener { findNavController().navigateUp() }
@@ -120,37 +135,49 @@ class PlayerFragment : Fragment() {
         }
     }
 
-    private fun makePlayButtonVisible(){
+    private fun makePlayButtonVisible() {
         binding.playButton.visibility = View.VISIBLE
         binding.pauseButton.visibility = View.INVISIBLE
     }
 
-    private fun makePauseButtonVisible(){
+    private fun makePauseButtonVisible() {
         binding.playButton.visibility = View.INVISIBLE
         binding.pauseButton.visibility = View.VISIBLE
     }
 
-    private fun showLoading(){
+    private fun showLoading() {
         binding.playButton.isClickable = false
     }
 
-    private fun showPrepared(){
+    private fun showPrepared() {
         binding.playButton.isClickable = true
     }
 
-    private fun showPlaying(){
+    private fun showPlaying() {
         makePauseButtonVisible()
     }
 
-    private fun showPaused(){
+    private fun showPaused() {
         makePlayButtonVisible()
     }
 
-    private fun showCompleted(){
+    private fun showCompleted() {
         binding.timer.text = getString(R.string.default_timer_text)
         makePlayButtonVisible()
     }
 
+    private fun manageFavouriteButton(isFavourite: Boolean) {
+
+        with(binding) {
+            if (isFavourite) {
+                addToFavouriteButton.visibility = View.INVISIBLE
+                removeFromFavouriteButton.visibility = View.VISIBLE
+            } else {
+                addToFavouriteButton.visibility = View.VISIBLE
+                removeFromFavouriteButton.visibility = View.INVISIBLE
+            }
+        }
+    }
 
     override fun onStop() {
         super.onStop()
@@ -167,6 +194,7 @@ class PlayerFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
     companion object {
         private const val TRACK = "track"
     }

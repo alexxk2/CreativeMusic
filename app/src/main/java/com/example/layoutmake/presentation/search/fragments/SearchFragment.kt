@@ -5,14 +5,13 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.layoutmake.R
@@ -21,7 +20,6 @@ import com.example.layoutmake.domain.models.Track
 import com.example.layoutmake.presentation.search.SearchingState
 import com.example.layoutmake.presentation.search.adapter.TrackAdapter
 import com.example.layoutmake.presentation.search.view_model.SearchViewModel
-import com.example.layoutmake.utils.debounce
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -83,6 +81,7 @@ class SearchFragment : Fragment() {
 
         startTrackRecyclerView()
         startHistoryRecyclerView()
+
 
         with(binding) {
 

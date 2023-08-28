@@ -209,6 +209,12 @@
         <item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>
     </style>
 
+    <style name="DislikeButtonStyle">
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:src">@drawable/ic_dislike_night</item>
+        <item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>
+    </style>
+
     <style name="TimerTextStyle">
         <item name="android:layout_marginTop">@dimen/search_edit_sides_padding</item>
         <item name="android:ellipsize">end</item>

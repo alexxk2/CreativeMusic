@@ -30,6 +30,8 @@ class HistoryManagerImpl(context: Context) : HistoryManager {
             val trackList =
                 Gson().fromJson(trackListJSon, Array<Track>::class.java).toMutableList()
 
+
+
             if (trackList.contains(track)) trackList.remove(track)
             else if (trackList.size == 10) trackList.removeLast()
 

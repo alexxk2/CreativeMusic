@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.layoutmake.domain.media.AddTrackToFavouriteUseCase
+import com.example.layoutmake.domain.media.RemoveTrackFromFavouriteUseCase
 import com.example.layoutmake.domain.models.Track
 import com.example.layoutmake.domain.player.use_cases.GetPlayerStateUseCase
 import com.example.layoutmake.domain.player.use_cases.GetTrackCurrentPositionUseCase
@@ -25,7 +27,9 @@ class PlayerViewModel(
     private val playSongUseCase: PlaySongUseCase,
     private val preparePlayerUseCase: PreparePlayerUseCase,
     private val releasePlayerUseCase: ReleasePlayerUseCase,
-    private val getPlayerStateUseCase: GetPlayerStateUseCase
+    private val getPlayerStateUseCase: GetPlayerStateUseCase,
+    private val addTrackToFavouriteUseCase: AddTrackToFavouriteUseCase,
+    private val removeTrackFromFavouriteUseCase: RemoveTrackFromFavouriteUseCase
 
 ) : ViewModel() {
 
@@ -36,6 +40,9 @@ class PlayerViewModel(
 
     private val _playerTime = MutableLiveData<String>("00:00")
     val playerTime: LiveData<String> = _playerTime
+
+    private val _isFavourite = MutableLiveData<Boolean>()
+    val isFavourite: LiveData<Boolean> = _isFavourite
 
     init {
         viewModelScope.launch {
@@ -48,6 +55,23 @@ class PlayerViewModel(
                     PLAYER_STATE_PAUSED -> _playerState.postValue(PlayerState.Paused)
                 }
             }
+        }
+        _isFavourite.value = track.isFavourite
+    }
+
+    fun addTrackToFavourite(track: Track){
+        _isFavourite.value = true
+
+        viewModelScope.launch {
+            addTrackToFavouriteUseCase.execute(track)
+        }
+    }
+
+    fun removeTrackFromFavourite(track: Track){
+        _isFavourite.value = false
+
+        viewModelScope.launch {
+            removeTrackFromFavouriteUseCase.execute(track)
         }
     }
 

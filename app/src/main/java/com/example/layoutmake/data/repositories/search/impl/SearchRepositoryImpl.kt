@@ -1,5 +1,7 @@
 package com.example.layoutmake.data.repositories.search.impl
 
+import com.example.layoutmake.data.converters.FavouriteDbConverter
+import com.example.layoutmake.data.externals.db.RoomStorage
 import com.example.layoutmake.data.externals.search.HistoryManager
 import com.example.layoutmake.data.externals.search.NetworkClient
 import com.example.layoutmake.data.externals.search.dto.TrackRequestEntity
@@ -11,10 +13,13 @@ import kotlinx.coroutines.flow.flow
 
 class SearchRepositoryImpl(
     private val historyManager: HistoryManager,
-    private val networkClient: NetworkClient
+    private val networkClient: NetworkClient,
+    private val roomStorage: RoomStorage,
+    private val converter: FavouriteDbConverter
 ) : SearchRepository {
 
-    override fun getSearchHistory(): MutableList<Track> {
+    override  fun getSearchHistory(): MutableList<Track> {
+
         return historyManager.getSearchHistory()
     }
 
@@ -27,23 +32,21 @@ class SearchRepositoryImpl(
     }
 
     override  fun startSearch(searchInput: String): Flow<List<Track>> = flow {
+
+        val favouriteIds = roomStorage.getFavouriteTracksIds()
+
         val response = networkClient.startSearch(TrackRequestEntity(searchInput))
+
 
         if (response.resultCode == 200) {
 
-            emit((response as TrackResponseEntity).results.map {
-                Track(
-                    trackId = it.trackId,
-                    trackName = it.trackName,
-                    artistName = it.artistName,
-                    trackTimeMillis = it.trackTimeMillis,
-                    artworkUrl100 = it.artworkUrl100,
-                    collectionName = it.collectionName,
-                    releaseDate = it.releaseDate,
-                    primaryGenreName = it.primaryGenreName,
-                    country = it.country,
-                    previewUrl = it.previewUrl
-                )
+            emit((response as TrackResponseEntity).results.map {trackDto->
+
+                if (favouriteIds.contains(trackDto.trackId)){
+                   converter.mapTrackToDomainFavourite(trackDto)
+                }
+                else converter.mapTrackToDomain(trackDto)
+
             })
         }
         else emit(emptyList())

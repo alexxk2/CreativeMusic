@@ -19,7 +19,9 @@ val presentationModule = module {
             playSongUseCase = get(),
             preparePlayerUseCase = get(),
             releasePlayerUseCase = get(),
-            getPlayerStateUseCase = get()
+            getPlayerStateUseCase = get(),
+            addTrackToFavouriteUseCase = get(),
+            removeTrackFromFavouriteUseCase = get()
         )
     }
 
@@ -45,7 +47,7 @@ val presentationModule = module {
     }
 
     viewModel<FavouriteTrackViewModel> {
-        FavouriteTrackViewModel()
+        FavouriteTrackViewModel(getAllFavouriteTracksUseCase = get())
     }
 
     viewModel<PlaylistsViewModel> {

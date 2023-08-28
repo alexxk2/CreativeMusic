@@ -6,9 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".presentation.media.fragments.MediaFragment">
 
-
-
-
     <TextView
         android:id="@+id/media_title_text_view"
         style="@style/SettingsActivityTitle"
