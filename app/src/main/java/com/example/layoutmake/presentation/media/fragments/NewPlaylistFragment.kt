@@ -18,6 +18,7 @@ import androidx.core.location.LocationRequestCompat.Quality
 import androidx.navigation.fragment.findNavController
 import com.example.layoutmake.app.SHARED_PREFS
 import com.example.layoutmake.databinding.FragmentNewPlaylistBinding
+import com.google.gson.Gson
 import java.io.File
 import java.io.FileOutputStream
 
@@ -76,6 +77,7 @@ class NewPlaylistFragment : Fragment() {
         binding.arrowBackButton.setOnClickListener {
             findNavController().navigateUp()
         }
+
 
     }
 

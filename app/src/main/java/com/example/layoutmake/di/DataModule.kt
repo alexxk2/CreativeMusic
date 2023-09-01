@@ -1,6 +1,7 @@
 package com.example.layoutmake.di
 
 import com.example.layoutmake.data.converters.FavouriteDbConverter
+import com.example.layoutmake.data.converters.PlaylistDbConverter
 import com.example.layoutmake.data.externals.db.FavouriteDatabase
 import com.example.layoutmake.data.externals.db.RoomStorage
 import com.example.layoutmake.data.externals.db.impl.RoomStorageImpl
@@ -55,5 +56,8 @@ val dataModule = module {
 
     single<FavouriteDbConverter> { FavouriteDbConverter() }
 
-    single<MediaRepository> { MediaRepositoryImpl(roomStorage = get(), converter = get()) }
+    single<MediaRepository> { MediaRepositoryImpl(roomStorage = get(), favouriteConverter = get(), playlistConverter = get()) }
+
+
+    single<PlaylistDbConverter> {PlaylistDbConverter()}
 }
