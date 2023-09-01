@@ -52,7 +52,7 @@ val presentationModule = module {
     }
 
     viewModel<PlaylistsViewModel> {
-        PlaylistsViewModel()
+        PlaylistsViewModel(getAllPlaylistsUseCase = get())
     }
 
     viewModel<NewPlaylistViewModel> { NewPlaylistViewModel(addNewPlaylistUseCase = get()) }

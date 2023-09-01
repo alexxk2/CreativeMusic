@@ -1,6 +1,6 @@
 package com.example.layoutmake.presentation.media.fragments
 
-import android.app.ProgressDialog.show
+
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -19,7 +19,6 @@ import androidx.activity.addCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.location.LocationRequestCompat.Quality
 import androidx.navigation.fragment.findNavController
 import com.example.layoutmake.R
 import com.example.layoutmake.app.SHARED_PREFS
@@ -28,7 +27,6 @@ import com.example.layoutmake.domain.models.Playlist
 import com.example.layoutmake.presentation.media.view_model.NewPlaylistViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
-import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import java.io.FileOutputStream
