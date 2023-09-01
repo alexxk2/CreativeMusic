@@ -17,10 +17,24 @@ data class Track(
     val previewUrl: String?,
     val isFavourite: Boolean = false,
     val date: Long = 0L
-): Parcelable{
+) : Parcelable {
 
-    companion object{
-        @JvmStatic val DEFAULT = Track(1,"default","default","default","default","default","default","default","default","default")
+    companion object {
+        @JvmStatic
+        val DEFAULT = Track(
+            -1,
+            "default",
+            "default",
+            "default",
+            "default",
+            "default",
+            "default",
+            "default",
+            "default",
+            "default",
+            false,
+            0L
+        )
     }
 }
 

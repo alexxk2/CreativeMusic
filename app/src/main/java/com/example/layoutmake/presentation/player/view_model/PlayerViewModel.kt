@@ -5,7 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.layoutmake.domain.media.AddTrackToFavouriteUseCase
+import com.example.layoutmake.domain.media.GetAllPlaylistsUseCase
 import com.example.layoutmake.domain.media.RemoveTrackFromFavouriteUseCase
+import com.example.layoutmake.domain.media.UpdatePlaylistUseCase
+import com.example.layoutmake.domain.models.Playlist
 import com.example.layoutmake.domain.models.Track
 import com.example.layoutmake.domain.player.use_cases.GetPlayerStateUseCase
 import com.example.layoutmake.domain.player.use_cases.GetTrackCurrentPositionUseCase
@@ -13,6 +16,7 @@ import com.example.layoutmake.domain.player.use_cases.PauseSongUseCase
 import com.example.layoutmake.domain.player.use_cases.PlaySongUseCase
 import com.example.layoutmake.domain.player.use_cases.PreparePlayerUseCase
 import com.example.layoutmake.domain.player.use_cases.ReleasePlayerUseCase
+import com.example.layoutmake.presentation.media.model.PlaylistsScreenState
 import com.example.layoutmake.presentation.player.model.PlayerState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -29,7 +33,9 @@ class PlayerViewModel(
     private val releasePlayerUseCase: ReleasePlayerUseCase,
     private val getPlayerStateUseCase: GetPlayerStateUseCase,
     private val addTrackToFavouriteUseCase: AddTrackToFavouriteUseCase,
-    private val removeTrackFromFavouriteUseCase: RemoveTrackFromFavouriteUseCase
+    private val removeTrackFromFavouriteUseCase: RemoveTrackFromFavouriteUseCase,
+    private val getAllPlaylistsUseCase: GetAllPlaylistsUseCase,
+    private val updatePlaylistUseCase: UpdatePlaylistUseCase
 
 ) : ViewModel() {
 
@@ -44,6 +50,9 @@ class PlayerViewModel(
     private val _isFavourite = MutableLiveData<Boolean>()
     val isFavourite: LiveData<Boolean> = _isFavourite
 
+    private val _playlists = MutableLiveData<List<Playlist>>()
+    val playlists: LiveData<List<Playlist>> = _playlists
+
     init {
         viewModelScope.launch {
             getPlayerStateUseCase.execute().collect {playerState->
@@ -57,6 +66,14 @@ class PlayerViewModel(
             }
         }
         _isFavourite.value = track.isFavourite
+    }
+
+    fun getAllPlaylists(){
+        viewModelScope.launch {
+            getAllPlaylistsUseCase.execute().collect{newList->
+                _playlists.value = newList
+            }
+        }
     }
 
     fun addTrackToFavourite(track: Track){

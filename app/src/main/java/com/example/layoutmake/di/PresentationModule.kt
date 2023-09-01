@@ -22,7 +22,9 @@ val presentationModule = module {
             releasePlayerUseCase = get(),
             getPlayerStateUseCase = get(),
             addTrackToFavouriteUseCase = get(),
-            removeTrackFromFavouriteUseCase = get()
+            removeTrackFromFavouriteUseCase = get(),
+            getAllPlaylistsUseCase = get(),
+            updatePlaylistUseCase = get()
         )
     }
 

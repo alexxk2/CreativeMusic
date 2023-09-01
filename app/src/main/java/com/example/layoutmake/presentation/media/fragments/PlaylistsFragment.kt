@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.example.layoutmake.databinding.FragmentPlaylistsBinding
 import com.example.layoutmake.domain.models.Playlist
+import com.example.layoutmake.domain.models.Track
 import com.example.layoutmake.presentation.media.adapters.PlaylistsAdapter
 import com.example.layoutmake.presentation.media.model.PlaylistsScreenState
 import com.example.layoutmake.presentation.media.view_model.PlaylistsViewModel
@@ -20,6 +21,7 @@ class PlaylistsFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: PlaylistsViewModel by viewModel()
     private lateinit var playlistAdapter: PlaylistsAdapter
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,7 +54,7 @@ class PlaylistsFragment : Fragment() {
         }
 
         binding.addNewPlaylistButton.setOnClickListener {
-            val action = MediaFragmentDirections.actionMediaFragmentToNewPlaylistFragment()
+            val action = MediaFragmentDirections.actionMediaFragmentToNewPlaylistFragment2()
             findNavController().navigate(action)
         }
 

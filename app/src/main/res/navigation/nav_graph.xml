@@ -14,7 +14,7 @@
             android:id="@+id/action_mediaFragment_to_playerFragment"
             app:destination="@id/playerFragment" />
         <action
-            android:id="@+id/action_mediaFragment_to_newPlaylistFragment"
+            android:id="@+id/action_mediaFragment_to_newPlaylistFragment2"
             app:destination="@id/newPlaylistFragment" />
     </fragment>
     <fragment
@@ -38,6 +38,9 @@
         <argument
             android:name="track"
             app:argType="com.example.layoutmake.domain.models.Track" />
+        <action
+            android:id="@+id/action_playerFragment_to_newPlaylistFragment"
+            app:destination="@id/newPlaylistFragment" />
     </fragment>
     <fragment
         android:id="@+id/favouriteTracksFragment"
@@ -53,5 +56,14 @@
         android:id="@+id/newPlaylistFragment"
         android:name="com.example.layoutmake.presentation.media.fragments.NewPlaylistFragment"
         android:label="fragment_new_playlist"
-        tools:layout="@layout/fragment_new_playlist" />
+        tools:layout="@layout/fragment_new_playlist" >
+        <action
+            android:id="@+id/action_newPlaylistFragment_to_playerFragment"
+            app:destination="@id/playerFragment" />
+        <argument
+            android:name="track"
+            app:argType="com.example.layoutmake.domain.models.Track"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
 </navigation>

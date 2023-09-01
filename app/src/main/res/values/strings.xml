@@ -46,6 +46,8 @@
     <string name="track_genre">Жанр</string>
     <string name="track_country">Страна</string>
     <string name="pause_button">pause button</string>
+    <string name="drag_handler">drag handler</string>
+    <string name="add_to_playlist">Добавить в плейлист</string>
 
     <!--media screen-->
     <string name="favourite_tracks">Избранные треки</string>
@@ -66,6 +68,7 @@
     <string name="cancelling_dialog_negative">Отмена</string>
     <string name="cancelling_dialog_positive">Завершить</string>
     <string name="snackbar_new_playlist_message">Плейлист %1$s создан</string>
+
 
 
 </resources>

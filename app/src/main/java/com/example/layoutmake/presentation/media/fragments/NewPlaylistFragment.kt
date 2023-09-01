@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.text.Editable
@@ -24,6 +25,7 @@ import com.example.layoutmake.R
 import com.example.layoutmake.app.SHARED_PREFS
 import com.example.layoutmake.databinding.FragmentNewPlaylistBinding
 import com.example.layoutmake.domain.models.Playlist
+import com.example.layoutmake.domain.models.Track
 import com.example.layoutmake.presentation.media.view_model.NewPlaylistViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -40,12 +42,17 @@ class NewPlaylistFragment : Fragment() {
     private var coverCount = 0
     private var coverSrc = "-1"
     private lateinit var sharedPrefs: SharedPreferences
+    private  var track: Track? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-
+            track = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                it.getParcelable(TRACK, Track::class.java)
+            } else {
+                it.getParcelable(TRACK)
+            }
         }
 
         val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
@@ -138,14 +145,14 @@ class NewPlaylistFragment : Fragment() {
 
     private fun showCancellingConfirmationDialog() {
         if (isFieldsEmpty()) {
-            findNavController().navigateUp()
+            chooseBackNavigationAndNavigate()
         } else {
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle(R.string.cancelling_dialog_title)
                 .setMessage(R.string.cancelling_dialog_message)
                 .setNegativeButton(R.string.cancelling_dialog_negative) { _, _ -> }
                 .setPositiveButton(R.string.cancelling_dialog_positive) { _, _ ->
-                    findNavController().navigateUp()
+                    chooseBackNavigationAndNavigate()
                 }
                 .show()
         }
@@ -160,7 +167,7 @@ class NewPlaylistFragment : Fragment() {
             tracksNumber = 0
         )
         viewModel.addNewPlaylist(newPlaylist)
-        findNavController().navigateUp()
+        chooseBackNavigationAndNavigate()
         showSnackbarCreated()
     }
 
@@ -184,6 +191,16 @@ class NewPlaylistFragment : Fragment() {
         snackbar.show()
     }
 
+    private fun chooseBackNavigationAndNavigate(){
+        if (track != null){
+            val action = NewPlaylistFragmentDirections.actionNewPlaylistFragmentToPlayerFragment(track!!)
+            findNavController().navigate(action)
+        }
+        else{
+            findNavController().navigateUp()
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         manageCreateButtonAccess(binding.editWorkoutName.text)
@@ -197,5 +214,6 @@ class NewPlaylistFragment : Fragment() {
     companion object {
         private const val COVERS = "covers"
         private const val COVERS_COUNT = "covers_count"
+        private const val TRACK = "track"
     }
 }

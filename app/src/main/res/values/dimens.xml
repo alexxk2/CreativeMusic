@@ -56,5 +56,6 @@
     <dimen name="playlist_create_button_sides">17dp</dimen>
     <dimen name="create_playlist_button_margin_top">170dp</dimen>
     <dimen name="playlist_recycler_view_top_margin">12dp</dimen>
+    <dimen name="bottom_sheet_peek">500dp</dimen>
 
 </resources>

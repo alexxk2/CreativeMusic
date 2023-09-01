@@ -6,15 +6,22 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.layoutmake.R
 import com.example.layoutmake.databinding.FragmentPlayerBinding
+import com.example.layoutmake.domain.models.Playlist
 import com.example.layoutmake.domain.models.Track
+import com.example.layoutmake.presentation.media.adapters.PlaylistsAdapter
+import com.example.layoutmake.presentation.player.adapters.PlaylistsFlatAdapter
 import com.example.layoutmake.presentation.player.model.PlayerState
 import com.example.layoutmake.presentation.player.view_model.PlayerViewModel
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
@@ -29,6 +36,8 @@ class PlayerFragment : Fragment() {
 
     private lateinit var track: Track
     private val viewModel: PlayerViewModel by viewModel { parametersOf(track) }
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
+    private lateinit var playlistFlatAdapter: PlaylistsFlatAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,6 +61,17 @@ class PlayerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setRecyclerView()
+        viewModel.getAllPlaylists()
+
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheetLayout).apply {
+            state = BottomSheetBehavior.STATE_HIDDEN
+        }
+
+        viewModel.playlists.observe(viewLifecycleOwner){newList->
+            playlistFlatAdapter.submitList(newList)
+        }
 
         viewModel.playerState.observe(viewLifecycleOwner) { state ->
 
@@ -94,6 +114,17 @@ class PlayerFragment : Fragment() {
         }
 
         binding.arrowBackButton.setOnClickListener { findNavController().navigateUp() }
+
+        binding.addToPlaylistButton.setOnClickListener {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+
+        binding.addNewPlaylistButton.setOnClickListener {
+            val action = PlayerFragmentDirections.actionPlayerFragmentToNewPlaylistFragment(track)
+            findNavController().navigate(action)
+        }
+
+        manageBottomSheetShadow()
 
     }
 
@@ -177,6 +208,40 @@ class PlayerFragment : Fragment() {
                 removeFromFavouriteButton.visibility = View.INVISIBLE
             }
         }
+    }
+
+    private fun manageBottomSheetShadow() {
+        bottomSheetBehavior.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                when (newState) {
+
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                        binding.overlay.visibility = View.GONE
+                    }
+
+                    else -> {
+                        binding.overlay.visibility = View.VISIBLE
+                    }
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                binding.overlay.alpha = slideOffset + 1
+            }
+        })
+    }
+
+    private fun setRecyclerView() {
+        playlistFlatAdapter = PlaylistsFlatAdapter(context = requireContext(),object : PlaylistsFlatAdapter.PlaylistClickListener {
+            override fun onPlaylistClick(playlist: Playlist) {
+                //navigate to future playlist screen
+            }
+        })
+
+        binding.playlistRecyclerViewFlat.adapter = playlistFlatAdapter
+        binding.playlistRecyclerViewFlat.layoutManager = LinearLayoutManager(requireContext())
+        binding.playlistRecyclerViewFlat.setHasFixedSize(true)
     }
 
     override fun onStop() {
