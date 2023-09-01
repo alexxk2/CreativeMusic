@@ -61,6 +61,11 @@
     <string name="playlist_name">Название*</string>
     <string name="description">Описание</string>
     <string name="create">Создать</string>
+    <string name="cancelling_dialog_title">Завершить создание плейлиста?</string>
+    <string name="cancelling_dialog_message">Все несохраненные данные будут потеряны</string>
+    <string name="cancelling_dialog_negative">Отмена</string>
+    <string name="cancelling_dialog_positive">Завершить</string>
+    <string name="snackbar_new_playlist_message">Плейлист %1$s создан</string>
 
 
 </resources>

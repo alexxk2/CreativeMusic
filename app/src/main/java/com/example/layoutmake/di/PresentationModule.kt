@@ -2,6 +2,7 @@ package com.example.layoutmake.di
 
 import com.example.layoutmake.domain.models.Track
 import com.example.layoutmake.presentation.media.view_model.FavouriteTrackViewModel
+import com.example.layoutmake.presentation.media.view_model.NewPlaylistViewModel
 import com.example.layoutmake.presentation.media.view_model.PlaylistsViewModel
 import com.example.layoutmake.presentation.player.view_model.PlayerViewModel
 import com.example.layoutmake.presentation.search.view_model.SearchViewModel
@@ -53,4 +54,6 @@ val presentationModule = module {
     viewModel<PlaylistsViewModel> {
         PlaylistsViewModel()
     }
+
+    viewModel<NewPlaylistViewModel> { NewPlaylistViewModel(addNewPlaylistUseCase = get()) }
 }
