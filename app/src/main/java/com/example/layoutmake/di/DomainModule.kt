@@ -2,6 +2,7 @@ package com.example.layoutmake.di
 
 import com.example.layoutmake.domain.media.AddNewPlaylistUseCase
 import com.example.layoutmake.domain.media.AddTrackToFavouriteUseCase
+import com.example.layoutmake.domain.media.AddTrackToSavedUseCase
 import com.example.layoutmake.domain.media.DeleteAllPlaylistsUseCase
 import com.example.layoutmake.domain.media.DeletePlaylistUseCase
 import com.example.layoutmake.domain.media.GetAllFavouriteTracksUseCase
@@ -64,4 +65,6 @@ val domainModule = module {
     factory<UpdatePlaylistUseCase> { UpdatePlaylistUseCase(mediaRepository = get()) }
     factory<GetPlaylistUseCase> { GetPlaylistUseCase(mediaRepository = get()) }
     factory<GetAllPlaylistsUseCase> { GetAllPlaylistsUseCase(mediaRepository = get()) }
+
+    factory<AddTrackToSavedUseCase> { AddTrackToSavedUseCase(mediaRepository = get()) }
 }

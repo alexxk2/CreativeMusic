@@ -2,13 +2,13 @@ package com.example.layoutmake.presentation.player.fragments
 
 import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -17,15 +17,14 @@ import com.example.layoutmake.R
 import com.example.layoutmake.databinding.FragmentPlayerBinding
 import com.example.layoutmake.domain.models.Playlist
 import com.example.layoutmake.domain.models.Track
-import com.example.layoutmake.presentation.media.adapters.PlaylistsAdapter
 import com.example.layoutmake.presentation.player.adapters.PlaylistsFlatAdapter
+import com.example.layoutmake.presentation.player.model.AddedState
 import com.example.layoutmake.presentation.player.model.PlayerState
 import com.example.layoutmake.presentation.player.view_model.PlayerViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.util.*
 
 
@@ -69,7 +68,11 @@ class PlayerFragment : Fragment() {
             state = BottomSheetBehavior.STATE_HIDDEN
         }
 
-        viewModel.playlists.observe(viewLifecycleOwner){newList->
+        viewModel.addedState.observe(viewLifecycleOwner) { state ->
+            manageAddingContent(state)
+        }
+
+        viewModel.playlists.observe(viewLifecycleOwner) { newList ->
             playlistFlatAdapter.submitList(newList)
         }
 
@@ -233,15 +236,51 @@ class PlayerFragment : Fragment() {
     }
 
     private fun setRecyclerView() {
-        playlistFlatAdapter = PlaylistsFlatAdapter(context = requireContext(),object : PlaylistsFlatAdapter.PlaylistClickListener {
-            override fun onPlaylistClick(playlist: Playlist) {
-                //navigate to future playlist screen
-            }
-        })
+        playlistFlatAdapter = PlaylistsFlatAdapter(context = requireContext(),
+            object : PlaylistsFlatAdapter.PlaylistClickListener {
+                override fun onPlaylistClick(playlist: Playlist) {
+
+                    viewModel.addTrackToExactPlaylist(track, playlist)
+                }
+            })
 
         binding.playlistRecyclerViewFlat.adapter = playlistFlatAdapter
         binding.playlistRecyclerViewFlat.layoutManager = LinearLayoutManager(requireContext())
         binding.playlistRecyclerViewFlat.setHasFixedSize(true)
+    }
+
+    private fun manageAddingContent(state: AddedState) {
+
+        when (state) {
+            is AddedState.Done -> {
+                showToastIfAddedOrNot(state.playlist, false)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+            }
+
+            is AddedState.NotDone -> {
+                showToastIfAddedOrNot(state.playlist, true)
+            }
+
+            AddedState.Ready -> {}
+        }
+
+    }
+
+    private fun showToastIfAddedOrNot(playlist: Playlist, ifContains: Boolean) {
+
+        if (ifContains) {
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.toast_message_already_exists, playlist.playlistName),
+                Toast.LENGTH_SHORT
+            ).show()
+        } else {
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.toast_message_added, playlist.playlistName),
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 
     override fun onStop() {

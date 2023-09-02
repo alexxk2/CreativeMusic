@@ -1,9 +1,8 @@
 package com.example.layoutmake.data.externals.db
 
 import com.example.layoutmake.data.externals.db.dto.PlaylistDto
+import com.example.layoutmake.data.externals.db.dto.SavedTrackDto
 import com.example.layoutmake.data.externals.search.dto.TrackDto
-import com.example.layoutmake.domain.models.Playlist
-import kotlinx.coroutines.flow.Flow
 
 interface RoomStorage {
 
@@ -27,4 +26,7 @@ interface RoomStorage {
     suspend fun getAllPlaylists(): List<PlaylistDto>
 
     suspend fun getPlaylist(playlistId: Int): PlaylistDto
+
+
+    suspend fun addTrackToSaved(savedTrackDto: SavedTrackDto)
 }

@@ -5,16 +5,15 @@ import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.layoutmake.R
-import com.example.layoutmake.databinding.PlaylistItemBinding
 import com.example.layoutmake.databinding.PlaylistItemFlatBinding
 import com.example.layoutmake.domain.models.Playlist
-import com.example.layoutmake.presentation.media.adapters.PlaylistsAdapter
 import java.io.File
 
 class PlaylistsFlatAdapter(
@@ -44,6 +43,7 @@ class PlaylistsFlatAdapter(
             if (item.coverSrc == "-1") {
 
                 albumImage.setImageResource(R.drawable.placeholder)
+                albumImage.scaleType = ImageView.ScaleType.CENTER
 
             } else {
                 val filePath =

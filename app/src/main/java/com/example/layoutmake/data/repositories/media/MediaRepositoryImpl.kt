@@ -2,6 +2,7 @@ package com.example.layoutmake.data.repositories.media
 
 import com.example.layoutmake.data.converters.FavouriteDbConverter
 import com.example.layoutmake.data.converters.PlaylistDbConverter
+import com.example.layoutmake.data.converters.SavedDbConverter
 import com.example.layoutmake.data.externals.db.RoomStorage
 import com.example.layoutmake.domain.models.Playlist
 import com.example.layoutmake.domain.models.Track
@@ -12,7 +13,8 @@ import kotlinx.coroutines.flow.flow
 class MediaRepositoryImpl(
     private val roomStorage: RoomStorage,
     private val favouriteConverter: FavouriteDbConverter,
-    private val playlistConverter: PlaylistDbConverter
+    private val playlistConverter: PlaylistDbConverter,
+    private val savedDbConverter: SavedDbConverter
 ) : MediaRepository {
 
     override suspend fun addTrackToFavourite(track: Track) {
@@ -72,5 +74,8 @@ class MediaRepositoryImpl(
         emit(playlistConverter.mapPlaylistToDomain(playlistDto = resultFromData))
     }
 
-
+    override suspend fun addTrackToSaved(track: Track) {
+        val mappedTrack = savedDbConverter.mapTrackToData(track)
+        roomStorage.addTrackToSaved(savedTrackDto = mappedTrack)
+    }
 }

@@ -27,4 +27,7 @@ interface MediaRepository {
 
     fun getPlaylist(playlistId: Int): Flow<Playlist>
 
+
+    suspend fun addTrackToSaved(track: Track)
+
 }

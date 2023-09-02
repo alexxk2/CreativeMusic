@@ -2,6 +2,7 @@ package com.example.layoutmake.di
 
 import com.example.layoutmake.data.converters.FavouriteDbConverter
 import com.example.layoutmake.data.converters.PlaylistDbConverter
+import com.example.layoutmake.data.converters.SavedDbConverter
 import com.example.layoutmake.data.externals.db.FavouriteDatabase
 import com.example.layoutmake.data.externals.db.RoomStorage
 import com.example.layoutmake.data.externals.db.impl.RoomStorageImpl
@@ -40,7 +41,14 @@ val dataModule = module {
 
     single<PlayerRepository> { PlayerRepositoryImpl(mediaPlayer = get()) }
 
-    single<SearchRepository> { SearchRepositoryImpl(historyManager = get(), networkClient = get(), roomStorage = get(), converter = get()) }
+    single<SearchRepository> {
+        SearchRepositoryImpl(
+            historyManager = get(),
+            networkClient = get(),
+            roomStorage = get(),
+            converter = get()
+        )
+    }
 
     single<SettingsRepository> {
         SettingsRepositoryImpl(
@@ -56,8 +64,18 @@ val dataModule = module {
 
     single<FavouriteDbConverter> { FavouriteDbConverter() }
 
-    single<MediaRepository> { MediaRepositoryImpl(roomStorage = get(), favouriteConverter = get(), playlistConverter = get()) }
+    single<MediaRepository> {
+        MediaRepositoryImpl(
+            roomStorage = get(),
+            favouriteConverter = get(),
+            playlistConverter = get(),
+            savedDbConverter = get()
+        )
+    }
 
 
-    single<PlaylistDbConverter> {PlaylistDbConverter()}
+    single<PlaylistDbConverter> { PlaylistDbConverter() }
+
+
+    single<SavedDbConverter> { SavedDbConverter() }
 }

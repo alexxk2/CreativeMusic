@@ -13,12 +13,14 @@
         android:layout_height="@dimen/album_image_sides"
         android:layout_marginStart="@dimen/search_edit_sides_padding"
         app:cardCornerRadius="4dp"
+        app:cardElevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/album_image"
+            style="@style/SettingsActivity"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:contentDescription="@string/album_image"

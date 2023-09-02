@@ -24,7 +24,8 @@ val presentationModule = module {
             addTrackToFavouriteUseCase = get(),
             removeTrackFromFavouriteUseCase = get(),
             getAllPlaylistsUseCase = get(),
-            updatePlaylistUseCase = get()
+            updatePlaylistUseCase = get(),
+            addTrackToSavedUseCase = get()
         )
     }
 

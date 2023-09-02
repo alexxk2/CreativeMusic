@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.layoutmake.domain.media.AddTrackToFavouriteUseCase
+import com.example.layoutmake.domain.media.AddTrackToSavedUseCase
 import com.example.layoutmake.domain.media.GetAllPlaylistsUseCase
 import com.example.layoutmake.domain.media.RemoveTrackFromFavouriteUseCase
 import com.example.layoutmake.domain.media.UpdatePlaylistUseCase
@@ -16,7 +17,7 @@ import com.example.layoutmake.domain.player.use_cases.PauseSongUseCase
 import com.example.layoutmake.domain.player.use_cases.PlaySongUseCase
 import com.example.layoutmake.domain.player.use_cases.PreparePlayerUseCase
 import com.example.layoutmake.domain.player.use_cases.ReleasePlayerUseCase
-import com.example.layoutmake.presentation.media.model.PlaylistsScreenState
+import com.example.layoutmake.presentation.player.model.AddedState
 import com.example.layoutmake.presentation.player.model.PlayerState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -35,7 +36,8 @@ class PlayerViewModel(
     private val addTrackToFavouriteUseCase: AddTrackToFavouriteUseCase,
     private val removeTrackFromFavouriteUseCase: RemoveTrackFromFavouriteUseCase,
     private val getAllPlaylistsUseCase: GetAllPlaylistsUseCase,
-    private val updatePlaylistUseCase: UpdatePlaylistUseCase
+    private val updatePlaylistUseCase: UpdatePlaylistUseCase,
+    private val addTrackToSavedUseCase: AddTrackToSavedUseCase
 
 ) : ViewModel() {
 
@@ -53,6 +55,9 @@ class PlayerViewModel(
     private val _playlists = MutableLiveData<List<Playlist>>()
     val playlists: LiveData<List<Playlist>> = _playlists
 
+    private val _addedState = MutableLiveData<AddedState>()
+    val addedState: LiveData<AddedState> = _addedState
+
     init {
         viewModelScope.launch {
             getPlayerStateUseCase.execute().collect {playerState->
@@ -66,6 +71,44 @@ class PlayerViewModel(
             }
         }
         _isFavourite.value = track.isFavourite
+    }
+
+    private fun addTrackToSaved(track: Track){
+        viewModelScope.launch {
+            addTrackToSavedUseCase.execute(track)
+
+        }
+    }
+
+    private fun updatePlaylist(playlist: Playlist){
+        viewModelScope.launch {
+            updatePlaylistUseCase.execute(playlist)
+            getAllPlaylists()
+        }
+    }
+
+    fun addTrackToExactPlaylist(track: Track, playlist: Playlist) {
+
+        val ifPlaylistContainsTrack = playlist.tracksIds.contains(track.trackId)
+
+        if (ifPlaylistContainsTrack) {
+            _addedState.value = AddedState.NotDone(playlist)
+
+        } else {
+            val tempList = mutableListOf<Int>()
+            tempList.addAll(playlist.tracksIds)
+            tempList.add(track.trackId)
+
+            val updatedPlaylist = playlist.copy(
+                tracksIds = tempList.toList(),
+                tracksNumber = tempList.size
+            )
+
+            addTrackToSaved(track)
+            updatePlaylist(updatedPlaylist)
+            _addedState.value = AddedState.Done(playlist)
+        }
+        _addedState.value = AddedState.Ready
     }
 
     fun getAllPlaylists(){
