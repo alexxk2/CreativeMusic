@@ -1,5 +1,6 @@
 package com.example.layoutmake.domain.repositories
 
+import android.net.Uri
 import com.example.layoutmake.domain.models.Playlist
 import com.example.layoutmake.domain.models.Track
 import kotlinx.coroutines.flow.Flow
@@ -30,4 +31,6 @@ interface MediaRepository {
 
     suspend fun addTrackToSaved(track: Track)
 
+
+    suspend fun saveImageAndReturnPath(uri: Uri): String
 }

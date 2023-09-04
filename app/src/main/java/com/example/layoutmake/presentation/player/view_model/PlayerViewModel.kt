@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.layoutmake.domain.media.AddTrackToFavouriteUseCase
 import com.example.layoutmake.domain.media.AddTrackToSavedUseCase
+import com.example.layoutmake.domain.media.CheckIfPlaylistContainsTrackUseCase
 import com.example.layoutmake.domain.media.GetAllPlaylistsUseCase
 import com.example.layoutmake.domain.media.RemoveTrackFromFavouriteUseCase
 import com.example.layoutmake.domain.media.UpdatePlaylistUseCase
@@ -19,6 +20,7 @@ import com.example.layoutmake.domain.player.use_cases.PreparePlayerUseCase
 import com.example.layoutmake.domain.player.use_cases.ReleasePlayerUseCase
 import com.example.layoutmake.presentation.player.model.AddedState
 import com.example.layoutmake.presentation.player.model.PlayerState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -37,7 +39,8 @@ class PlayerViewModel(
     private val removeTrackFromFavouriteUseCase: RemoveTrackFromFavouriteUseCase,
     private val getAllPlaylistsUseCase: GetAllPlaylistsUseCase,
     private val updatePlaylistUseCase: UpdatePlaylistUseCase,
-    private val addTrackToSavedUseCase: AddTrackToSavedUseCase
+    private val addTrackToSavedUseCase: AddTrackToSavedUseCase,
+    private val checkIfPlaylistContainsTrackUseCase: CheckIfPlaylistContainsTrackUseCase
 
 ) : ViewModel() {
 
@@ -60,7 +63,7 @@ class PlayerViewModel(
 
     init {
         viewModelScope.launch {
-            getPlayerStateUseCase.execute().collect {playerState->
+            getPlayerStateUseCase.execute().collect { playerState ->
                 when (playerState) {
                     PLAYER_STATE_LOADING -> _playerState.postValue(PlayerState.Loading)
                     PLAYER_STATE_PREPARED -> _playerState.postValue(PlayerState.Prepared)
@@ -73,53 +76,41 @@ class PlayerViewModel(
         _isFavourite.value = track.isFavourite
     }
 
-    private fun addTrackToSaved(track: Track){
-        viewModelScope.launch {
+    private fun addTrackToSaved(track: Track) {
+        viewModelScope.launch(Dispatchers.IO) {
             addTrackToSavedUseCase.execute(track)
-
         }
     }
 
-    private fun updatePlaylist(playlist: Playlist){
+    private fun updatePlaylistAndGetUpdatedOne(track: Track, playlist: Playlist) {
         viewModelScope.launch {
-            updatePlaylistUseCase.execute(playlist)
+            updatePlaylistUseCase.execute(track, playlist)
             getAllPlaylists()
         }
     }
 
     fun addTrackToExactPlaylist(track: Track, playlist: Playlist) {
 
-        val ifPlaylistContainsTrack = playlist.tracksIds.contains(track.trackId)
-
-        if (ifPlaylistContainsTrack) {
+        if (checkIfPlaylistContainsTrackUseCase.execute(track = track, playList = playlist)) {
             _addedState.value = AddedState.NotDone(playlist)
 
         } else {
-            val tempList = mutableListOf<Int>()
-            tempList.addAll(playlist.tracksIds)
-            tempList.add(track.trackId)
-
-            val updatedPlaylist = playlist.copy(
-                tracksIds = tempList.toList(),
-                tracksNumber = tempList.size
-            )
-
             addTrackToSaved(track)
-            updatePlaylist(updatedPlaylist)
+            updatePlaylistAndGetUpdatedOne(track,playlist)
             _addedState.value = AddedState.Done(playlist)
         }
         _addedState.value = AddedState.Ready
     }
 
-    fun getAllPlaylists(){
+    fun getAllPlaylists() {
         viewModelScope.launch {
-            getAllPlaylistsUseCase.execute().collect{newList->
+            getAllPlaylistsUseCase.execute().collect { newList ->
                 _playlists.value = newList
             }
         }
     }
 
-    fun addTrackToFavourite(track: Track){
+    fun addTrackToFavourite(track: Track) {
         _isFavourite.value = true
 
         viewModelScope.launch {
@@ -127,7 +118,7 @@ class PlayerViewModel(
         }
     }
 
-    fun removeTrackFromFavourite(track: Track){
+    fun removeTrackFromFavourite(track: Track) {
         _isFavourite.value = false
 
         viewModelScope.launch {
@@ -156,16 +147,16 @@ class PlayerViewModel(
         releasePlayerUseCase.execute()
     }
 
-    private fun startTimer(){
+    private fun startTimer() {
         timerJob = viewModelScope.launch {
             delay(DELAY_BEFORE_STATE_CHANGED)
-            while (_playerState.value == PlayerState.Playing){
+            while (_playerState.value == PlayerState.Playing) {
                 delay(TIMER_UPDATE_INTERVAL_MS)
                 _playerTime.value = SimpleDateFormat(
                     "mm:ss",
                     Locale.getDefault()
                 ).format(getTrackCurrentPositionUseCase.execute())
-                if (_playerState.value == PlayerState.Completed){
+                if (_playerState.value == PlayerState.Completed) {
                     _playerTime.value = "00:00"
                     timerJob?.cancel()
                 }

@@ -236,13 +236,9 @@ class PlayerFragment : Fragment() {
     }
 
     private fun setRecyclerView() {
-        playlistFlatAdapter = PlaylistsFlatAdapter(context = requireContext(),
-            object : PlaylistsFlatAdapter.PlaylistClickListener {
-                override fun onPlaylistClick(playlist: Playlist) {
-
-                    viewModel.addTrackToExactPlaylist(track, playlist)
-                }
-            })
+        playlistFlatAdapter = PlaylistsFlatAdapter(context = requireContext()) { playlist ->
+            viewModel.addTrackToExactPlaylist(track,playlist)
+        }
 
         binding.playlistRecyclerViewFlat.adapter = playlistFlatAdapter
         binding.playlistRecyclerViewFlat.layoutManager = LinearLayoutManager(requireContext())

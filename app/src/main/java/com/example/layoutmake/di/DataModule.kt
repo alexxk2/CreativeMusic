@@ -6,6 +6,8 @@ import com.example.layoutmake.data.converters.SavedDbConverter
 import com.example.layoutmake.data.externals.db.FavouriteDatabase
 import com.example.layoutmake.data.externals.db.RoomStorage
 import com.example.layoutmake.data.externals.db.impl.RoomStorageImpl
+import com.example.layoutmake.data.externals.media_storage.ImageSaver
+import com.example.layoutmake.data.externals.media_storage.impl.ImageSaverImpl
 import com.example.layoutmake.data.externals.player.Player
 import com.example.layoutmake.data.externals.player.impl.MediaPlayerImpl
 import com.example.layoutmake.data.externals.search.HistoryManager
@@ -69,7 +71,8 @@ val dataModule = module {
             roomStorage = get(),
             favouriteConverter = get(),
             playlistConverter = get(),
-            savedDbConverter = get()
+            savedDbConverter = get(),
+            imageSaver = get()
         )
     }
 
@@ -78,4 +81,6 @@ val dataModule = module {
 
 
     single<SavedDbConverter> { SavedDbConverter() }
+
+    single<ImageSaver> {ImageSaverImpl(context = get())  }
 }

@@ -9,7 +9,7 @@ import com.example.layoutmake.data.externals.db.dto.SavedTrackDto
 import com.example.layoutmake.data.externals.search.dto.TrackDto
 
 
-@Database(entities = [TrackDto::class, PlaylistDto::class, SavedTrackDto::class], version = 5, exportSchema = false)
+@Database(entities = [TrackDto::class, PlaylistDto::class, SavedTrackDto::class], version = 6, exportSchema = false)
 abstract class FavouriteDatabase: RoomDatabase() {
 
     abstract fun favouriteDao(): FavouriteDao

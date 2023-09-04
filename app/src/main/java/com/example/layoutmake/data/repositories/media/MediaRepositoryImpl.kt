@@ -1,17 +1,22 @@
 package com.example.layoutmake.data.repositories.media
 
+import android.net.Uri
 import com.example.layoutmake.data.converters.FavouriteDbConverter
 import com.example.layoutmake.data.converters.PlaylistDbConverter
 import com.example.layoutmake.data.converters.SavedDbConverter
 import com.example.layoutmake.data.externals.db.RoomStorage
+import com.example.layoutmake.data.externals.media_storage.ImageSaver
 import com.example.layoutmake.domain.models.Playlist
 import com.example.layoutmake.domain.models.Track
 import com.example.layoutmake.domain.repositories.MediaRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 
 class MediaRepositoryImpl(
     private val roomStorage: RoomStorage,
+    private val imageSaver: ImageSaver,
     private val favouriteConverter: FavouriteDbConverter,
     private val playlistConverter: PlaylistDbConverter,
     private val savedDbConverter: SavedDbConverter
@@ -33,7 +38,7 @@ class MediaRepositoryImpl(
         emit(resultFromData.map { trackDto ->
             favouriteConverter.mapTrackToDomain(trackDto)
         })
-    }
+    }.flowOn(Dispatchers.IO)
 
     override fun getFavouriteTracksIds(): Flow<List<Int>> = flow {
         emit(roomStorage.getFavouriteTracksIds())
@@ -66,16 +71,18 @@ class MediaRepositoryImpl(
             playlistConverter.mapPlaylistToDomain(playlistDto)
         })
 
-    }
+    }.flowOn(Dispatchers.IO)
 
     override fun getPlaylist(playlistId: Int): Flow<Playlist> = flow {
         val resultFromData = roomStorage.getPlaylist(playlistId)
 
         emit(playlistConverter.mapPlaylistToDomain(playlistDto = resultFromData))
-    }
+    }.flowOn(Dispatchers.IO)
 
     override suspend fun addTrackToSaved(track: Track) {
         val mappedTrack = savedDbConverter.mapTrackToData(track)
         roomStorage.addTrackToSaved(savedTrackDto = mappedTrack)
     }
+
+    override suspend fun saveImageAndReturnPath(uri: Uri): String  = imageSaver.saveImageAndReturnPath(uri)
 }

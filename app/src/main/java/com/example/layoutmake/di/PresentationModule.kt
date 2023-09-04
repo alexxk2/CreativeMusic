@@ -25,7 +25,8 @@ val presentationModule = module {
             removeTrackFromFavouriteUseCase = get(),
             getAllPlaylistsUseCase = get(),
             updatePlaylistUseCase = get(),
-            addTrackToSavedUseCase = get()
+            addTrackToSavedUseCase = get(),
+            checkIfPlaylistContainsTrackUseCase = get()
         )
     }
 
@@ -58,5 +59,10 @@ val presentationModule = module {
         PlaylistsViewModel(getAllPlaylistsUseCase = get())
     }
 
-    viewModel<NewPlaylistViewModel> { NewPlaylistViewModel(addNewPlaylistUseCase = get()) }
+    viewModel<NewPlaylistViewModel> {
+        NewPlaylistViewModel(
+            addNewPlaylistUseCase = get(),
+            saveImageAndReturnPathUseCase = get()
+        )
+    }
 }
