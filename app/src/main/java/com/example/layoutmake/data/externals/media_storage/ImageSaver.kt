@@ -4,5 +4,5 @@ import android.net.Uri
 
 interface ImageSaver {
 
-    suspend fun saveImageAndReturnPath(uri: Uri): String
+    suspend fun saveImageAndReturnPath(uri: Uri): Uri
 }

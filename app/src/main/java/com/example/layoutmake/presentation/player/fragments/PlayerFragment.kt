@@ -236,7 +236,7 @@ class PlayerFragment : Fragment() {
     }
 
     private fun setRecyclerView() {
-        playlistFlatAdapter = PlaylistsFlatAdapter(context = requireContext()) { playlist ->
+        playlistFlatAdapter = PlaylistsFlatAdapter { playlist ->
             viewModel.addTrackToExactPlaylist(track,playlist)
         }
 

@@ -5,5 +5,5 @@ import com.example.layoutmake.domain.repositories.MediaRepository
 
 class SaveImageAndReturnPathUseCase(private val mediaRepository: MediaRepository) {
 
-    suspend fun execute(uri:Uri): String = mediaRepository.saveImageAndReturnPath(uri)
+    suspend fun execute(uri:Uri): Uri = mediaRepository.saveImageAndReturnPath(uri)
 }

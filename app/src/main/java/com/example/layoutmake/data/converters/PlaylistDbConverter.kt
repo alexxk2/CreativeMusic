@@ -1,5 +1,6 @@
 package com.example.layoutmake.data.converters
 
+import androidx.core.net.toUri
 import com.example.layoutmake.data.externals.db.dto.PlaylistDto
 import com.example.layoutmake.domain.models.Playlist
 import com.google.gson.Gson
@@ -13,8 +14,8 @@ class PlaylistDbConverter {
                 playlistId = playlistId,
                 playlistName = playlistName,
                 playlistDescription = playlistDescription,
-                coverSrc = coverSrc,
-                tracksIds = convertToJson(tracksIds),
+                coverSrc = coverSrc?.toString(),
+                tracksIds = convertListOfIdsToJson(tracksIds),
                 tracksNumber = tracksNumber
             )
         }
@@ -26,17 +27,20 @@ class PlaylistDbConverter {
                 playlistId = playlistId,
                 playlistName = playlistName,
                 playlistDescription = playlistDescription,
-                coverSrc = coverSrc,
-                tracksIds = convertFromJson(tracksIds),
+                coverSrc = coverSrc?.toUri(),
+                tracksIds = convertListOfIdsFromJson(tracksIds),
                 tracksNumber = tracksNumber
             )
         }
     }
 
-    private fun convertFromJson(jsonString: String): List<Int> {
+    private fun convertListOfIdsFromJson(jsonString: String): List<Int> {
         val typeToken = object : TypeToken<List<Int>>() {}.type
         return Gson().fromJson<List<Int>>(jsonString, typeToken)
     }
 
-    private fun convertToJson(list: List<Int>) = Gson().toJson(list)
+    private fun convertListOfIdsToJson(list: List<Int>) = Gson().toJson(list)
+
+
+
 }

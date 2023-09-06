@@ -1,10 +1,7 @@
 package com.example.layoutmake.presentation.media.adapters
 
-import android.content.Context
-import android.os.Environment
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.net.toUri
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -12,10 +9,8 @@ import com.bumptech.glide.Glide
 import com.example.layoutmake.R
 import com.example.layoutmake.databinding.PlaylistItemBinding
 import com.example.layoutmake.domain.models.Playlist
-import java.io.File
 
 class PlaylistsAdapter(
-    private val context: Context,
     private val clickListener: (playlist: Playlist) -> Unit
 ) : ListAdapter<Playlist, PlaylistsAdapter.PlaylistViewHolder>(DiffCallBack) {
 
@@ -33,16 +28,9 @@ class PlaylistsAdapter(
                     playlistImage.setImageResource(R.drawable.placeholder_large)
 
                 } else {
-                    val filePath =
-                        File(
-                            context.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
-                            COVERS
-                        )
-                    val file = File(filePath, item.coverSrc)
-                    val coverUri = file.toUri()
 
                     Glide.with(playlistImage)
-                        .load(coverUri)
+                        .load(item.coverSrc)
                         .centerCrop()
                         .placeholder(R.drawable.placeholder)
                         .into(playlistImage)
@@ -81,6 +69,5 @@ class PlaylistsAdapter(
             }
         }
 
-        private const val COVERS = "covers"
     }
 }

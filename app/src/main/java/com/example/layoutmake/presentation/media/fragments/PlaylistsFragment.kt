@@ -21,7 +21,6 @@ class PlaylistsFragment : Fragment() {
     private lateinit var playlistAdapter: PlaylistsAdapter
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -60,7 +59,7 @@ class PlaylistsFragment : Fragment() {
     }
 
     private fun setRecyclerView() {
-        playlistAdapter = PlaylistsAdapter(context = requireContext()){playlist ->
+        playlistAdapter = PlaylistsAdapter{playlist ->
             //future navigation to playlist
         }
 
@@ -84,7 +83,6 @@ class PlaylistsFragment : Fragment() {
             }
         }
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

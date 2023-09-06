@@ -1,14 +1,17 @@
 package com.example.layoutmake.data.repositories.media
 
 import android.net.Uri
+import android.text.Editable
 import com.example.layoutmake.data.converters.FavouriteDbConverter
 import com.example.layoutmake.data.converters.PlaylistDbConverter
 import com.example.layoutmake.data.converters.SavedDbConverter
 import com.example.layoutmake.data.externals.db.RoomStorage
+import com.example.layoutmake.data.externals.db.dto.PlaylistDto
 import com.example.layoutmake.data.externals.media_storage.ImageSaver
 import com.example.layoutmake.domain.models.Playlist
 import com.example.layoutmake.domain.models.Track
 import com.example.layoutmake.domain.repositories.MediaRepository
+import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -45,9 +48,21 @@ class MediaRepositoryImpl(
     }
 
 
-    override suspend fun addNewPlaylist(playlist: Playlist) {
-        val mappedPlaylist = playlistConverter.mapPlaylistToData(playlist)
-        roomStorage.addNewPlaylist(playlistDto = mappedPlaylist)
+    override suspend fun addNewPlaylist(
+        playlistName: Editable?,
+        playlistDescription: Editable?,
+        uri: Uri?
+    ) {
+
+        val newPlaylistDto = PlaylistDto(
+            playlistName = playlistName.toString(),
+            playlistDescription = playlistDescription.toString(),
+            coverSrc = uri?.toString(),
+            tracksIds = Gson().toJson(emptyList<Int>()),
+            tracksNumber = 0
+        )
+
+        roomStorage.addNewPlaylist(playlistDto = newPlaylistDto)
     }
 
     override suspend fun deleteAllPlaylists() {
@@ -84,5 +99,6 @@ class MediaRepositoryImpl(
         roomStorage.addTrackToSaved(savedTrackDto = mappedTrack)
     }
 
-    override suspend fun saveImageAndReturnPath(uri: Uri): String  = imageSaver.saveImageAndReturnPath(uri)
+    override suspend fun saveImageAndReturnPath(uri: Uri): Uri =
+        imageSaver.saveImageAndReturnPath(uri)
 }

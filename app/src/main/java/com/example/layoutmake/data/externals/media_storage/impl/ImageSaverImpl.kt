@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Environment
+import androidx.core.net.toUri
 import com.example.layoutmake.app.SHARED_PREFS
 import com.example.layoutmake.data.externals.media_storage.ImageSaver
 import java.io.File
@@ -17,7 +18,7 @@ class ImageSaverImpl(private val context: Context) : ImageSaver {
     private val sharedPrefs = context.getSharedPreferences(SHARED_PREFS, 0)
 
 
-    override suspend fun saveImageAndReturnPath(uri: Uri): String {
+    override suspend fun saveImageAndReturnPath(uri: Uri): Uri {
 
         coverCount = sharedPrefs.getInt(COVERS_COUNT, 0)
 
@@ -38,9 +39,8 @@ class ImageSaverImpl(private val context: Context) : ImageSaver {
             .decodeStream(inputStream)
             .compress(Bitmap.CompressFormat.JPEG, 30, outPutStream)
 
-        return coverSrc
+        return file.toUri()
     }
-
 
     private fun putCountInSharedPrefs(count: Int) {
         sharedPrefs.edit()

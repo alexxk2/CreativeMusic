@@ -20,8 +20,8 @@ class NewPlaylistViewModel(
     private val _track = MutableLiveData<Track?>(null)
     val track: LiveData<Track?> = _track
 
-    private val _coverSrc = MutableLiveData<String?>(null)
-    val coverSrc: LiveData<String?> = _coverSrc
+    private val _coverSrc = MutableLiveData<Uri?>(null)
+    val coverSrc: LiveData<Uri?> = _coverSrc
 
     fun saveImageToPrivateStorage(uri: Uri) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -38,7 +38,7 @@ class NewPlaylistViewModel(
             addNewPlaylistUseCase.execute(
                 playlistName = playlistName,
                 playlistDescription = playlistDescription,
-                coverSrc = _coverSrc.value
+                uri = _coverSrc.value
             )
         }
     }
