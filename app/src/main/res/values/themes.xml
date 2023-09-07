@@ -16,5 +16,8 @@
 
         <item name="bottomNavigationStyle">@style/Widget.MaterialComponents.BottomNavigationView.Colored</item>
 
+        <item name="snackbarStyle">@style/Widget.App.Snackbar</item>
+        <item name="snackbarButtonStyle">@style/Widget.App.SnackbarButton</item>
+
     </style>
 </resources>

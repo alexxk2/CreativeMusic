@@ -1,9 +1,18 @@
 package com.example.layoutmake.di
 
+import com.example.layoutmake.domain.media.AddNewPlaylistUseCase
 import com.example.layoutmake.domain.media.AddTrackToFavouriteUseCase
+import com.example.layoutmake.domain.media.AddTrackToSavedUseCase
+import com.example.layoutmake.domain.media.CheckIfPlaylistContainsTrackUseCase
+import com.example.layoutmake.domain.media.DeleteAllPlaylistsUseCase
+import com.example.layoutmake.domain.media.DeletePlaylistUseCase
 import com.example.layoutmake.domain.media.GetAllFavouriteTracksUseCase
+import com.example.layoutmake.domain.media.GetAllPlaylistsUseCase
 import com.example.layoutmake.domain.media.GetFavouriteTracksIdsUseCase
+import com.example.layoutmake.domain.media.GetPlaylistUseCase
 import com.example.layoutmake.domain.media.RemoveTrackFromFavouriteUseCase
+import com.example.layoutmake.domain.media.SaveImageUseCase
+import com.example.layoutmake.domain.media.UpdatePlaylistUseCase
 import com.example.layoutmake.domain.player.use_cases.GetPlayerStateUseCase
 import com.example.layoutmake.domain.player.use_cases.GetTrackCurrentPositionUseCase
 import com.example.layoutmake.domain.player.use_cases.PauseSongUseCase
@@ -50,4 +59,18 @@ val domainModule = module {
     factory<RemoveTrackFromFavouriteUseCase> { RemoveTrackFromFavouriteUseCase(mediaRepository = get()) }
     factory<GetAllFavouriteTracksUseCase> { GetAllFavouriteTracksUseCase(mediaRepository = get()) }
     factory<GetFavouriteTracksIdsUseCase> { GetFavouriteTracksIdsUseCase(mediaRepository = get()) }
+
+
+    factory<AddNewPlaylistUseCase> { AddNewPlaylistUseCase(mediaRepository = get()) }
+    factory<DeleteAllPlaylistsUseCase> { DeleteAllPlaylistsUseCase(mediaRepository = get()) }
+    factory<DeletePlaylistUseCase> { DeletePlaylistUseCase(mediaRepository = get()) }
+    factory<UpdatePlaylistUseCase> { UpdatePlaylistUseCase(mediaRepository = get()) }
+    factory<GetPlaylistUseCase> { GetPlaylistUseCase(mediaRepository = get()) }
+    factory<GetAllPlaylistsUseCase> { GetAllPlaylistsUseCase(mediaRepository = get()) }
+
+    factory<AddTrackToSavedUseCase> { AddTrackToSavedUseCase(mediaRepository = get()) }
+
+    factory<SaveImageUseCase> { SaveImageUseCase(mediaRepository = get()) }
+
+    factory<CheckIfPlaylistContainsTrackUseCase> { CheckIfPlaylistContainsTrackUseCase() }
 }

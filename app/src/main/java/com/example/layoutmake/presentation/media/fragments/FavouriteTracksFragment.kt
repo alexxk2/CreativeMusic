@@ -53,6 +53,8 @@ class FavouriteTracksFragment : Fragment() {
         viewModel.screenState.observe(viewLifecycleOwner) { screenState ->
             manageScreenContent(screenState)
         }
+
+
     }
 
     private fun setFavouriteRecyclerView() {

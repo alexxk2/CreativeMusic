@@ -40,6 +40,8 @@ class SearchFragment : Fragment() {
 
     private var searchJob: Job? = null
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -57,6 +59,9 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d("GGG","onViewCreated")
+
+
 
         viewModel.trackList.observe(viewLifecycleOwner){newTrackList ->
             tracks.clear()
@@ -194,11 +199,13 @@ class SearchFragment : Fragment() {
 
             if (historyCondition){
                 clearErrors()
+                historyFrameLayout.visibility = View.VISIBLE
                 searchHistoryView.visibility = View.VISIBLE
                 cleanHistoryButton.visibility = View.VISIBLE
                 recyclerView.visibility = View.GONE
             }
             else{
+                historyFrameLayout.visibility = View.GONE
                 searchHistoryView.visibility = View.GONE
                 cleanHistoryButton.visibility = View.GONE
                 recyclerView.visibility = View.VISIBLE
@@ -220,7 +227,7 @@ class SearchFragment : Fragment() {
 
 
     private fun startSearchDebounce(s:CharSequence?){
-        if (!s.isNullOrEmpty()) {
+        if (!s.isNullOrEmpty()&& binding.searchEditText.hasFocus()) {
             showProgressBar()
 
             searchInput = s.toString()
@@ -243,7 +250,7 @@ class SearchFragment : Fragment() {
         with(binding){
             progressBar.visibility = View.INVISIBLE
 
-            if(!searchEditText.hasFocus() || searchEditText.text.isNullOrEmpty() || searchHistoryView.isVisible){
+            if(searchEditText.text.isNullOrEmpty() || searchHistoryView.isVisible){
                 recyclerView.visibility = View.GONE
             }
             else recyclerView.visibility = View.VISIBLE
@@ -295,7 +302,6 @@ class SearchFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-
         _binding = null
         Log.d("GGG","onDestroyView")
     }

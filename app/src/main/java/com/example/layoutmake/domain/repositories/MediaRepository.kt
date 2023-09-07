@@ -1,5 +1,8 @@
 package com.example.layoutmake.domain.repositories
 
+import android.net.Uri
+import android.text.Editable
+import com.example.layoutmake.domain.models.Playlist
 import com.example.layoutmake.domain.models.Track
 import kotlinx.coroutines.flow.Flow
 
@@ -12,4 +15,23 @@ interface MediaRepository {
     fun getAllFavouriteTracks(): Flow<List<Track>>
 
     fun getFavouriteTracksIds(): Flow<List<Int>>
+
+
+    suspend fun addNewPlaylist(playlistName: Editable?, playlistDescription: Editable?, uri: Uri?)
+
+    suspend fun deleteAllPlaylists()
+
+    suspend fun deletePlaylist(playlist: Playlist)
+
+    suspend fun updatePlaylist(playlist: Playlist)
+
+    fun getAllPlaylists(): Flow<List<Playlist>>
+
+    fun getPlaylist(playlistId: Int): Flow<Playlist>
+
+
+    suspend fun addTrackToSaved(track: Track)
+
+
+    suspend fun saveImageAndReturnPath(uri: Uri): Uri
 }

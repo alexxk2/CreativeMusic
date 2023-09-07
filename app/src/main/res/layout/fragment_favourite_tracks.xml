@@ -21,6 +21,7 @@
 
         <ImageView
             android:id="@+id/image_empty_playlists"
+            android:layout_marginTop="@dimen/no_content_image_top_margin"
             style="@style/NoContentImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
