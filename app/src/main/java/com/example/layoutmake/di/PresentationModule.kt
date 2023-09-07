@@ -62,7 +62,7 @@ val presentationModule = module {
     viewModel<NewPlaylistViewModel> {
         NewPlaylistViewModel(
             addNewPlaylistUseCase = get(),
-            saveImageAndReturnPathUseCase = get()
+            saveImageUseCase = get()
         )
     }
 }
