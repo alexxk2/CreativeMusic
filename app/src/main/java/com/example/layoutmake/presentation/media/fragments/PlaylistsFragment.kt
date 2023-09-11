@@ -59,8 +59,10 @@ class PlaylistsFragment : Fragment() {
     }
 
     private fun setRecyclerView() {
-        playlistAdapter = PlaylistsAdapter{playlist ->
-            //future navigation to playlist
+        playlistAdapter = PlaylistsAdapter { playlist ->
+            val action =
+                MediaFragmentDirections.actionMediaFragmentToPlaylistFragment(playlist.playlistId)
+            findNavController().navigate(action)
         }
 
         binding.playlistRecyclerView.adapter = playlistAdapter

@@ -1,0 +1,135 @@
+package com.example.layoutmake.presentation.media.fragments
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.LinearLayout
+import androidx.core.view.doOnLayout
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+import com.example.layoutmake.R
+import com.example.layoutmake.databinding.FragmentPlaylistBinding
+import com.example.layoutmake.domain.models.Playlist
+import com.example.layoutmake.domain.models.Track
+import com.example.layoutmake.presentation.media.adapters.PlaylistTrackAdapter
+import com.example.layoutmake.presentation.media.adapters.PlaylistsAdapter
+import com.example.layoutmake.presentation.media.view_model.PlaylistViewModel
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import org.koin.androidx.viewmodel.ext.android.viewModel
+
+
+class PlaylistFragment : Fragment() {
+    private var _binding: FragmentPlaylistBinding? = null
+    private val binding get() = _binding!!
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
+    private var playlistId = 0
+    private val viewModel: PlaylistViewModel by viewModel()
+    private lateinit var playlistTrackAdapter: PlaylistTrackAdapter
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            playlistId = it.getInt(PLAYLIST_ID)
+        }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentPlaylistBinding.inflate(layoutInflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setRecyclerView()
+        viewModel.getPlaylist(playlistId)
+
+        viewModel.playlist.observe(viewLifecycleOwner) { playlist ->
+            bindViews(playlist)
+        }
+
+        viewModel.playlistInfo.observe(viewLifecycleOwner) { playlistInfo ->
+            bindViewPlaylistInfo(playlistInfo)
+        }
+
+        viewModel.listOfTracks.observe(viewLifecycleOwner) { listOfTracks ->
+            playlistTrackAdapter.submitList(listOfTracks)
+        }
+
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheetLayout).apply {
+            state = BottomSheetBehavior.STATE_COLLAPSED
+
+        }
+
+        binding.emptySpace.doOnLayout {
+            bottomSheetBehavior.setPeekHeight(binding.emptySpace.height, false)
+        }
+
+        binding.arrowBackButton.setOnClickListener {
+            findNavController().navigateUp()
+        }
+    }
+
+    private fun bindViews(playlist: Playlist) {
+        with(binding) {
+
+            playlist.coverSrc?.let {
+                Glide.with(requireContext())
+                    .load(it)
+                    .centerCrop()
+                    .into(playlistImage)
+            }
+
+            playlistNameTitle.text = playlist.playlistName
+            playlistDescription.text = playlist.playlistDescription
+
+        }
+    }
+
+    private fun bindViewPlaylistInfo(playlistInfo: Pair<String, String>) {
+        binding.playlistInfo.text =
+            getString(R.string.playlist_info, playlistInfo.first, playlistInfo.second)
+    }
+
+    private fun setRecyclerView() {
+        playlistTrackAdapter = PlaylistTrackAdapter(requireContext(), clickListener = { track ->
+            val action = PlaylistFragmentDirections.actionPlaylistFragmentToPlayerFragment(track)
+            findNavController().navigate(action)
+
+        }, longClickListener = { track ->
+            showDeletingConfirmationDialog(track)
+        })
+
+        binding.tracksRecyclerViewFlat.adapter = playlistTrackAdapter
+        binding.tracksRecyclerViewFlat.setHasFixedSize(true)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun showDeletingConfirmationDialog(track: Track) {
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.dialog_delete_title)
+            .setMessage("")
+            .setNegativeButton(R.string.no) { _, _ -> }
+            .setPositiveButton(R.string.yes) { _, _ ->
+                viewModel.deleteTrackFromPlaylist(track, playlistId)
+            }
+            .show()
+    }
+
+
+    companion object {
+        const val PLAYLIST_ID = "playlistId"
+    }
+}

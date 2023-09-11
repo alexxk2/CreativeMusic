@@ -130,7 +130,7 @@
                 app:layout_constraintTop_toBottomOf="@id/timer" />
 
             <TextView
-                android:id="@+id/album_name"
+                android:id="@+id/playlist_name_title"
                 style="@style/InfoBlockNamesStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -146,7 +146,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/track_year"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/album_name" />
+                app:layout_constraintTop_toBottomOf="@id/playlist_name_title" />
 
             <TextView
                 android:id="@+id/track_genre"
@@ -186,10 +186,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="@+id/album_name"
+                app:layout_constraintBottom_toBottomOf="@+id/playlist_name_title"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/album_name"
-                app:layout_constraintTop_toTopOf="@+id/album_name"
+                app:layout_constraintStart_toEndOf="@+id/playlist_name_title"
+                app:layout_constraintTop_toTopOf="@+id/playlist_name_title"
                 tools:text="@string/default_text" />
 
             <TextView

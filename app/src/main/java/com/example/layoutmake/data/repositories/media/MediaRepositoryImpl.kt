@@ -99,6 +99,49 @@ class MediaRepositoryImpl(
         roomStorage.addTrackToSaved(savedTrackDto = mappedTrack)
     }
 
+    override fun getPlaylistTracks(listOfIds: List<Int>): Flow<List<Track>> = flow {
+        val filteredListFromData =
+            roomStorage.getAllSavedTracks().filter { listOfIds.contains(it.trackId) }
+
+        emit(filteredListFromData.map { savedTrackDto ->
+            savedDbConverter.mapTrackToDomain(savedTrackDto)
+        })
+
+    }
+
     override suspend fun saveImageAndReturnPath(uri: Uri): Uri =
         imageSaver.saveImageAndReturnPath(uri)
+
+
+    override suspend fun deleteTrackFromPlaylist(track: Track, playlistId: Int) {
+        val playlistToUpdate = roomStorage.getPlaylist(playlistId)
+
+        val updatedListOfIds =
+            playlistConverter.convertListOfIdsFromJson(playlistToUpdate.tracksIds)
+                .filterNot { it == track.trackId }
+
+        val updatedPlaylistDto = playlistToUpdate.copy(
+            tracksIds = playlistConverter.convertListOfIdsToJson(updatedListOfIds)
+        )
+        roomStorage.updatePlaylist(updatedPlaylistDto)
+
+
+
+
+        var isContainsInPlaylists = false
+        val allPlaylists = roomStorage.getAllPlaylists()
+
+        allPlaylists.forEach { playlist ->
+            if (playlistConverter.convertListOfIdsFromJson(playlist.tracksIds)
+                    .contains(track.trackId)
+            ) {
+                isContainsInPlaylists = true
+                return@forEach
+            }
+        }
+        if (!isContainsInPlaylists) {
+            roomStorage.deleteTrackFromSaved(savedDbConverter.mapTrackToData(track))
+        }
+
+    }
 }

@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 class GetPlaylistUseCase(private val mediaRepository: MediaRepository) {
 
-    suspend fun execute(playlistId: Int): Flow<Playlist> = mediaRepository.getPlaylist(playlistId)
+     fun execute(playlistId: Int): Flow<Playlist> = mediaRepository.getPlaylist(playlistId)
 }

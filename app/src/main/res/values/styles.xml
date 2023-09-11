@@ -248,7 +248,8 @@
         <item name="android:orientation">vertical</item>
         <item name="behavior_hideable">true</item>
         <item name="behavior_peekHeight">@dimen/bottom_sheet_peek</item>
-        <item name="layout_behavior">com.google.android.material.bottomsheet.BottomSheetBehavior</item>
+        <item name="layout_behavior">com.google.android.material.bottomsheet.BottomSheetBehavior
+        </item>
 
     </style>
 
@@ -285,7 +286,7 @@
         <item name="android:textColor">@color/y_black</item>
         <item name="android:textSize">@dimen/no_content_message_text_size</item>
     </style>
-    
+
     <style name="PlaylistInfoText">
         <item name="android:ellipsize">end</item>
         <item name="android:fontFamily">@font/ys_display_regular</item>
@@ -342,6 +343,38 @@
         <item name="colorPrimary">@color/white</item>
         <item name="colorOnSurface">@color/y_black</item>
     </style>
-    
+
+    <!--Playlist screen-->
+
+    <style name="PlaylistNameText">
+        <item name="android:layout_marginStart">@dimen/sides_margin</item>
+        <item name="android:layout_marginTop">@dimen/title_margin_start_new_playlist</item>
+        <item name="android:fontFamily">@font/ys_display_bold</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="PlaylistDescriptionText">
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textColor">@color/y_black</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="PlaylistIconsStyle">
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>
+    </style>
+
+    <style name="PlaylistBottomSheet">
+        <item name="android:background">@drawable/bottom_sheet_background</item>
+        <item name="android:orientation">vertical</item>
+        <item name="behavior_hideable">false</item>
+
+        <item name="layout_behavior">com.google.android.material.bottomsheet.BottomSheetBehavior
+        </item>
+
+    </style>
+
 </resources>
 

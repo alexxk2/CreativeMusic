@@ -32,6 +32,11 @@ interface MediaRepository {
 
     suspend fun addTrackToSaved(track: Track)
 
+    fun getPlaylistTracks(listOfIds: List<Int>): Flow<List<Track>>
+
+    suspend fun deleteTrackFromPlaylist(track: Track, playlistId: Int)
 
     suspend fun saveImageAndReturnPath(uri: Uri): Uri
+
+
 }

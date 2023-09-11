@@ -55,4 +55,12 @@ class RoomStorageImpl(favouriteDatabase: FavouriteDatabase): RoomStorage {
     override suspend fun addTrackToSaved(savedTrackDto: SavedTrackDto) {
         savedTracksDao.addNewItem(savedTrackDto)
     }
+
+    override suspend fun getAllSavedTracks(): List<SavedTrackDto> {
+        return savedTracksDao.getAllItems()
+    }
+
+    override suspend fun deleteTrackFromSaved(savedTrackDto: SavedTrackDto) {
+        return savedTracksDao.deleteItem(savedTrackDto)
+    }
 }

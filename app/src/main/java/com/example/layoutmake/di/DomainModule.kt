@@ -6,9 +6,11 @@ import com.example.layoutmake.domain.media.AddTrackToSavedUseCase
 import com.example.layoutmake.domain.media.CheckIfPlaylistContainsTrackUseCase
 import com.example.layoutmake.domain.media.DeleteAllPlaylistsUseCase
 import com.example.layoutmake.domain.media.DeletePlaylistUseCase
+import com.example.layoutmake.domain.media.DeleteTrackFromPlaylistUseCase
 import com.example.layoutmake.domain.media.GetAllFavouriteTracksUseCase
 import com.example.layoutmake.domain.media.GetAllPlaylistsUseCase
 import com.example.layoutmake.domain.media.GetFavouriteTracksIdsUseCase
+import com.example.layoutmake.domain.media.GetPlaylistTracksUseCase
 import com.example.layoutmake.domain.media.GetPlaylistUseCase
 import com.example.layoutmake.domain.media.RemoveTrackFromFavouriteUseCase
 import com.example.layoutmake.domain.media.SaveImageUseCase
@@ -69,6 +71,8 @@ val domainModule = module {
     factory<GetAllPlaylistsUseCase> { GetAllPlaylistsUseCase(mediaRepository = get()) }
 
     factory<AddTrackToSavedUseCase> { AddTrackToSavedUseCase(mediaRepository = get()) }
+    factory<GetPlaylistTracksUseCase> { GetPlaylistTracksUseCase(mediaRepository = get()) }
+    factory<DeleteTrackFromPlaylistUseCase> { DeleteTrackFromPlaylistUseCase(mediaRepository = get()) }
 
     factory<SaveImageUseCase> { SaveImageUseCase(mediaRepository = get()) }
 

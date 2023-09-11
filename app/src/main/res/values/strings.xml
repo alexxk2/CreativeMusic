@@ -71,6 +71,15 @@
     <string name="cancelling_dialog_positive">Завершить</string>
     <string name="snackbar_new_playlist_message">Плейлист %1$s создан</string>
 
-
+    <!--Playlist screen-->
+    <string name="playlist_image">playlist image</string>
+    <string name="default_playlist_name">Best songs 2021</string>
+    <string name="default_playlist_description">2022</string>
+    <string name="default_playlist_info">300 минут • 98 треков</string>
+    <string name="playlist_info">%1$s • %2$s</string>
+    <string name="share_button">share button</string>
+    <string name="no">НЕТ</string>
+    <string name="yes">ДА</string>
+    <string name="dialog_delete_title">Хотите удалить трек?</string>
 
 </resources>
