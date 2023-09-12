@@ -76,6 +76,31 @@ class MediaRepositoryImpl(
     override suspend fun deletePlaylist(playlistId: Int) {
         val playlistToDelete = roomStorage.getPlaylist(playlistId)
         roomStorage.deletePlaylist(playlistDto = playlistToDelete)
+
+
+        var isContainsInPlaylists = false
+
+        val allPlaylists = roomStorage.getAllPlaylists()
+
+        val playlistTracks = roomStorage.getAllSavedTracks().filter {
+            playlistConverter.convertListOfIdsFromJson(playlistToDelete.tracksIds)
+                .contains(it.trackId)
+        }
+        playlistTracks.forEach loop1@ { savedTrackDto ->
+
+            allPlaylists.forEach loop2@ { anotherPlaylist ->
+                if (playlistConverter.convertListOfIdsFromJson(anotherPlaylist.tracksIds)
+                        .contains(savedTrackDto.trackId)
+                ) {
+                    isContainsInPlaylists = true
+                    return@loop2
+                }
+            }
+            if (!isContainsInPlaylists) {
+                roomStorage.deleteTrackFromSaved(savedTrackDto)
+            }
+            isContainsInPlaylists = false
+        }
     }
 
     override suspend fun updatePlaylist(playlist: Playlist) {
