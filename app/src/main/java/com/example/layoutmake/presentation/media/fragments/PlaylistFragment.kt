@@ -14,10 +14,10 @@ import com.example.layoutmake.databinding.FragmentPlaylistBinding
 import com.example.layoutmake.domain.models.Playlist
 import com.example.layoutmake.domain.models.Track
 import com.example.layoutmake.presentation.media.adapters.PlaylistTrackAdapter
-import com.example.layoutmake.presentation.media.adapters.PlaylistsAdapter
 import com.example.layoutmake.presentation.media.view_model.PlaylistViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -28,6 +28,7 @@ class PlaylistFragment : Fragment() {
     private var playlistId = 0
     private val viewModel: PlaylistViewModel by viewModel()
     private lateinit var playlistTrackAdapter: PlaylistTrackAdapter
+    private lateinit var bottomSheetBehaviorMore: BottomSheetBehavior<LinearLayout>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,6 +51,11 @@ class PlaylistFragment : Fragment() {
 
         setRecyclerView()
         viewModel.getPlaylist(playlistId)
+
+        viewModel.isListEmpty.observe(viewLifecycleOwner){isEmpty->
+            if (isEmpty) showNoTracksToShareMessage()
+
+        }
 
         viewModel.playlist.observe(viewLifecycleOwner) { playlist ->
             bindViews(playlist)
@@ -75,6 +81,30 @@ class PlaylistFragment : Fragment() {
         binding.arrowBackButton.setOnClickListener {
             findNavController().navigateUp()
         }
+
+        binding.shareButton.setOnClickListener {
+            viewModel.sharePlaylistIfNotEmpty(playlistId)
+        }
+
+        binding.shareTextButton.setOnClickListener {
+            viewModel.sharePlaylistIfNotEmpty(playlistId)
+        }
+
+        bottomSheetBehaviorMore = BottomSheetBehavior.from(binding.bottomSheetLayoutMore).apply {
+            state = BottomSheetBehavior.STATE_HIDDEN
+        }
+
+        binding.moreButton.setOnClickListener {
+            bottomSheetBehaviorMore.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+
+        binding.deleteTextButton.setOnClickListener {
+            bottomSheetBehaviorMore.state = BottomSheetBehavior.STATE_HIDDEN
+            showDeletePlaylistConfirmationDialog()
+        }
+
+        manageBottomSheetShadow()
+
     }
 
     private fun bindViews(playlist: Playlist) {
@@ -90,12 +120,25 @@ class PlaylistFragment : Fragment() {
             playlistNameTitle.text = playlist.playlistName
             playlistDescription.text = playlist.playlistDescription
 
+            if (playlist.coverSrc == null) {
+                includeFlatPlaylist.albumImage.setImageResource(R.drawable.placeholder_large)
+            } else {
+                Glide.with(includeFlatPlaylist.albumImage)
+                    .load(playlist.coverSrc)
+                    .centerCrop()
+                    .placeholder(R.drawable.placeholder)
+                    .into(includeFlatPlaylist.albumImage)
+            }
+
+            includeFlatPlaylist.playlistName.text = playlist.playlistName
+
         }
     }
 
     private fun bindViewPlaylistInfo(playlistInfo: Pair<String, String>) {
         binding.playlistInfo.text =
             getString(R.string.playlist_info, playlistInfo.first, playlistInfo.second)
+        binding.includeFlatPlaylist.tracksNumber.text = playlistInfo.second
     }
 
     private fun setRecyclerView() {
@@ -104,7 +147,7 @@ class PlaylistFragment : Fragment() {
             findNavController().navigate(action)
 
         }, longClickListener = { track ->
-            showDeletingConfirmationDialog(track)
+            showDeleteTrackConfirmationDialog(track)
         })
 
         binding.tracksRecyclerViewFlat.adapter = playlistTrackAdapter
@@ -116,10 +159,10 @@ class PlaylistFragment : Fragment() {
         _binding = null
     }
 
-    private fun showDeletingConfirmationDialog(track: Track) {
+    private fun showDeleteTrackConfirmationDialog(track: Track) {
 
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle(R.string.dialog_delete_title)
+            .setTitle(R.string.dialog_delete_track_title)
             .setMessage("")
             .setNegativeButton(R.string.no) { _, _ -> }
             .setPositiveButton(R.string.yes) { _, _ ->
@@ -128,8 +171,50 @@ class PlaylistFragment : Fragment() {
             .show()
     }
 
+    private fun showDeletePlaylistConfirmationDialog() {
 
-    companion object {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(getString(R.string.dialog_delete_playlist_title,viewModel.playlist.value?.playlistName))
+            .setMessage("")
+            .setNegativeButton(R.string.no) { _, _ -> }
+            .setPositiveButton(R.string.yes) { _, _ ->
+                viewModel.deletePlaylist(playlistId)
+                findNavController().navigateUp()
+            }
+            .show()
+    }
+
+    private fun showNoTracksToShareMessage() {
+        Snackbar.make(
+            binding.playlistConstraintLayout,
+            R.string.no_tracks_to_share,
+            Snackbar.LENGTH_SHORT
+        ).show()
+    }
+
+    private fun manageBottomSheetShadow() {
+        bottomSheetBehaviorMore.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                when (newState) {
+
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                        binding.overlay.visibility = View.GONE
+                    }
+
+                    else -> {
+                        binding.overlay.visibility = View.VISIBLE
+                    }
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                binding.overlay.alpha = slideOffset + 1
+            }
+        })
+    }
+
+        companion object {
         const val PLAYLIST_ID = "playlistId"
     }
 }

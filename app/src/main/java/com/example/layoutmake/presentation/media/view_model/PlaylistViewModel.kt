@@ -4,9 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.layoutmake.domain.media.DeletePlaylistUseCase
 import com.example.layoutmake.domain.media.DeleteTrackFromPlaylistUseCase
 import com.example.layoutmake.domain.media.GetPlaylistTracksUseCase
 import com.example.layoutmake.domain.media.GetPlaylistUseCase
+import com.example.layoutmake.domain.media.SharePlaylistUseCase
 import com.example.layoutmake.domain.models.Playlist
 import com.example.layoutmake.domain.models.Track
 import kotlinx.coroutines.Dispatchers
@@ -17,7 +19,9 @@ import java.util.*
 class PlaylistViewModel(
     private val getPlaylistUseCase: GetPlaylistUseCase,
     private val getPlaylistTracksUseCase: GetPlaylistTracksUseCase,
-    private val deleteTrackFromPlaylistUseCase: DeleteTrackFromPlaylistUseCase
+    private val deleteTrackFromPlaylistUseCase: DeleteTrackFromPlaylistUseCase,
+    private val sharePlaylistUseCase: SharePlaylistUseCase,
+    private val deletePlaylistUseCase: DeletePlaylistUseCase
 
 ) : ViewModel() {
 
@@ -30,6 +34,27 @@ class PlaylistViewModel(
     private val _playlistInfo = MutableLiveData<Pair<String, String>>()
     val playlistInfo: LiveData<Pair<String, String>> = _playlistInfo
 
+    private val _isListEmpty = MutableLiveData<Boolean>()
+    val isListEmpty: LiveData<Boolean> = _isListEmpty
+
+
+    fun deletePlaylist(playlistId: Int){
+        viewModelScope.launch(Dispatchers.IO) {
+            deletePlaylistUseCase.execute(playlistId)
+        }
+    }
+
+    fun sharePlaylistIfNotEmpty(playlistId:Int){
+        viewModelScope.launch(Dispatchers.IO) {
+            if (listOfTracks.value?.isEmpty() == true){
+                _isListEmpty.postValue(true)
+            }
+            else{
+                _isListEmpty.postValue(false)
+                sharePlaylistUseCase.execute(playlistId)
+            }
+        }
+    }
 
     fun deleteTrackFromPlaylist(track: Track, playlistId: Int) {
         viewModelScope.launch(Dispatchers.IO) {

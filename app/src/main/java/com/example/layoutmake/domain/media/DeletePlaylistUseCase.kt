@@ -5,5 +5,5 @@ import com.example.layoutmake.domain.repositories.MediaRepository
 
 class DeletePlaylistUseCase(private val mediaRepository: MediaRepository) {
 
-    suspend fun execute(playlist: Playlist) = mediaRepository.deletePlaylist(playlist)
+    suspend fun execute(playlistId: Int) = mediaRepository.deletePlaylist(playlistId)
 }

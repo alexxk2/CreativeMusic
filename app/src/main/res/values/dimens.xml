@@ -60,5 +60,6 @@
 
     <!--playlist screen-->
     <dimen name="PlaylistBottomSheetPeekHeight">266dp</dimen>
+    <dimen name="bottom_sheep_peek_more">383dp</dimen>
 
 </resources>

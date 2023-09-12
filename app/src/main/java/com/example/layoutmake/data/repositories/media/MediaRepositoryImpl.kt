@@ -8,6 +8,7 @@ import com.example.layoutmake.data.converters.SavedDbConverter
 import com.example.layoutmake.data.externals.db.RoomStorage
 import com.example.layoutmake.data.externals.db.dto.PlaylistDto
 import com.example.layoutmake.data.externals.media_storage.ImageSaver
+import com.example.layoutmake.data.externals.settings.ExternalNavigator
 import com.example.layoutmake.domain.models.Playlist
 import com.example.layoutmake.domain.models.Track
 import com.example.layoutmake.domain.repositories.MediaRepository
@@ -16,13 +17,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MediaRepositoryImpl(
     private val roomStorage: RoomStorage,
     private val imageSaver: ImageSaver,
     private val favouriteConverter: FavouriteDbConverter,
     private val playlistConverter: PlaylistDbConverter,
-    private val savedDbConverter: SavedDbConverter
+    private val savedDbConverter: SavedDbConverter,
+    private val externalNavigator: ExternalNavigator
 ) : MediaRepository {
 
     override suspend fun addTrackToFavourite(track: Track) {
@@ -69,9 +73,9 @@ class MediaRepositoryImpl(
         roomStorage.deleteAllPlaylists()
     }
 
-    override suspend fun deletePlaylist(playlist: Playlist) {
-        val mappedPlaylist = playlistConverter.mapPlaylistToData(playlist)
-        roomStorage.deletePlaylist(playlistDto = mappedPlaylist)
+    override suspend fun deletePlaylist(playlistId: Int) {
+        val playlistToDelete = roomStorage.getPlaylist(playlistId)
+        roomStorage.deletePlaylist(playlistDto = playlistToDelete)
     }
 
     override suspend fun updatePlaylist(playlist: Playlist) {
@@ -126,8 +130,6 @@ class MediaRepositoryImpl(
         roomStorage.updatePlaylist(updatedPlaylistDto)
 
 
-
-
         var isContainsInPlaylists = false
         val allPlaylists = roomStorage.getAllPlaylists()
 
@@ -143,5 +145,48 @@ class MediaRepositoryImpl(
             roomStorage.deleteTrackFromSaved(savedDbConverter.mapTrackToData(track))
         }
 
+    }
+
+    override suspend fun sharePlaylist(playlistId: Int) {
+        var playlistString = ""
+        val playlistToShare = roomStorage.getPlaylist(playlistId)
+        val listOfIds = playlistConverter.convertListOfIdsFromJson(playlistToShare.tracksIds)
+        val listOfTracksToShare = getPlaylistTracks(listOfIds)
+        listOfTracksToShare.collect { playlistString = createPlaylistString(playlistToShare, it) }
+        externalNavigator.sharePlaylist(playlist = playlistString)
+    }
+
+    private fun createPlaylistString(playlistDto: PlaylistDto, listOfTracks: List<Track>): String {
+        var numberInList = 1
+
+        var result = "${playlistDto.playlistName}\n${playlistDto.playlistDescription}\n${
+            getRightEndingTracks(listOfTracks.size)
+        }"
+        listOfTracks.forEach {
+            result += "\n${numberInList}.${it.artistName} - ${it.trackName} ${
+                SimpleDateFormat(
+                    "mm:ss",
+                    Locale.getDefault()
+                ).format(it.trackTimeMillis.toLong())
+            }"
+            numberInList++
+        }
+        return result
+    }
+
+    private fun getRightEndingTracks(numberOfTracks: Int): String {
+        val preLastDigit = numberOfTracks % 100 / 10
+
+        if (preLastDigit == 1) {
+            return "$numberOfTracks треков"
+        }
+
+        return when (numberOfTracks % 10) {
+            1 -> "$numberOfTracks трек"
+            2 -> "$numberOfTracks трека"
+            3 -> "$numberOfTracks трека"
+            4 -> "$numberOfTracks трека"
+            else -> "$numberOfTracks треков"
+        }
     }
 }

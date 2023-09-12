@@ -71,7 +71,9 @@ val presentationModule = module {
         PlaylistViewModel(
             getPlaylistUseCase = get(),
             getPlaylistTracksUseCase = get(),
-            deleteTrackFromPlaylistUseCase = get()
+            deleteTrackFromPlaylistUseCase = get(),
+            sharePlaylistUseCase = get(),
+            deletePlaylistUseCase = get()
         )
     }
 }
