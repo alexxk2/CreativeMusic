@@ -382,5 +382,12 @@
         <item name="android:layout_marginStart">@dimen/sides_margin</item>
     </style>
 
+    <style name="ThemeOverlay.App.MaterialAlertDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="colorPrimary">@color/y_blue</item>
+        <item name="colorSecondary">@color/white</item>
+        <item name="android:background">@color/white</item>
+        <item name="colorSurface">@color/white</item>
+        <item name="colorOnSurface">@color/y_black</item>
+    </style>
 </resources>
 

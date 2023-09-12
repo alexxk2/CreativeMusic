@@ -21,8 +21,8 @@
 
         <ImageView
             android:id="@+id/playlist_image"
-            android:layout_width="match_parent"
             style="@style/SettingsActivity"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clickable="true"
             android:contentDescription="@string/add_playlist_image"
@@ -33,19 +33,19 @@
 
     <TextView
         android:id="@+id/playlist_name"
+        style="@style/PlaylistInfoText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        style="@style/PlaylistInfoText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/playlist_image_card_item"
         tools:text="@string/default_text" />
 
     <TextView
         android:id="@+id/tracks_number"
+        style="@style/PlaylistInfoText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/PlaylistInfoText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/playlist_name"
         tools:text="@string/default_text" />

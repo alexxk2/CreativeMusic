@@ -9,6 +9,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.addCallback
 import androidx.activity.result.ActivityResultLauncher
@@ -16,9 +17,11 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.example.layoutmake.R
 import com.example.layoutmake.databinding.FragmentNewPlaylistBinding
 import com.example.layoutmake.domain.models.Track
+import com.example.layoutmake.presentation.media.model.NewPlaylistState
 import com.example.layoutmake.presentation.media.view_model.NewPlaylistViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -41,10 +44,12 @@ class NewPlaylistFragment : Fragment() {
                 it.getParcelable(TRACK)
             }
             viewModel.getTrack(track)
+            val playListId = it.getInt(PLAYLIST_ID)
+            viewModel.setScreenState(playListId)
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(this) {
-            checksIfFieldsEmptyToShowCancellingDialogOrNot()
+            manageBackNavigation()
         }
     }
 
@@ -82,13 +87,17 @@ class NewPlaylistFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {}
         })
 
+        viewModel.screenState.observe(viewLifecycleOwner) { state ->
+            manageScreenState(state)
+
+        }
 
         binding.arrowBackButton.setOnClickListener {
-            checksIfFieldsEmptyToShowCancellingDialogOrNot()
+            manageBackNavigation()
         }
 
         binding.createPlaylistButton.setOnClickListener {
-            createNewPlaylistAndNavigate()
+            chooseUpdateOrSaveAndNavigate()
         }
     }
 
@@ -96,15 +105,25 @@ class NewPlaylistFragment : Fragment() {
         binding.createPlaylistButton.isEnabled = !input.isNullOrBlank()
     }
 
-    private fun checksIfFieldsEmptyToShowCancellingDialogOrNot() {
-        if (isFieldsEmpty()) {
-            chooseBackNavigationAndNavigate()
-        } else {
-            showCancellingConfirmationDialog()
+    private fun manageBackNavigation() {
+        when (viewModel.screenState.value) {
+            NewPlaylistState.CreateNewState -> {
+                if (isFieldsEmpty()) {
+                    chooseBackNavigationAndNavigate()
+                } else {
+                    showCancellingConfirmationDialog()
+                }
+            }
+
+            is NewPlaylistState.UpdateOldState -> {
+                chooseBackNavigationAndNavigate()
+            }
+
+            else -> {}
         }
     }
 
-    private fun showCancellingConfirmationDialog(){
+    private fun showCancellingConfirmationDialog() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(R.string.cancelling_dialog_title)
             .setMessage(R.string.cancelling_dialog_message)
@@ -115,13 +134,30 @@ class NewPlaylistFragment : Fragment() {
             .show()
     }
 
-    private fun createNewPlaylistAndNavigate() {
-        viewModel.addNewPlaylist(
-            playlistName = binding.editWorkoutName.text,
-            playlistDescription = binding.editWorkoutDescription.text
-        )
-        chooseBackNavigationAndNavigate()
-        showSnackbarCreated()
+    private fun chooseUpdateOrSaveAndNavigate() {
+        when (viewModel.screenState.value) {
+            NewPlaylistState.CreateNewState -> {
+                viewModel.addNewPlaylist(
+                    playlistName = binding.editWorkoutName.text,
+                    playlistDescription = binding.editWorkoutDescription.text
+                )
+                chooseBackNavigationAndNavigate()
+                showSnackbarCreated()
+            }
+
+            is NewPlaylistState.UpdateOldState -> {
+                viewModel.updatePlaylist(
+                    playlistId = viewModel.playlist.value?.playlistId!!,
+                    playlistName = binding.editWorkoutName.text,
+                    playlistDescription = binding.editWorkoutDescription.text
+                )
+                chooseBackNavigationAndNavigate()
+            }
+
+            else -> {}
+        }
+
+
     }
 
     private fun isFieldsEmpty() =
@@ -154,6 +190,39 @@ class NewPlaylistFragment : Fragment() {
         }
     }
 
+    private fun manageScreenState(state: NewPlaylistState) {
+        with(binding) {
+            when (state) {
+                NewPlaylistState.CreateNewState -> {
+                    Glide.with(addPlaylistImage)
+                        .load(R.drawable.new_playlist_background_downloaded)
+                        .centerCrop()
+                        .into(addPlaylistImage)
+                }
+                is NewPlaylistState.UpdateOldState -> {
+                    titleTextView.text = getString(R.string.edit)
+                    createPlaylistButton.text = getString(R.string.save)
+                    editWorkoutName.setText(state.playlist.playlistName)
+                    editWorkoutDescription.setText(state.playlist.playlistDescription)
+                    if (state.playlist.coverSrc !=null){
+                        Glide.with(addPlaylistImage)
+                            .load(state.playlist.coverSrc)
+                            .centerCrop()
+                            .into(addPlaylistImage)
+
+                    }
+                    else {
+
+                        addPlaylistImage.setImageResource(R.drawable.image_placeholder)
+                        addPlaylistImage.scaleType = ImageView.ScaleType.CENTER
+
+                    }
+
+                }
+            }
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         manageCreateButtonAccess(binding.editWorkoutName.text)
@@ -166,5 +235,6 @@ class NewPlaylistFragment : Fragment() {
 
     companion object {
         private const val TRACK = "track"
+        private const val PLAYLIST_ID = "playlistId"
     }
 }

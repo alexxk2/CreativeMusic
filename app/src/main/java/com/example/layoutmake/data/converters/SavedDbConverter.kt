@@ -18,7 +18,7 @@ class SavedDbConverter {
                 primaryGenreName = primaryGenreName,
                 country = country,
                 previewUrl = previewUrl,
-                isFavourite = true,
+                isFavourite = isFavourite,
                 date = date
             )
         }
@@ -37,7 +37,7 @@ class SavedDbConverter {
                 primaryGenreName = primaryGenreName,
                 country = country,
                 previewUrl = previewUrl,
-                isFavourite = true,
+                isFavourite = isFavourite,
                 date = date
             )
         }

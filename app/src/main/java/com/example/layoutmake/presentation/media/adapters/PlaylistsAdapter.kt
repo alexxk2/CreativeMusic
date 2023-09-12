@@ -21,7 +21,8 @@ class PlaylistsAdapter(
 
             with(binding) {
 
-                playlistConstraintLayout.setOnClickListener { clickListener(item) }
+                root.setOnClickListener { clickListener(item) }
+                playlistImage.setOnClickListener { clickListener(item) }
 
                 if (item.coverSrc == null) {
 

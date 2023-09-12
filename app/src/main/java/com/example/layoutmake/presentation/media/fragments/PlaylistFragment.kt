@@ -52,9 +52,14 @@ class PlaylistFragment : Fragment() {
         setRecyclerView()
         viewModel.getPlaylist(playlistId)
 
-        viewModel.isListEmpty.observe(viewLifecycleOwner){isEmpty->
-            if (isEmpty) showNoTracksToShareMessage()
+        viewModel.isListEmpty.observe(viewLifecycleOwner) { isEmpty ->
+            manageTracksVisibility(isEmpty)
+        }
 
+        viewModel.showNoTracksMessage.observe(viewLifecycleOwner) {
+            if (it) {
+                showNoTracksToShareMessage()
+            }
         }
 
         viewModel.playlist.observe(viewLifecycleOwner) { playlist ->
@@ -102,6 +107,15 @@ class PlaylistFragment : Fragment() {
             bottomSheetBehaviorMore.state = BottomSheetBehavior.STATE_HIDDEN
             showDeletePlaylistConfirmationDialog()
         }
+
+        binding.editTextButton.setOnClickListener {
+            val action = PlaylistFragmentDirections.actionPlaylistFragmentToNewPlaylistFragment(
+                track = null,
+                playlistId = playlistId
+            )
+            findNavController().navigate(action)
+        }
+
 
         manageBottomSheetShadow()
 
@@ -161,11 +175,11 @@ class PlaylistFragment : Fragment() {
 
     private fun showDeleteTrackConfirmationDialog(track: Track) {
 
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle(R.string.dialog_delete_track_title)
-            .setMessage("")
-            .setNegativeButton(R.string.no) { _, _ -> }
-            .setPositiveButton(R.string.yes) { _, _ ->
+        MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_App_MaterialAlertDialog)
+            .setTitle(R.string.delete_track)
+            .setMessage(R.string.are_you_sure_delete_track)
+            .setNegativeButton(R.string.cancel) { _, _ -> }
+            .setPositiveButton(R.string.delete) { _, _ ->
                 viewModel.deleteTrackFromPlaylist(track, playlistId)
             }
             .show()
@@ -173,11 +187,11 @@ class PlaylistFragment : Fragment() {
 
     private fun showDeletePlaylistConfirmationDialog() {
 
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle(getString(R.string.dialog_delete_playlist_title,viewModel.playlist.value?.playlistName))
-            .setMessage("")
-            .setNegativeButton(R.string.no) { _, _ -> }
-            .setPositiveButton(R.string.yes) { _, _ ->
+        MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_App_MaterialAlertDialog)
+            .setTitle(getString(R.string.delete_playlist))
+            .setMessage(R.string.are_you_sure_delete_playlist)
+            .setNegativeButton(R.string.cancel) { _, _ -> }
+            .setPositiveButton(R.string.delete) { _, _ ->
                 viewModel.deletePlaylist(playlistId)
                 findNavController().navigateUp()
             }
@@ -190,6 +204,7 @@ class PlaylistFragment : Fragment() {
             R.string.no_tracks_to_share,
             Snackbar.LENGTH_SHORT
         ).show()
+        bottomSheetBehaviorMore.state = BottomSheetBehavior.STATE_HIDDEN
     }
 
     private fun manageBottomSheetShadow() {
@@ -214,7 +229,19 @@ class PlaylistFragment : Fragment() {
         })
     }
 
-        companion object {
+    private fun manageTracksVisibility(isListEmpty: Boolean) {
+        with(binding) {
+            if (isListEmpty) {
+                tracksRecyclerViewFlat.visibility = View.GONE
+                emptyListMessage.visibility = View.VISIBLE
+            } else {
+                tracksRecyclerViewFlat.visibility = View.VISIBLE
+                emptyListMessage.visibility = View.GONE
+            }
+        }
+    }
+
+    companion object {
         const val PLAYLIST_ID = "playlistId"
     }
 }

@@ -86,9 +86,9 @@ class MediaRepositoryImpl(
             playlistConverter.convertListOfIdsFromJson(playlistToDelete.tracksIds)
                 .contains(it.trackId)
         }
-        playlistTracks.forEach loop1@ { savedTrackDto ->
+        playlistTracks.forEach loop1@{ savedTrackDto ->
 
-            allPlaylists.forEach loop2@ { anotherPlaylist ->
+            allPlaylists.forEach loop2@{ anotherPlaylist ->
                 if (playlistConverter.convertListOfIdsFromJson(anotherPlaylist.tracksIds)
                         .contains(savedTrackDto.trackId)
                 ) {
@@ -103,9 +103,21 @@ class MediaRepositoryImpl(
         }
     }
 
-    override suspend fun updatePlaylist(playlist: Playlist) {
-        val mappedPlaylist = playlistConverter.mapPlaylistToData(playlist)
+    override suspend fun updatePlaylist(track: Track, playlist: Playlist) {
+
+        val tempList = mutableListOf<Int>()
+        tempList.addAll(playlist.tracksIds)
+        tempList.add(track.trackId)
+
+        val updatedPlaylist = playlist.copy(
+            tracksIds = tempList.toList(),
+            tracksNumber = tempList.size
+        )
+
+        val mappedPlaylist = playlistConverter.mapPlaylistToData(updatedPlaylist)
         roomStorage.updatePlaylist(playlistDto = mappedPlaylist)
+
+
     }
 
     override fun getAllPlaylists(): Flow<List<Playlist>> = flow {
@@ -130,7 +142,7 @@ class MediaRepositoryImpl(
 
     override fun getPlaylistTracks(listOfIds: List<Int>): Flow<List<Track>> = flow {
         val filteredListFromData =
-            roomStorage.getAllSavedTracks().filter { listOfIds.contains(it.trackId) }
+            roomStorage.getAllSavedTracks().filter { listOfIds.contains(it.trackId) }.sortedByDescending { it.date }
 
         emit(filteredListFromData.map { savedTrackDto ->
             savedDbConverter.mapTrackToDomain(savedTrackDto)
@@ -150,9 +162,11 @@ class MediaRepositoryImpl(
                 .filterNot { it == track.trackId }
 
         val updatedPlaylistDto = playlistToUpdate.copy(
-            tracksIds = playlistConverter.convertListOfIdsToJson(updatedListOfIds)
+            tracksIds = playlistConverter.convertListOfIdsToJson(updatedListOfIds),
+            tracksNumber = updatedListOfIds.size
         )
         roomStorage.updatePlaylist(updatedPlaylistDto)
+
 
 
         var isContainsInPlaylists = false
@@ -213,5 +227,20 @@ class MediaRepositoryImpl(
             4 -> "$numberOfTracks трека"
             else -> "$numberOfTracks треков"
         }
+    }
+
+    override suspend fun updatePlaylist(
+        playlistId: Int,
+        playlistName: Editable?,
+        playlistDescription: Editable?,
+        uri: Uri?
+    ) {
+        val playlistDtoToUpdate = roomStorage.getPlaylist(playlistId)
+        val updatedPlaylist = playlistDtoToUpdate.copy(
+            playlistName = playlistName.toString(),
+            playlistDescription = playlistDescription.toString(),
+            coverSrc = uri.toString()
+        )
+        roomStorage.updatePlaylist(updatedPlaylist)
     }
 }

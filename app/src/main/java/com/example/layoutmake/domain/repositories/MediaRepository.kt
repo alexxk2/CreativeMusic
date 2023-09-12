@@ -23,7 +23,9 @@ interface MediaRepository {
 
     suspend fun deletePlaylist(playlistId: Int)
 
-    suspend fun updatePlaylist(playlist: Playlist)
+    suspend fun updatePlaylist(track: Track, playlist: Playlist)
+
+    suspend fun updatePlaylist(playlistId: Int, playlistName: Editable?, playlistDescription: Editable?, uri: Uri?)
 
     fun getAllPlaylists(): Flow<List<Playlist>>
 

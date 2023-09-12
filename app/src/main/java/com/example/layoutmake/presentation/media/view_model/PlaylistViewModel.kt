@@ -12,6 +12,7 @@ import com.example.layoutmake.domain.media.SharePlaylistUseCase
 import com.example.layoutmake.domain.models.Playlist
 import com.example.layoutmake.domain.models.Track
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -37,23 +38,27 @@ class PlaylistViewModel(
     private val _isListEmpty = MutableLiveData<Boolean>()
     val isListEmpty: LiveData<Boolean> = _isListEmpty
 
+    private val _showNoTracksMessage = MutableLiveData<Boolean>()
+    val showNoTracksMessage: LiveData<Boolean> = _showNoTracksMessage
 
-    fun deletePlaylist(playlistId: Int){
+
+    fun deletePlaylist(playlistId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             deletePlaylistUseCase.execute(playlistId)
         }
     }
 
-    fun sharePlaylistIfNotEmpty(playlistId:Int){
+    fun sharePlaylistIfNotEmpty(playlistId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            if (listOfTracks.value?.isEmpty() == true){
-                _isListEmpty.postValue(true)
-            }
-            else{
-                _isListEmpty.postValue(false)
+            if (isListEmpty.value == true) {
+                _showNoTracksMessage.postValue(true)
+                delay(CHECK_RETURN_STATE_DELAY)
+                _showNoTracksMessage.postValue(false)
+            } else {
                 sharePlaylistUseCase.execute(playlistId)
             }
         }
+
     }
 
     fun deleteTrackFromPlaylist(track: Track, playlistId: Int) {
@@ -77,6 +82,7 @@ class PlaylistViewModel(
             getPlaylistTracksUseCase.execute(listOfIds).collect { currentList ->
                 _listOfTracks.postValue(currentList)
                 calculatePlaylistDuration(currentList)
+                _isListEmpty.postValue(currentList.isEmpty())
             }
         }
     }
@@ -124,6 +130,10 @@ class PlaylistViewModel(
             4 -> "$minutes минуты"
             else -> "$minutes минут"
         }
+    }
+
+    companion object{
+        const val CHECK_RETURN_STATE_DELAY = 300L
     }
 
 }

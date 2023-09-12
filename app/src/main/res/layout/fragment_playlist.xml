@@ -17,10 +17,14 @@
 
         <ImageButton
             android:id="@+id/arrow_back_button"
-            style="@style/BackArrowButton"
+            android:translationZ="1dp"
             android:layout_width="@dimen/settings_back_arrow_sides"
             android:layout_height="@dimen/settings_back_arrow_sides"
+            android:layout_marginStart="@dimen/settings_back_arrow_margin"
+            android:layout_marginTop="@dimen/settings_back_arrow_margin"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/arrow_back"
+            android:src="@drawable/icon_arrow_back"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -113,6 +117,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/drag_handler" />
+
+        <TextView
+            android:id="@+id/empty_list_message"
+            style="@style/PlaylistMenuText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="24dp"
+            android:text="@string/message_no_tracks" />
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/tracks_recycler_view_flat"
