@@ -70,6 +70,30 @@
     <string name="cancelling_dialog_negative">Отмена</string>
     <string name="cancelling_dialog_positive">Завершить</string>
     <string name="snackbar_new_playlist_message">Плейлист %1$s создан</string>
+    <string name="edit">Редактировать</string>
+    <string name="save">Сохранить</string>
+
+    <!--Playlist screen-->
+    <string name="playlist_image">playlist image</string>
+    <string name="default_playlist_name">Best songs 2021</string>
+    <string name="default_playlist_description">2022</string>
+    <string name="default_playlist_info">300 минут • 98 треков</string>
+    <string name="playlist_info">%1$s • %2$s</string>
+    <string name="share_button">share button</string>
+    <string name="no">НЕТ</string>
+    <string name="yes">ДА</string>
+    <string name="dialog_delete_track_title">Хотите удалить трек?</string>
+    <string name="no_tracks_to_share">В этом плейлисте нет списка треков, которым можно поделиться</string>
+    <string name="share">Поделиться</string>
+    <string name="edit_information">Редактировать информацию</string>
+    <string name="delete_playlist">Удалить плейлиcт</string>
+    <string name="dialog_delete_playlist_title">Хотите удалить плейлист «%1$s»?</string>
+    <string name="message_no_tracks">В этом плейлисте нет треков</string>
+    <string name="cancel">ОТМЕНА</string>
+    <string name="delete">УДАЛИТЬ</string>
+    <string name="delete_track">Удалить трек</string>
+    <string name="are_you_sure_delete_track">Вы уверены, что хотите удалить трек из плейлиста?</string>
+    <string name="are_you_sure_delete_playlist">Вы уверены, что хотите удалить этот плейлист?</string>
 
 
 

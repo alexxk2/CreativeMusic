@@ -29,4 +29,8 @@ interface RoomStorage {
 
 
     suspend fun addTrackToSaved(savedTrackDto: SavedTrackDto)
+
+    suspend fun getAllSavedTracks(): List<SavedTrackDto>
+
+    suspend fun deleteTrackFromSaved(savedTrackDto: SavedTrackDto)
 }

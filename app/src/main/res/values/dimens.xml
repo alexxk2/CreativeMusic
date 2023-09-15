@@ -58,4 +58,8 @@
     <dimen name="playlist_recycler_view_top_margin">12dp</dimen>
     <dimen name="bottom_sheet_peek">500dp</dimen>
 
+    <!--playlist screen-->
+    <dimen name="PlaylistBottomSheetPeekHeight">266dp</dimen>
+    <dimen name="bottom_sheep_peek_more">383dp</dimen>
+
 </resources>

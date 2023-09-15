@@ -72,7 +72,8 @@ val dataModule = module {
             favouriteConverter = get(),
             playlistConverter = get(),
             savedDbConverter = get(),
-            imageSaver = get()
+            imageSaver = get(),
+            externalNavigator = get()
         )
     }
 

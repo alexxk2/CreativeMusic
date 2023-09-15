@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity() {
             when(destination.id){
                 R.id.playerFragment -> binding.bottomNavigation.visibility = View.GONE
                 R.id.newPlaylistFragment -> binding.bottomNavigation.visibility = View.GONE
+                R.id.playlistFragment -> binding.bottomNavigation.visibility = View.GONE
                 else -> binding.bottomNavigation.visibility = View.VISIBLE
             }
         }

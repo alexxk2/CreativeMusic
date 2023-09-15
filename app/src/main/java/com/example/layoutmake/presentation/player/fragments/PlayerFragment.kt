@@ -159,7 +159,7 @@ class PlayerFragment : Fragment() {
             if (track.collectionName != null) {
                 albumNameValue.text = track.collectionName
             } else {
-                albumName.isVisible = false
+                playlistNameTitle.isVisible = false
                 albumNameValue.isVisible = false
             }
 

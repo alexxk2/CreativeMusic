@@ -21,17 +21,26 @@ interface MediaRepository {
 
     suspend fun deleteAllPlaylists()
 
-    suspend fun deletePlaylist(playlist: Playlist)
+    suspend fun deletePlaylist(playlistId: Int)
 
-    suspend fun updatePlaylist(playlist: Playlist)
+    suspend fun updatePlaylist(track: Track, playlist: Playlist)
+
+    suspend fun updatePlaylist(playlistId: Int, playlistName: Editable?, playlistDescription: Editable?, uri: Uri?)
 
     fun getAllPlaylists(): Flow<List<Playlist>>
 
     fun getPlaylist(playlistId: Int): Flow<Playlist>
 
+    suspend fun sharePlaylist(playlistId:Int)
+
 
     suspend fun addTrackToSaved(track: Track)
 
+    fun getPlaylistTracks(listOfIds: List<Pair<Int, Long>>): Flow<List<Track>>
+
+    suspend fun deleteTrackFromPlaylist(track: Track, playlistId: Int)
 
     suspend fun saveImageAndReturnPath(uri: Uri): Uri
+
+
 }

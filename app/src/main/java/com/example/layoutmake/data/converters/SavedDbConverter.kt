@@ -18,8 +18,29 @@ class SavedDbConverter {
                 primaryGenreName = primaryGenreName,
                 country = country,
                 previewUrl = previewUrl,
-                isFavourite = true,
-                date = date
+                isFavourite = isFavourite,
+                date = date,
+                artworkUrl60 = artworkUrl60
+            )
+        }
+    }
+
+    fun mapTrackToDomain(savedTrackDto: SavedTrackDto): Track {
+        with(savedTrackDto) {
+            return Track(
+                trackId = trackId,
+                trackName = trackName,
+                artistName = artistName,
+                trackTimeMillis = trackTimeMillis,
+                artworkUrl100 = artworkUrl100,
+                collectionName = collectionName,
+                releaseDate = releaseDate,
+                primaryGenreName = primaryGenreName,
+                country = country,
+                previewUrl = previewUrl,
+                isFavourite = isFavourite,
+                date = date,
+                artworkUrl60 = artworkUrl60
             )
         }
     }

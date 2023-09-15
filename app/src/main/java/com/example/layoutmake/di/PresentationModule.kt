@@ -3,6 +3,7 @@ package com.example.layoutmake.di
 import com.example.layoutmake.domain.models.Track
 import com.example.layoutmake.presentation.media.view_model.FavouriteTrackViewModel
 import com.example.layoutmake.presentation.media.view_model.NewPlaylistViewModel
+import com.example.layoutmake.presentation.media.view_model.PlaylistViewModel
 import com.example.layoutmake.presentation.media.view_model.PlaylistsViewModel
 import com.example.layoutmake.presentation.player.view_model.PlayerViewModel
 import com.example.layoutmake.presentation.search.view_model.SearchViewModel
@@ -62,7 +63,19 @@ val presentationModule = module {
     viewModel<NewPlaylistViewModel> {
         NewPlaylistViewModel(
             addNewPlaylistUseCase = get(),
-            saveImageUseCase = get()
+            saveImageUseCase = get(),
+            getPlaylistUseCase = get(),
+            updatePlaylistUseCase = get()
+        )
+    }
+
+    viewModel<PlaylistViewModel> {
+        PlaylistViewModel(
+            getPlaylistUseCase = get(),
+            getPlaylistTracksUseCase = get(),
+            deleteTrackFromPlaylistUseCase = get(),
+            sharePlaylistUseCase = get(),
+            deletePlaylistUseCase = get()
         )
     }
 }
