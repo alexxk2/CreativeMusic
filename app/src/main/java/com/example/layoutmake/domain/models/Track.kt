@@ -16,7 +16,8 @@ data class Track(
     val country: String?,
     val previewUrl: String?,
     val isFavourite: Boolean = false,
-    val date: Long = 0L
+    val date: Long = 0L,
+    val artworkUrl60: String
 ) : Parcelable
 
 

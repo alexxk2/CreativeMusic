@@ -370,9 +370,12 @@
         <item name="android:background">@drawable/bottom_sheet_background</item>
         <item name="android:orientation">vertical</item>
         <item name="behavior_hideable">false</item>
+
         <item name="layout_behavior">com.google.android.material.bottomsheet.BottomSheetBehavior
         </item>
     </style>
+
+    <!--<item name="behavior_peekHeight">@dimen/PlaylistBottomSheetPeekHeight</item>-->
 
     <style name="PlaylistMenuText">
         <item name="android:clickable">true</item>

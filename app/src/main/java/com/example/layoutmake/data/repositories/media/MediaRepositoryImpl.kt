@@ -7,6 +7,7 @@ import com.example.layoutmake.data.converters.PlaylistDbConverter
 import com.example.layoutmake.data.converters.SavedDbConverter
 import com.example.layoutmake.data.externals.db.RoomStorage
 import com.example.layoutmake.data.externals.db.dto.PlaylistDto
+import com.example.layoutmake.data.externals.db.dto.SavedTrackDto
 import com.example.layoutmake.data.externals.media_storage.ImageSaver
 import com.example.layoutmake.data.externals.settings.ExternalNavigator
 import com.example.layoutmake.domain.models.Playlist
@@ -82,14 +83,15 @@ class MediaRepositoryImpl(
 
         val allPlaylists = roomStorage.getAllPlaylists()
 
-        val playlistTracks = roomStorage.getAllSavedTracks().filter {
-            playlistConverter.convertListOfIdsFromJson(playlistToDelete.tracksIds)
-                .contains(it.trackId)
+        val playlistTracks = roomStorage.getAllSavedTracks().filter { track ->
+            playlistConverter.convertListOfIdsFromJson(playlistToDelete.tracksIds).map{it.first}
+                .contains(track.trackId)
         }
+
         playlistTracks.forEach loop1@{ savedTrackDto ->
 
             allPlaylists.forEach loop2@{ anotherPlaylist ->
-                if (playlistConverter.convertListOfIdsFromJson(anotherPlaylist.tracksIds)
+                if (playlistConverter.convertListOfIdsFromJson(anotherPlaylist.tracksIds).map{it.first}
                         .contains(savedTrackDto.trackId)
                 ) {
                     isContainsInPlaylists = true
@@ -104,10 +106,12 @@ class MediaRepositoryImpl(
     }
 
     override suspend fun updatePlaylist(track: Track, playlist: Playlist) {
+        val dateOfAdding = Calendar.getInstance().timeInMillis
 
-        val tempList = mutableListOf<Int>()
+        val tempList = mutableListOf<Pair<Int, Long>>()
         tempList.addAll(playlist.tracksIds)
-        tempList.add(track.trackId)
+        tempList.add(Pair(track.trackId, dateOfAdding))
+
 
         val updatedPlaylist = playlist.copy(
             tracksIds = tempList.toList(),
@@ -116,7 +120,6 @@ class MediaRepositoryImpl(
 
         val mappedPlaylist = playlistConverter.mapPlaylistToData(updatedPlaylist)
         roomStorage.updatePlaylist(playlistDto = mappedPlaylist)
-
 
     }
 
@@ -140,11 +143,23 @@ class MediaRepositoryImpl(
         roomStorage.addTrackToSaved(savedTrackDto = mappedTrack)
     }
 
-    override fun getPlaylistTracks(listOfIds: List<Int>): Flow<List<Track>> = flow {
-        val filteredListFromData =
-            roomStorage.getAllSavedTracks().filter { listOfIds.contains(it.trackId) }.sortedByDescending { it.date }
+    override fun getPlaylistTracks(listOfIds: List<Pair<Int, Long>>): Flow<List<Track>> = flow {
+        val listOfTracksIds = listOfIds.map { it.first }
 
-        emit(filteredListFromData.map { savedTrackDto ->
+        val filteredListFromData =
+            roomStorage.getAllSavedTracks()
+                .filter { listOfTracksIds.contains(it.trackId) }
+
+        val listOfTracksToSort = mutableListOf<SavedTrackDto>()
+
+        listOfIds.forEach { pair ->
+            filteredListFromData.forEach { track ->
+                if (track.trackId == pair.first) listOfTracksToSort.add(track.copy(date = pair.second))
+
+            }
+        }
+
+        emit(listOfTracksToSort.sortedByDescending { it.date }.map { savedTrackDto ->
             savedDbConverter.mapTrackToDomain(savedTrackDto)
         })
 
@@ -159,7 +174,8 @@ class MediaRepositoryImpl(
 
         val updatedListOfIds =
             playlistConverter.convertListOfIdsFromJson(playlistToUpdate.tracksIds)
-                .filterNot { it == track.trackId }
+                .filterNot { it.first == track.trackId }
+
 
         val updatedPlaylistDto = playlistToUpdate.copy(
             tracksIds = playlistConverter.convertListOfIdsToJson(updatedListOfIds),
@@ -168,12 +184,11 @@ class MediaRepositoryImpl(
         roomStorage.updatePlaylist(updatedPlaylistDto)
 
 
-
         var isContainsInPlaylists = false
         val allPlaylists = roomStorage.getAllPlaylists()
 
         allPlaylists.forEach { playlist ->
-            if (playlistConverter.convertListOfIdsFromJson(playlist.tracksIds)
+            if (playlistConverter.convertListOfIdsFromJson(playlist.tracksIds).map { it.first }
                     .contains(track.trackId)
             ) {
                 isContainsInPlaylists = true

@@ -17,6 +17,7 @@ data class TrackDto(
     val country: String?,
     @ColumnInfo(name = "preview_url") val previewUrl: String?,
     @ColumnInfo(name = "is_favourite") val isFavourite: Boolean = false,
-    val date: Long = 0L
+    val date: Long = 0L,
+    @ColumnInfo(name = "artwork_url_60") val artworkUrl60: String
 ) {
 }

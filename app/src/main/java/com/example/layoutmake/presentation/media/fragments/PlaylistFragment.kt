@@ -1,11 +1,14 @@
 package com.example.layoutmake.presentation.media.fragments
 
 import android.os.Bundle
+import android.provider.MediaStore.Audio.Playlists.Members.PLAYLIST_ID
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.doOnLayout
+import androidx.core.view.marginBottom
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -80,7 +83,18 @@ class PlaylistFragment : Fragment() {
         }
 
         binding.emptySpace.doOnLayout {
-            bottomSheetBehavior.setPeekHeight(binding.emptySpace.height, false)
+
+            bottomSheetBehavior.setPeekHeight(
+                binding.playlistCoordinatorLayout.height - binding.playlistConstraintLayout.height,
+                false
+            )
+
+            binding.playlistScrollView.layoutParams = CoordinatorLayout.LayoutParams(
+                binding.playlistScrollView.width,
+                binding.playlistCoordinatorLayout.height - bottomSheetBehavior.peekHeight
+            )
+
+
         }
 
         binding.arrowBackButton.setOnClickListener {

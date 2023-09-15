@@ -8,6 +8,6 @@ data class Playlist(
     val playlistName: String,
     val playlistDescription: String,
     val coverSrc: Uri?,
-    val tracksIds: List<Int>,
+    val tracksIds: List<Pair<Int, Long>>,
     val tracksNumber: Int
 )

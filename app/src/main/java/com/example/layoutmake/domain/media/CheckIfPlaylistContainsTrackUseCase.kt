@@ -5,5 +5,5 @@ import com.example.layoutmake.domain.models.Track
 
 class CheckIfPlaylistContainsTrackUseCase {
 
-    fun execute(track: Track, playList: Playlist) = playList.tracksIds.contains(track.trackId)
+    fun execute(track: Track, playList: Playlist) = playList.tracksIds.map { it.first }.contains(track.trackId)
 }

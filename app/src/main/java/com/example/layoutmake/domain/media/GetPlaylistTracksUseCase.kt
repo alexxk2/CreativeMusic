@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 class GetPlaylistTracksUseCase(private val mediaRepository: MediaRepository) {
 
-    fun execute(listOfIds: List<Int>): Flow<List<Track>> = mediaRepository.getPlaylistTracks(listOfIds)
+    fun execute(listOfIds: List<Pair<Int, Long>>): Flow<List<Track>> = mediaRepository.getPlaylistTracks(listOfIds)
 }

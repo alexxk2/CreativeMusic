@@ -19,7 +19,8 @@ class SavedDbConverter {
                 country = country,
                 previewUrl = previewUrl,
                 isFavourite = isFavourite,
-                date = date
+                date = date,
+                artworkUrl60 = artworkUrl60
             )
         }
     }
@@ -38,7 +39,8 @@ class SavedDbConverter {
                 country = country,
                 previewUrl = previewUrl,
                 isFavourite = isFavourite,
-                date = date
+                date = date,
+                artworkUrl60 = artworkUrl60
             )
         }
     }

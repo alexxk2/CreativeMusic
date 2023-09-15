@@ -42,7 +42,7 @@ class PlaylistTrackAdapter(
                 SimpleDateFormat("mm:ss", Locale.getDefault()).format(item.trackTimeMillis.toLong())
 
             Glide.with(context)
-                .load(item.artworkUrl100)
+                .load(item.artworkUrl60)
                 .placeholder(R.drawable.placeholder)
                 .centerCrop()
                 .transform(RoundedCorners(4))

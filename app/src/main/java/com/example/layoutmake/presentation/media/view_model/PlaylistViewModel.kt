@@ -77,7 +77,7 @@ class PlaylistViewModel(
         }
     }
 
-    private fun getPlaylistTracks(listOfIds: List<Int>) {
+    private fun getPlaylistTracks(listOfIds: List<Pair<Int, Long>>) {
         viewModelScope.launch(Dispatchers.IO) {
             getPlaylistTracksUseCase.execute(listOfIds).collect { currentList ->
                 _listOfTracks.postValue(currentList)

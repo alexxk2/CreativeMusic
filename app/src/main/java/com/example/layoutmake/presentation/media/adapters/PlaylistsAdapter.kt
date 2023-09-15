@@ -38,7 +38,7 @@ class PlaylistsAdapter(
                 }
 
                 playlistName.text = item.playlistName
-                tracksNumber.text = item.tracksNumber.toString()
+                tracksNumber.text = getRightEndingTracks(item.tracksNumber)
             }
 
         }
@@ -56,6 +56,22 @@ class PlaylistsAdapter(
         val item = getItem(position)
         holder.bind(item, clickListener)
 
+    }
+
+    private fun getRightEndingTracks(numberOfTracks: Int): String {
+        val preLastDigit = numberOfTracks % 100 / 10
+
+        if (preLastDigit == 1) {
+            return "$numberOfTracks треков"
+        }
+
+        return when (numberOfTracks % 10) {
+            1 -> "$numberOfTracks трек"
+            2 -> "$numberOfTracks трека"
+            3 -> "$numberOfTracks трека"
+            4 -> "$numberOfTracks трека"
+            else -> "$numberOfTracks треков"
+        }
     }
 
     companion object {

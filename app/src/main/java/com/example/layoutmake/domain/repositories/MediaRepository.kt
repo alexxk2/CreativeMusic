@@ -36,7 +36,7 @@ interface MediaRepository {
 
     suspend fun addTrackToSaved(track: Track)
 
-    fun getPlaylistTracks(listOfIds: List<Int>): Flow<List<Track>>
+    fun getPlaylistTracks(listOfIds: List<Pair<Int, Long>>): Flow<List<Track>>
 
     suspend fun deleteTrackFromPlaylist(track: Track, playlistId: Int)
 

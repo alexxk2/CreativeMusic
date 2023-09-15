@@ -34,12 +34,12 @@ class PlaylistDbConverter {
         }
     }
 
-    fun convertListOfIdsFromJson(jsonString: String): List<Int> {
-        val typeToken = object : TypeToken<List<Int>>() {}.type
-        return Gson().fromJson<List<Int>>(jsonString, typeToken)
+    fun convertListOfIdsFromJson(jsonString: String): List<Pair<Int, Long>> {
+        val typeToken = object : TypeToken<List<Pair<Int, Long>>>() {}.type
+        return Gson().fromJson<List<Pair<Int, Long>>>(jsonString, typeToken)
     }
 
-     fun convertListOfIdsToJson(list: List<Int>) = Gson().toJson(list)
+     fun convertListOfIdsToJson(list: List<Pair<Int, Long>>) = Gson().toJson(list)
 
 
 
